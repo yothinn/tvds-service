@@ -63,6 +63,25 @@ var MemberSchema = new Schema({
             },
         }
     },
+    contactNumber: {
+        type: {
+            mobilePhoneNumber: {
+                type: Number,
+            },
+            houseNumber: {
+                type: Number,
+            },
+            otherNumber1: {
+                type: Number,
+            },
+            otherNumber2: {
+                type: Number,
+            },
+            otherNumber3: {
+                type: Number,
+            },
+        }
+    },
     juristicPersonInfo: {
         type: {
             juristicID: {

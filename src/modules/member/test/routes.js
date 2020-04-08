@@ -34,7 +34,14 @@ describe('Member CRUD routes tests', function () {
                 lastName: 'ocha',
                 lastNameThai: 'โอชา',
                 dateOfBirth: '2020-04-08',
-                gender: 'ชาย'
+                gender: 'ชาย',
+            },
+            contactNumber: {
+                mobilePhoneNumber: "0987654433",
+                houseNumber: "0987654433",
+                otherNumber1: "099876544",
+                otherNumber2: "099876544",
+                otherNumber3: "099876544",
             },
             juristicPersonInfo: {
                 juristicID: 'aaa777',
@@ -140,7 +147,7 @@ describe('Member CRUD routes tests', function () {
                             return done(err);
                         }
                         var resp = res.body;
-                        
+
                         assert.equal(resp.status, 200);
                         assert.equal(resp.data.involedPartyID, mockup.involedPartyID);
                         assert.equal(resp.data.involvedPartyType, mockup.involvedPartyType);
@@ -161,6 +168,12 @@ describe('Member CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
+
+                        assert.equal(resp.data.contactNumber.mobilePhoneNumber, mockup.contactNumber.mobilePhoneNumber);
+                        assert.equal(resp.data.contactNumber.houseNumber, mockup.contactNumber.houseNumber);
+                        assert.equal(resp.data.contactNumber.otherNumber1, mockup.contactNumber.otherNumber1);
+                        assert.equal(resp.data.contactNumber.otherNumber2, mockup.contactNumber.otherNumber2);
+                        assert.equal(resp.data.contactNumber.otherNumber3, mockup.contactNumber.otherNumber3);
 
                         assert.equal(resp.data.juristicPersonInfo.juristicID, mockup.juristicPersonInfo.juristicID);
                         assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
@@ -240,6 +253,12 @@ describe('Member CRUD routes tests', function () {
                 assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
                 assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                 assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
+
+                assert.equal(resp.data.contactNumber.mobilePhoneNumber, mockup.contactNumber.mobilePhoneNumber);
+                assert.equal(resp.data.contactNumber.houseNumber, mockup.contactNumber.houseNumber);
+                assert.equal(resp.data.contactNumber.otherNumber1, mockup.contactNumber.otherNumber1);
+                assert.equal(resp.data.contactNumber.otherNumber2, mockup.contactNumber.otherNumber2);
+                assert.equal(resp.data.contactNumber.otherNumber3, mockup.contactNumber.otherNumber3);
 
                 assert.equal(resp.data.juristicPersonInfo.juristicID, mockup.juristicPersonInfo.juristicID);
                 assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
@@ -333,6 +352,12 @@ describe('Member CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
 
+                        assert.equal(resp.data.contactNumber.mobilePhoneNumber, mockup.contactNumber.mobilePhoneNumber);
+                        assert.equal(resp.data.contactNumber.houseNumber, mockup.contactNumber.houseNumber);
+                        assert.equal(resp.data.contactNumber.otherNumber1, mockup.contactNumber.otherNumber1);
+                        assert.equal(resp.data.contactNumber.otherNumber2, mockup.contactNumber.otherNumber2);
+                        assert.equal(resp.data.contactNumber.otherNumber3, mockup.contactNumber.otherNumber3);
+
                         assert.equal(resp.data.juristicPersonInfo.juristicID, mockup.juristicPersonInfo.juristicID);
                         assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
                         assert.equal(resp.data.juristicPersonInfo.companyName, mockup.juristicPersonInfo.companyName);
@@ -392,10 +417,10 @@ describe('Member CRUD routes tests', function () {
                 if (err) {
                     console.log(err);
                     return done(err);
-                    
+
                 }
                 var resp = res.body;
-                
+
                 request(app)
                     .delete('/api/members/' + resp.data._id)
                     .set('Authorization', 'Bearer ' + token)
