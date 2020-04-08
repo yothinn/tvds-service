@@ -11,8 +11,7 @@ var OrderSchema = new Schema({
         unique: true,
     },
     docdate: {
-        type: Date,
-        required: 'Please fill a Order document date',
+        type: Date
     },
     carNo: {
         type: String
