@@ -14,17 +14,15 @@ var OrderSchema = new Schema({
         type: Date,
         required: 'Please fill a Order document date',
     },
-    items: {
-        type:[{
-            itemno:{
-                type: String,
-                required: 'Please fill a Order items[itemno]',
-            },
-            itemdescription:{
-                type: String,
-                required: 'Please fill a Order items[itemdescription]',
-            }
-        }]
+    carNo: {
+        type: String
+    },
+    cusAmount: {
+        type: Number
+    },
+    orderStatus: {
+        type: String,
+        enum: ['draft', 'golive', 'close']
     },
     created: {
         type: Date,
@@ -56,29 +54,30 @@ var OrderSchema = new Schema({
         }
     }
 });
-OrderSchema.pre('save', function(next){
+OrderSchema.pre('save', function (next) {
     let Order = this;
     const model = mongoose.model("Order", OrderSchema);
     const startOfMonth = moment(Order.docdate).startOf('month').format('YYYY-MM-DD');
     const endOfMonth = moment(Order.docdate).endOf('month').format('YYYY-MM-DD');
     if (Order.isNew) {
         // create
-        model.find({ docdate: { $gte: startOfMonth, $lte: endOfMonth } },function(err,data){
-            if(err) next(err);
+        model.find({ docdate: { $gte: startOfMonth, $lte: endOfMonth } }, function (err, data) {
+            if (err) next(err);
             var year = new Date(Order.docdate).getFullYear();
             var month = new Date(Order.docdate).getMonth() + 1;
+            var fullMonth = month.toString().padStart(2, "0");
             var num = data.length + 1;
             var no = num.toString().padStart(3, "0");
-            Order.docno = year.toString() + '-' + month.toString() + '-' + no.toString();
+            Order.docno = year.toString() + '-' + fullMonth.toString() + '-' + no.toString();
             next();
         })
-        
-    }else{
+
+    } else {
         // update
         Order.updated = new Date();
         next();
     }
-    
-    
+
+
 })
 mongoose.model("Order", OrderSchema);

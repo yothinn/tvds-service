@@ -16,11 +16,10 @@ describe('Order CRUD routes tests', function () {
 
     before(function (done) {
         mockup = {
-            docdate: "2020-10-23",
-            items:[{
-                itemno: "01",
-                itemdescription: "รายการที่ 1"
-            }]
+            "docdate": "2020-10-23",
+            "carNo": "1",
+            "cusAmount": 5,
+            "orderStatus": "draft"
         };
         credentials = {
             username: 'username',
@@ -36,18 +35,18 @@ describe('Order CRUD routes tests', function () {
         done();
     });
 
-    it('should be Order get use token', (done)=>{
+    it('should be Order get use token', (done) => {
         request(app)
-        .get('/api/orders')
-        .set('Authorization', 'Bearer ' + token)
-        .expect(200)
-        .end((err, res)=>{
-            if (err) {
-                return done(err);
-            }
-            var resp = res.body;
-            done();
-        });
+            .get('/api/orders')
+            .set('Authorization', 'Bearer ' + token)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                done();
+            });
     });
 
     it('should be Order get by id', function (done) {
@@ -71,17 +70,20 @@ describe('Order CRUD routes tests', function () {
                             return done(err);
                         }
                         var resp = res.body;
+                        console.log(resp.data)
                         assert.equal(resp.status, 200);
                         assert.equal(resp.data.docno, "2020-10-001");
                         // assert.equal(resp.data.docdate, mockup.docdate);
-                        assert.equal(resp.data.items.length,1);
+                        assert.equal(resp.data.carNo, mockup.carNo);
+                        assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                        assert.equal(resp.data.orderStatus, mockup.orderStatus);
                         done();
                     });
             });
 
     });
 
-    it('should be Order post use token', (done)=>{
+    it('should be Order post use token', (done) => {
         request(app)
             .post('/api/orders')
             .set('Authorization', 'Bearer ' + token)
@@ -93,8 +95,10 @@ describe('Order CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 assert.equal(resp.data.docno, "2020-10-001");
-                        // assert.equal(resp.data.docdate, mockup.docdate);
-                        assert.equal(resp.data.items.length,1);
+                // assert.equal(resp.data.docdate, mockup.docdate);
+                assert.equal(resp.data.carNo, mockup.carNo);
+                assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                assert.equal(resp.data.orderStatus, mockup.orderStatus);
                 done();
             });
     });
@@ -111,11 +115,9 @@ describe('Order CRUD routes tests', function () {
                     return done(err);
                 }
                 var resp = res.body;
-                var update = mockup;
-                update.items.push({
-                    itemno: "02",
-                    itemdescription: "รายการที่ 2"
-                });
+                var update = {
+                    "orderStatus": "golive"
+                };
                 request(app)
                     .put('/api/orders/' + resp.data._id)
                     .set('Authorization', 'Bearer ' + token)
@@ -128,7 +130,9 @@ describe('Order CRUD routes tests', function () {
                         var resp = res.body;
                         assert.equal(resp.data.docno, "2020-10-001");
                         // assert.equal(resp.data.docdate, mockup.docdate);
-                        assert.equal(resp.data.items.length,2);
+                        assert.equal(resp.data.carNo, mockup.carNo);
+                        assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                        assert.equal(resp.data.orderStatus, update.orderStatus);
                         done();
                     });
             });
@@ -156,15 +160,15 @@ describe('Order CRUD routes tests', function () {
 
     });
 
-    it('should be order get not use token', (done)=>{
+    it('should be order get not use token', (done) => {
         request(app)
-        .get('/api/orders')
-        .expect(403)
-        .expect({
-            status: 403,
-            message: 'User is not authorized'
-        })
-        .end(done);
+            .get('/api/orders')
+            .expect(403)
+            .expect({
+                status: 403,
+                message: 'User is not authorized'
+            })
+            .end(done);
     });
 
     it('should be order post not use token', function (done) {
