@@ -7,6 +7,7 @@ var mongoose = require("mongoose"),
   _ = require("lodash"),
   request = require("request");
 
+
 exports.getList = function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
@@ -130,27 +131,10 @@ exports.getUserProfile = (req, res) => {
     replyToken: req.body.events[0].replyToken,
     messages: [
       {
-        type: "text",
-        text: "Hello Quick Reply!",
-        quickReply: {
-          items: [
-            {
-              type: "action",
-              action: {
-                type: "location",
-                label: "Location",
-              },
-            },
-          ],
-        },
+        type: `text`,
+        text: `${JSON.stringify(req.body.events[0])}`,
       },
     ],
-    // messages: [
-    //   {
-    //     type: `text`,
-    //     text: `${JSON.stringify(req.body.events[0])}`,
-    //   },
-    // ],
   });
   request.post(
     {
@@ -163,4 +147,5 @@ exports.getUserProfile = (req, res) => {
       res.jsonp(req.body.events[0]);
     }
   );
+  
 };
