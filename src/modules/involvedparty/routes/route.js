@@ -3,8 +3,8 @@ var controller = require('../controllers/controller'),
     mq = require('../../core/controllers/rabbitmq'),
     policy = require('../policy/policy');
 module.exports = function (app) {
-    var url = '/api/members';
-    var urlWithParam = '/api/members/:memberId';
+    var url = '/api/involvedpartys';
+    var urlWithParam = '/api/involvedpartys/:involvedpartyId';
     app.route(url)//.all(policy.isAllowed)
         .get(controller.getList)
         .post(controller.create);
@@ -14,7 +14,7 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
-    app.param('memberId', controller.getByID);
+    app.param('involvedpartyId', controller.getByID);
 
     /**
      * Message Queue

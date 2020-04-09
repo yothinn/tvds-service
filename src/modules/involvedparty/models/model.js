@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-var MemberSchema = new Schema({
+var InvolvedpartySchema = new Schema({
     involedPartyID: {
         type: String,
     },
@@ -63,24 +63,15 @@ var MemberSchema = new Schema({
             },
         }
     },
-    contactNumber: {
-        type: {
-            mobilePhoneNumber: {
-                type: Number,
+    directContact: {
+        type: [{
+            method: {
+                type: String
             },
-            houseNumber: {
-                type: Number,
-            },
-            otherNumber1: {
-                type: Number,
-            },
-            otherNumber2: {
-                type: Number,
-            },
-            otherNumber3: {
-                type: Number,
-            },
-        }
+            value: {
+                type: String
+            }
+        }]
     },
     juristicPersonInfo: {
         type: {
@@ -104,6 +95,9 @@ var MemberSchema = new Schema({
     registeredAddress: {
         type: {
             addressLine1: {
+                type: String,
+            },
+            addressStreet: {
                 type: String,
             },
             addressSubDistrict: {
@@ -135,6 +129,9 @@ var MemberSchema = new Schema({
     contactAddress: {
         type: {
             addressLine1: {
+                type: String,
+            },
+            addressStreet: {
                 type: String,
             },
             addressSubDistrict: {
@@ -245,18 +242,18 @@ var MemberSchema = new Schema({
         }
     }
 });
-MemberSchema.pre('save', function (next) {
-    let Member = this;
-    const model = mongoose.model("Member", MemberSchema);
-    if (Member.isNew) {
+InvolvedpartySchema.pre('save', function (next) {
+    let Involvedparty = this;
+    const model = mongoose.model("Involvedparty", InvolvedpartySchema);
+    if (Involvedparty.isNew) {
         // create
         next();
     } else {
         // update
-        Member.updated = new Date();
+        Involvedparty.updated = new Date();
         next();
     }
 
 
 })
-mongoose.model("Member", MemberSchema);
+mongoose.model("Involvedparty", InvolvedpartySchema);

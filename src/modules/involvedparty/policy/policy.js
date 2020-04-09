@@ -17,11 +17,11 @@ exports.invokeRolesPolicies = function() {
       roles: ["admin", "user"],
       allows: [
         {
-          resources: "/api/members",
+          resources: "/api/involvedpartys",
           permissions: "*"
         },
         {
-          resources: "/api/members/:memberId",
+          resources: "/api/involvedpartys/:involvedpartyId",
           permissions: "*"
         }
       ]

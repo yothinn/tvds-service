@@ -2,7 +2,7 @@
 var mongoose = require('mongoose'),
     model = require('../models/model'),
     mq = require('../../core/controllers/rabbitmq'),
-    Member = mongoose.model('Member'),
+    Involvedparty = mongoose.model('Involvedparty'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
 
@@ -16,7 +16,7 @@ exports.getList = function (req, res) {
     }
     query.skip = size * (pageNo - 1);
     query.limit = size;
-        Member.find({}, {}, query, function (err, datas) {
+        Involvedparty.find({}, {}, query, function (err, datas) {
             if (err) {
                 return res.status(400).send({
                     status: 400,
@@ -32,9 +32,9 @@ exports.getList = function (req, res) {
 };
 
 exports.create = function (req, res) {
-    var newMember = new Member (req.body);
-    newMember.createby = req.user;
-    newMember.save(function (err, data) {
+    var newInvolvedparty = new Involvedparty (req.body);
+    newInvolvedparty.createby = req.user;
+    newInvolvedparty.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -62,7 +62,7 @@ exports.getByID = function (req, res, next, id) {
         });
     }
 
-    Member.findById(id, function (err, data) {
+    Involvedparty.findById(id, function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -83,10 +83,10 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-    var updMember = _.extend(req.data, req.body);
-    updMember.updated = new Date();
-    updMember.updateby = req.user;
-    updMember.save(function (err, data) {
+    var updInvolvedparty = _.extend(req.data, req.body);
+    updInvolvedparty.updated = new Date();
+    updInvolvedparty.updateby = req.user;
+    updInvolvedparty.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
