@@ -126,7 +126,7 @@ exports.getUserProfile = (req, res) => {
       "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
   };
   let body = JSON.stringify({
-    replyToken: bodyResponse.events[0].replyToken,
+    replyToken: req.body.events[0].replyToken,
     messages: [
       {
         type: `text`,
@@ -140,8 +140,8 @@ exports.getUserProfile = (req, res) => {
       headers: headers,
       body: body,
     },
-    (err, res, body) => {
-      console.log("status = " + res.statusCode);
+    (err, resp, body) => {
+      console.log("status = " + resp.statusCode);
       res.jsonp(req.body.events[0]);
     }
   );
