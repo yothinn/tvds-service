@@ -14,6 +14,9 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
+    app.route('/api/chatbot/channel/1654060178')
+        .post(controller.getUserProfile);
+
     app.param('involvedpartyId', controller.getByID);
 
     /**

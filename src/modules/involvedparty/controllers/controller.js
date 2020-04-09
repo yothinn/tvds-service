@@ -116,3 +116,8 @@ exports.delete = function (req, res) {
         };
     });
 };
+
+
+exports.getUserProfile = (req, res) => {
+    res.jsonp(req.body.events[0]);
+};
