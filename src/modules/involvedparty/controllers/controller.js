@@ -121,31 +121,56 @@ exports.delete = function (req, res) {
   });
 };
 
-exports.getUserProfile = (req, res) => {
-  let headers = {
-    "Content-Type": "application/json",
-    Authorization:
-      "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
-  };
-  let body = JSON.stringify({
-    replyToken: req.body.events[0].replyToken,
-    messages: [
-      {
-        type: `text`,
-        text: `${JSON.stringify(req.body.events[0])}`,
-      },
-    ],
-  });
-  request.post(
-    {
-      url: "https://api.line.me/v2/bot/message/reply",
-      headers: headers,
-      body: body,
-    },
-    (err, resp, body) => {
-      console.log("status = " + resp.statusCode);
-      res.jsonp(req.body.events[0]);
-    }
-  );
-  
+exports.getUserProfile = (req, res, next) => {
+  next();
 };
+
+exports.replyMessage = (req, res) => {
+    let headers = {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
+      };
+      let body = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: [
+          {
+            type: `text`,
+            text: `${JSON.stringify(req.body.events[0])}`,
+          },
+        ],
+      });
+      request.post(
+        {
+          url: "https://api.line.me/v2/bot/message/reply",
+          headers: headers,
+          body: body,
+        },
+        (err, resp, body) => {
+          console.log("status = " + resp.statusCode);
+          res.jsonp(req.body.events[0]);
+        }
+      );
+};
+
+exports.sendMessage = (req, res) => {
+    let headers = {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
+      };
+      let body = JSON.stringify(req.body);
+      request.post(
+        {
+          url: "https://api.line.me/v2/bot/message/push",
+          headers: headers,
+          body: body,
+        },
+        (err, resp, body) => {
+          console.log("status = " + resp.statusCode);
+          res.jsonp(req.body.events[0]);
+        }
+      );
+};
+
+
