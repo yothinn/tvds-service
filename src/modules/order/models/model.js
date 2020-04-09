@@ -55,27 +55,27 @@ var OrderSchema = new Schema({
 });
 OrderSchema.pre('save', function (next) {
     let Order = this;
-    // const model = mongoose.model("Order", OrderSchema);
-    // const startOfMonth = moment(Order.docdate).startOf('month').format('YYYY-MM-DD');
-    // const endOfMonth = moment(Order.docdate).endOf('month').format('YYYY-MM-DD');
+    const model = mongoose.model("Order", OrderSchema);
+    const startOfMonth = moment(Order.docdate).startOf('month').format();
+    const endOfMonth = moment(Order.docdate).endOf('month').format();
     if (Order.isNew) {
         // create
-        // model.find({ docdate: { $gte: startOfMonth, $lte: endOfMonth } }, function (err, data) {
-        //     if (err) next(err);
-        //     var year = new Date(Order.docdate).getFullYear();
-        //     var month = new Date(Order.docdate).getMonth() + 1;
-        //     var fullMonth = month.toString().padStart(2, "0");
-        //     var num = data.length + 1;
-        //     var no = num.toString().padStart(3, "0");
-        //     Order.docno = year.toString() + '-' + fullMonth.toString() + '-' + no.toString();
-        //     next();
-        // })
+        model.find({ docdate: { $gte: startOfMonth, $lte: endOfMonth } }, function (err, data) {
+            if (err) next(err);
+            var year = new Date(Order.docdate).getFullYear();
+            var month = new Date(Order.docdate).getMonth() + 1;
+            var fullMonth = month.toString().padStart(2, "0");
+            var num = data.length + 1;
+            var no = num.toString().padStart(4, "0");
+            Order.docno = year.toString() + '-' + fullMonth.toString() + '-' + no.toString();
+            next();
+        });
 
-        var newDate = new Date();
-        var textDate = newDate.getFullYear().toString().substr(2, 2) + (newDate.getMonth() + 1).toString().padStart(2, "0") +
-            newDate.getDate().toString().padStart(2, "0") + newDate.getTime().toString().substr(4, 9);
-        Order.docno = textDate;
-        next();
+        // var newDate = new Date();
+        // var textDate = newDate.getFullYear().toString().substr(2, 2) + (newDate.getMonth() + 1).toString().padStart(2, "0") +
+        //     newDate.getDate().toString().padStart(2, "0") + newDate.getTime().toString().substr(4, 9);
+        // Order.docno = textDate;
+        // next();
 
     } else {
         // update
