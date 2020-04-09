@@ -168,7 +168,7 @@ exports.sendMessage = (req, res) => {
         },
         (err, resp, body) => {
           console.log("status = " + resp.statusCode);
-          res.jsonp(req.body.events[0]);
+          res.jsonp({});
         }
       );
 };
