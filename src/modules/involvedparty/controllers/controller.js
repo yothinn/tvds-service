@@ -132,7 +132,7 @@ exports.getUserProfile = (req, res) => {
     messages: [
       {
         type: `text`,
-        text: `${req.body.events[0]}`,
+        text: `${JSON.stringify(req.body.events[0])}`,
       },
     ],
   });
