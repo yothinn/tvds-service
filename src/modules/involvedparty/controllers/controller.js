@@ -137,13 +137,8 @@ exports.getUserProfile = (req, res) => {
             {
               type: "action",
               action: {
-                type: "datetimepicker",
-                label: "Datetime Picker",
-                data: "storeId=12345",
-                mode: "datetime",
-                initial: "2018-09-11T00:00",
-                max: "2018-12-31T23:59",
-                min: "2018-01-01T00:00",
+                type: "location",
+                label: "Location",
               },
             },
           ],
