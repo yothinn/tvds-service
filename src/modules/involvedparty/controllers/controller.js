@@ -4,7 +4,9 @@ var mongoose = require("mongoose"),
   mq = require("../../core/controllers/rabbitmq"),
   Involvedparty = mongoose.model("Involvedparty"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
-  _ = require("lodash");
+  _ = require("lodash"),
+  request = require("request");
+
 
 exports.getList = function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
