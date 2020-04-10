@@ -23,6 +23,96 @@ var OrderSchema = new Schema({
         type: String,
         enum: ['draft', 'golive', 'close']
     },
+    contactLists: {
+        type: [
+            {
+                contactStatus: {
+                    type: String,
+                    enum: ["select","waitapprove","confirm","reject"]
+                },
+                personalInfo: {
+                    type: {
+                        title: {
+                            type: String
+                        },
+                        titleThai: {
+                            type: String
+                        },
+                        firstName: {
+                            type: String
+                        },
+                        firstNameThai: {
+                            type: String
+                        },
+                        middleName: {
+                            type: String
+                        },
+                        middleNameThai: {
+                            type: String
+                        },
+                        lastName: {
+                            type: String
+                        },
+                        lastNameThai: {
+                            type: String
+                        },
+                        citizenId: {
+                            type: String
+                        },
+                        dateOfBirth: {
+                            type: Date
+                        },
+                        gender: {
+                            type: String
+                        }
+                    }
+                },
+                directContact: {
+                    type: [
+                        {
+                            method: {
+                                type: String
+                            },
+                            value: {
+                                type: String
+                            }
+                        }
+                    ]
+                },
+                contactAddress: {
+                    type: {
+                        addressLine1: {
+                            type: String
+                        },
+                        addressStreet: {
+                            type: String
+                        },
+                        addressSubDistrict: {
+                            type: String
+                        },
+                        addressDistrict: {
+                            type: String
+                        },
+                        addressProvince: {
+                            type: String
+                        },
+                        addressCountry: {
+                            type: String
+                        },
+                        addressPostalCode: {
+                            type: String
+                        },
+                        latitude: {
+                            type: String
+                        },
+                        longitude: {
+                            type: String
+                        }
+                    }
+                }
+            }
+        ]
+    },
     created: {
         type: Date,
         default: Date.now
@@ -55,6 +145,7 @@ var OrderSchema = new Schema({
 });
 OrderSchema.pre('save', function (next) {
     let Order = this;
+    Order.cusAmount = Order.contactLists.length;
     const model = mongoose.model("Order", OrderSchema);
     const startOfMonth = moment(Order.docdate).startOf('month').format();
     const endOfMonth = moment(Order.docdate).endOf('month').format();

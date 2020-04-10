@@ -18,8 +18,42 @@ describe('Order CRUD routes tests', function () {
         mockup = {
             "docdate": "2020-10-23",
             "carNo": "1",
-            "cusAmount": 5,
-            "orderStatus": "draft"
+            "orderStatus": "draft",
+            "contactLists": [
+                {
+                    "contactStatus": "select",
+                    "personalInfo": {
+                        "title": "mr",
+                        "titleThai": "นาย",
+                        "firstName": "Dinsoh",
+                        "firstNameThai": "ดินสอ",
+                        "middleName": "middle",
+                        "middleNameThai": "กลาง",
+                        "lastName": "Pakka",
+                        "lastNameThai": "ปากกา",
+                        "citizenId": "1159555569865",
+                        "dateOfBirth": "2020-04-08",
+                        "gender": "ชาย"
+                    },
+                    "directContact": [
+                        {
+                            "method": "เบอร์มือถือ",
+                            "value": "0987451255"
+                        }
+                    ],
+                    "contactAddress": {
+                        "addressLine1": "บ้านเลขที่ 78/1",
+                        "addressStreet": "วงแหวนลำลูกกา",
+                        "addressSubDistrict": "บึงคำพร้อย",
+                        "addressDistrict": "ลำลูกกา",
+                        "addressProvince": "ปทุมธานี",
+                        "addressCountry": "ไทย",
+                        "addressPostalCode": "12130",
+                        "latitude": "13.7480318",
+                        "longitude": "100.5848721"
+                    }
+                }
+            ]
         };
         credentials = {
             username: 'username',
@@ -75,8 +109,11 @@ describe('Order CRUD routes tests', function () {
                         // assert.equal(resp.data.docno, "2020-10-001");
                         // assert.equal(resp.data.docdate, mockup.docdate);
                         assert.equal(resp.data.carNo, mockup.carNo);
-                        assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                        assert.equal(resp.data.cusAmount, 1);
                         assert.equal(resp.data.orderStatus, mockup.orderStatus);
+
+                        assert.equal(resp.data.contactLists.length, 1);
+                        assert.equal(resp.data.contactLists[0].contactStatus, mockup.contactLists[0].contactStatus);
                         done();
                     });
             });
@@ -97,8 +134,11 @@ describe('Order CRUD routes tests', function () {
                 // assert.equal(resp.data.docno, "2020-10-001");
                 // assert.equal(resp.data.docdate, mockup.docdate);
                 assert.equal(resp.data.carNo, mockup.carNo);
-                assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                assert.equal(resp.data.cusAmount, 1);
                 assert.equal(resp.data.orderStatus, mockup.orderStatus);
+
+                assert.equal(resp.data.contactLists.length, 1);
+                assert.equal(resp.data.contactLists[0].contactStatus, mockup.contactLists[0].contactStatus);
                 done();
             });
     });
@@ -131,8 +171,11 @@ describe('Order CRUD routes tests', function () {
                         // assert.equal(resp.data.docno, "2020-10-001");
                         // assert.equal(resp.data.docdate, mockup.docdate);
                         assert.equal(resp.data.carNo, mockup.carNo);
-                        assert.equal(resp.data.cusAmount, mockup.cusAmount);
+                        assert.equal(resp.data.cusAmount, 1);
                         assert.equal(resp.data.orderStatus, update.orderStatus);
+
+                        assert.equal(resp.data.contactLists.length, 1);
+                        assert.equal(resp.data.contactLists[0].contactStatus, mockup.contactLists[0].contactStatus);
                         done();
                     });
             });
