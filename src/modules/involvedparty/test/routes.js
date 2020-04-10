@@ -24,6 +24,7 @@ describe('Involvedparty CRUD routes tests', function () {
             nationality: 'ไทย',
             countryOfResidence: 'กรุงเทพ',
             documentActive: true,
+            relationType: 'member',
             personalInfo: {
                 title: 'mr',
                 titleThai: 'นาย',
@@ -33,6 +34,7 @@ describe('Involvedparty CRUD routes tests', function () {
                 middleNameThai: 'กลาง',
                 lastName: 'ocha',
                 lastNameThai: 'โอชา',
+                luId: 'lineid',
                 citizenId: '1178844475698',
                 dateOfBirth: '2020-04-08',
                 gender: 'ชาย'
@@ -47,8 +49,8 @@ describe('Involvedparty CRUD routes tests', function () {
                 juristicID: 'aaa777',
                 juristicRegisteredDate: '2020-04-08',
                 companyName: '3m company',
-                companyNameThai: 'บริษัท 3ม'
-                // BusinessType: [] 
+                companyNameThai: 'บริษัท 3ม',
+                BusinessType: ['BusinessType'] 
             },
             registeredAddress: {
                 addressLine1: 'บ้านเลขที่ 27/9',
@@ -157,6 +159,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.nationality, mockup.nationality);
                         assert.equal(resp.data.countryOfResidence, mockup.countryOfResidence);
                         assert.equal(resp.data.documentActive, mockup.documentActive);
+                        assert.equal(resp.data.relationType, mockup.relationType);
 
                         assert.equal(resp.data.personalInfo.title, mockup.personalInfo.title);
                         assert.equal(resp.data.personalInfo.titleThai, mockup.personalInfo.titleThai);
@@ -166,6 +169,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.luId, mockup.personalInfo.luId);
                         assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
@@ -178,7 +182,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
                         assert.equal(resp.data.juristicPersonInfo.companyName, mockup.juristicPersonInfo.companyName);
                         assert.equal(resp.data.juristicPersonInfo.companyNameThai, mockup.juristicPersonInfo.companyNameThai);
-                        // assert.equal(resp.data.juristicPersonInfo.BusinessType, mockup.juristicPersonInfo.BusinessType);
+                        assert.equal(resp.data.juristicPersonInfo.BusinessType[0], mockup.juristicPersonInfo.BusinessType[0]);
 
                         assert.equal(resp.data.registeredAddress.addressLine1, mockup.registeredAddress.addressLine1);
                         assert.equal(resp.data.registeredAddress.addressStreet, mockup.registeredAddress.addressStreet);
@@ -244,6 +248,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.nationality, mockup.nationality);
                         assert.equal(resp.data.countryOfResidence, mockup.countryOfResidence);
                         assert.equal(resp.data.documentActive, mockup.documentActive);
+                        assert.equal(resp.data.relationType, mockup.relationType);
 
                         assert.equal(resp.data.personalInfo.title, mockup.personalInfo.title);
                         assert.equal(resp.data.personalInfo.titleThai, mockup.personalInfo.titleThai);
@@ -253,6 +258,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.luId, mockup.personalInfo.luId);
                         assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
@@ -265,7 +271,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
                         assert.equal(resp.data.juristicPersonInfo.companyName, mockup.juristicPersonInfo.companyName);
                         assert.equal(resp.data.juristicPersonInfo.companyNameThai, mockup.juristicPersonInfo.companyNameThai);
-                        // assert.equal(resp.data.juristicPersonInfo.BusinessType, mockup.juristicPersonInfo.BusinessType);
+                        assert.equal(resp.data.juristicPersonInfo.BusinessType[0], mockup.juristicPersonInfo.BusinessType[0]);
 
                         assert.equal(resp.data.registeredAddress.addressLine1, mockup.registeredAddress.addressLine1);
                         assert.equal(resp.data.registeredAddress.addressStreet, mockup.registeredAddress.addressStreet);
@@ -343,6 +349,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.nationality, mockup.nationality);
                         assert.equal(resp.data.countryOfResidence, mockup.countryOfResidence);
                         assert.equal(resp.data.documentActive, mockup.documentActive);
+                        assert.equal(resp.data.relationType, mockup.relationType);
 
                         assert.equal(resp.data.personalInfo.title, mockup.personalInfo.title);
                         assert.equal(resp.data.personalInfo.titleThai, mockup.personalInfo.titleThai);
@@ -352,6 +359,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.luId, mockup.personalInfo.luId);
                         assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
@@ -364,7 +372,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.juristicPersonInfo.juristicRegisteredDate, mockup.juristicPersonInfo.juristicRegisteredDate);
                         assert.equal(resp.data.juristicPersonInfo.companyName, mockup.juristicPersonInfo.companyName);
                         assert.equal(resp.data.juristicPersonInfo.companyNameThai, mockup.juristicPersonInfo.companyNameThai);
-                        // assert.equal(resp.data.juristicPersonInfo.BusinessType, mockup.juristicPersonInfo.BusinessType);
+                        assert.equal(resp.data.juristicPersonInfo.BusinessType[0], mockup.juristicPersonInfo.BusinessType[0]);
 
                         assert.equal(resp.data.registeredAddress.addressLine1, mockup.registeredAddress.addressLine1);
                         assert.equal(resp.data.registeredAddress.addressStreet, mockup.registeredAddress.addressStreet);

@@ -29,6 +29,11 @@ var InvolvedpartySchema = new Schema({
     documentActive: {
         type: Boolean
     },
+    relationType: {
+        type: String,
+        enum: ['member', 'driver', 'shareholder', 'supplier'],
+        default: 'member'
+    },
     personalInfo: {
         type: {
             title: {
@@ -53,6 +58,9 @@ var InvolvedpartySchema = new Schema({
                 type: String
             },
             lastNameThai: {
+                type: String
+            },
+            luId: {
                 type: String
             },
             citizenId: {
@@ -89,10 +97,10 @@ var InvolvedpartySchema = new Schema({
             },
             companyNameThai: {
                 type: String
-            }
-            // BusinessType: {
-            //     type: Array,
-            // },
+            },
+            BusinessType: {
+                type: [String]
+            },
         }
     },
     registeredAddress: {
