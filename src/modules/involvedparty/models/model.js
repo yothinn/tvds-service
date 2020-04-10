@@ -6,60 +6,63 @@ var Schema = mongoose.Schema;
 
 var InvolvedpartySchema = new Schema({
     involedPartyID: {
-        type: String,
+        type: String
     },
     involvedPartyType: {
-        type: String,
+        type: String
     },
     taxID: {
-        type: String,
+        type: String
     },
     otherUniqueID: {
-        type: String,
+        type: String
     },
     otherUniqueIDType: {
-        type: String,
+        type: String
     },
     nationality: {
-        type: String,
+        type: String
     },
     countryOfResidence: {
-        type: String,
+        type: String
     },
     documentActive: {
-        type: Boolean,
+        type: Boolean
     },
     personalInfo: {
         type: {
             title: {
-                type: String,
+                type: String
             },
             titleThai: {
-                type: String,
+                type: String
             },
             firstName: {
-                type: String,
+                type: String
             },
             firstNameThai: {
-                type: String,
+                type: String
             },
             middleName: {
-                type: String,
+                type: String
             },
             middleNameThai: {
-                type: String,
+                type: String
             },
             lastName: {
-                type: String,
+                type: String
             },
             lastNameThai: {
-                type: String,
+                type: String
+            },
+            citizenId: {
+                type: Number
             },
             dateOfBirth: {
-                type: Date,
+                type: Date
             },
             gender: {
-                type: String,
+                type: String
             },
         }
     },
@@ -76,16 +79,16 @@ var InvolvedpartySchema = new Schema({
     juristicPersonInfo: {
         type: {
             juristicID: {
-                type: String,
+                type: String
             },
             juristicRegisteredDate: {
-                type: Date,
+                type: Date
             },
             companyName: {
-                type: String,
+                type: String
             },
             companyNameThai: {
-                type: String,
+                type: String
             }
             // BusinessType: {
             //     type: Array,
@@ -95,65 +98,65 @@ var InvolvedpartySchema = new Schema({
     registeredAddress: {
         type: {
             addressLine1: {
-                type: String,
+                type: String
             },
             addressStreet: {
-                type: String,
+                type: String
             },
             addressSubDistrict: {
-                type: String,
+                type: String
             },
             addressDistrict: {
-                type: String,
+                type: String
             },
             addressProvince: {
-                type: String,
+                type: String
             },
             addressCountry: {
-                type: String,
+                type: String
             },
             addressPostalCode: {
-                type: String,
+                type: String
             },
             latitude: {
-                type: String,
+                type: String
             },
             longitude: {
-                type: String,
+                type: String
             },
         }
     },
     contactUseRegAddress: {
-        type: Boolean,
+        type: Boolean
     },
     contactAddress: {
         type: {
             addressLine1: {
-                type: String,
+                type: String
             },
             addressStreet: {
-                type: String,
+                type: String
             },
             addressSubDistrict: {
-                type: String,
+                type: String
             },
             addressDistrict: {
-                type: String,
+                type: String
             },
             addressProvince: {
-                type: String,
+                type: String
             },
             addressCountry: {
-                type: String,
+                type: String
             },
             addressPostalCode: {
-                type: String,
+                type: String
             },
             latitude: {
-                type: String,
+                type: String
             },
             longitude: {
-                type: String,
+                type: String
             },
         }
     },

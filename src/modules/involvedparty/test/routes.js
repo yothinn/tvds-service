@@ -33,6 +33,7 @@ describe('Involvedparty CRUD routes tests', function () {
                 middleNameThai: 'กลาง',
                 lastName: 'ocha',
                 lastNameThai: 'โอชา',
+                citizenId: '1178844475698',
                 dateOfBirth: '2020-04-08',
                 gender: 'ชาย'
             },
@@ -165,6 +166,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
 
@@ -251,6 +253,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
 
@@ -349,6 +352,7 @@ describe('Involvedparty CRUD routes tests', function () {
                         assert.equal(resp.data.personalInfo.middleNameThai, mockup.personalInfo.middleNameThai);
                         assert.equal(resp.data.personalInfo.lastName, mockup.personalInfo.lastName);
                         assert.equal(resp.data.personalInfo.lastNameThai, mockup.personalInfo.lastNameThai);
+                        assert.equal(resp.data.personalInfo.citizenId, mockup.personalInfo.citizenId);
                         assert.equal(resp.data.personalInfo.dateOfBirth, mockup.personalInfo.dateOfBirth);
                         assert.equal(resp.data.personalInfo.gender, mockup.personalInfo.gender);
 
