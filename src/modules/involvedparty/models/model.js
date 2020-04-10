@@ -56,7 +56,7 @@ var InvolvedpartySchema = new Schema({
                 type: String
             },
             citizenId: {
-                type: Number
+                type: String
             },
             dateOfBirth: {
                 type: Date
