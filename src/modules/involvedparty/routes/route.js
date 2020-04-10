@@ -14,6 +14,14 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
+    // https://tvds-service.herokuapp.com/api/chatbot/channel/1654060178
+    app.route('/api/chatbot/channel/1654060178')
+        .post(controller.getUserProfile, controller.replyMessage);
+
+    // https://tvds-service.herokuapp.com/api/chatbot/sendmessage
+    app.route('/api/chatbot/sendmessage')
+        .post(controller.sendMessage);
+
     app.param('involvedpartyId', controller.getByID);
 
     /**
