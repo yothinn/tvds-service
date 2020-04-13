@@ -166,7 +166,7 @@ describe('Postcode CRUD routes tests', function () {
 
     });
 
-    it('should be postcode get not use token', (done)=>{
+    xit('should be postcode get not use token', (done)=>{
         request(app)
         .get('/api/postcodes')
         .expect(403)
@@ -177,7 +177,7 @@ describe('Postcode CRUD routes tests', function () {
         .end(done);
     });
 
-    it('should be postcode post not use token', function (done) {
+    xit('should be postcode post not use token', function (done) {
 
         request(app)
             .post('/api/postcodes')
@@ -191,7 +191,7 @@ describe('Postcode CRUD routes tests', function () {
 
     });
 
-    it('should be postcode put not use token', function (done) {
+    xit('should be postcode put not use token', function (done) {
 
         request(app)
             .post('/api/postcodes')
@@ -219,7 +219,7 @@ describe('Postcode CRUD routes tests', function () {
 
     });
 
-    it('should be postcode delete not use token', function (done) {
+    xit('should be postcode delete not use token', function (done) {
 
         request(app)
             .post('/api/postcodes')
