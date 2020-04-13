@@ -133,7 +133,6 @@ describe('Postcode CRUD routes tests', function () {
                             return done(err);
                         }
                         var resp = res.body;
-                        console.log(resp.data);
                         assert.equal(resp.data.locationcode, update.locationcode);
                         assert.equal(resp.data.district, upadate.district);
                         assert.equal(resp.data.province, update.province);
