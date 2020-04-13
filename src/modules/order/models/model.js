@@ -28,7 +28,7 @@ var OrderSchema = new Schema({
             {
                 contactStatus: {
                     type: String,
-                    enum: ["select","waitapprove","confirm","reject"]
+                    enum: ["select", "waitapprove", "confirm", "reject"]
                 },
                 personalInfo: {
                     type: {
@@ -109,7 +109,10 @@ var OrderSchema = new Schema({
                             type: String
                         }
                     }
-                }
+                },
+                membership: {
+                    type: String
+                },
             }
         ]
     },
