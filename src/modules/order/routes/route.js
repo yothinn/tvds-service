@@ -14,6 +14,14 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
+    app.route('/api/ordersupdatemap').all(policy.isAllowed)
+        .post(
+            controller.getIpiData,
+            controller.getOrder,
+            controller.mapData,
+            controller.returnData
+        )
+
     app.param('orderId', controller.getByID);
 
     /**

@@ -6,7 +6,8 @@ var request = require('supertest'),
     jwt = require('jsonwebtoken'),
     mongoose = require('mongoose'),
     app = require('../../../config/express'),
-    Order = mongoose.model('Order');
+    Order = mongoose.model('Order'),
+    Involvedparty = mongoose.model('Involvedparty');
 
 var credentials,
     token,
@@ -201,6 +202,230 @@ describe('Order CRUD routes tests', function () {
                     .end(done);
             });
 
+    });
+
+    it('should be map IPI and order', function (done) {
+        var ipi1 = new Involvedparty({
+            "involedPartyID": "partyid001",
+            "personalInfo": {
+                "title": "mr",
+                "titleThai": "นาย",
+                "firstName": "",
+                "firstNameThai": "เบอร์เกอร์",
+                "middleName": "",
+                "middleNameThai": "",
+                "lastName": "",
+                "lastNameThai": "ซอสพริก",
+                "citizenId": "1159555569865",
+                "dateOfBirth": "2020-04-08",
+                "gender": "ชาย"
+            },
+            "directContact": [
+                {
+                    "method": "เบอร์มือถือ",
+                    "value": "0987451255"
+                }
+            ],
+            "contactAddress": {
+                "addressLine1": "บ้านเลขที่ 78/1",
+                "addressStreet": "วงแหวนลำลูกกา",
+                "addressSubDistrict": "บึงคำพร้อย",
+                "addressDistrict": "ลำลูกกา",
+                "addressProvince": "ปทุมธานี",
+                "addressCountry": "ไทย",
+                "addressPostalCode": "12130",
+                "latitude": "14.023695",
+                "longitude": "100.664178"
+            },
+            "membership": [
+                {
+                    "activity": "delivery"
+                }
+            ]
+        });
+        var ipi2 = new Involvedparty({
+            "involedPartyID": "partyid002",
+            "personalInfo": {
+                "title": "mr",
+                "titleThai": "นาย",
+                "firstName": "",
+                "firstNameThai": "เบอร์เกอร์",
+                "middleName": "",
+                "middleNameThai": "",
+                "lastName": "",
+                "lastNameThai": "ซอสพริก",
+                "citizenId": "1159555569865",
+                "dateOfBirth": "2020-04-08",
+                "gender": "ชาย"
+            },
+            "directContact": [
+                {
+                    "method": "เบอร์มือถือ",
+                    "value": "0987451255"
+                }
+            ],
+            "contactAddress": {
+                "addressLine1": "บ้านเลขที่ 78/1",
+                "addressStreet": "วงแหวนลำลูกกา",
+                "addressSubDistrict": "บึงคำพร้อย",
+                "addressDistrict": "ลำลูกกา",
+                "addressProvince": "ปทุมธานี",
+                "addressCountry": "ไทย",
+                "addressPostalCode": "12130",
+                "latitude": "14.023695",
+                "longitude": "100.664178"
+            },
+            "membership": [
+                {
+                    "activity": "shareholder"
+                },
+                {
+                    "activity": "delivery"
+                }
+            ]
+        });
+        var ipi3 = new Involvedparty({
+            "involedPartyID": "partyid003",
+            "personalInfo": {
+                "title": "mr",
+                "titleThai": "นาย",
+                "firstName": "",
+                "firstNameThai": "เบอร์เกอร์",
+                "middleName": "",
+                "middleNameThai": "",
+                "lastName": "",
+                "lastNameThai": "ซอสพริก",
+                "citizenId": "1159555569865",
+                "dateOfBirth": "2020-04-08",
+                "gender": "ชาย"
+            },
+            "directContact": [
+                {
+                    "method": "เบอร์มือถือ",
+                    "value": "0987451255"
+                }
+            ],
+            "contactAddress": {
+                "addressLine1": "บ้านเลขที่ 78/1",
+                "addressStreet": "วงแหวนลำลูกกา",
+                "addressSubDistrict": "บึงคำพร้อย",
+                "addressDistrict": "ลำลูกกา",
+                "addressProvince": "ปทุมธานี",
+                "addressCountry": "ไทย",
+                "addressPostalCode": "12130",
+                "latitude": "14.023695",
+                "longitude": "100.664178"
+            },
+            "membership": [
+                {
+                    "activity": "driver"
+                }
+            ]
+        });
+        var ipi4 = new Involvedparty({
+            "involedPartyID": "partyid004",
+            "personalInfo": {
+                "title": "mr",
+                "titleThai": "นาย",
+                "firstName": "",
+                "firstNameThai": "เบอร์เกอร์",
+                "middleName": "",
+                "middleNameThai": "",
+                "lastName": "",
+                "lastNameThai": "ซอสพริก",
+                "citizenId": "1159555569865",
+                "dateOfBirth": "2020-04-08",
+                "gender": "ชาย"
+            },
+            "directContact": [
+                {
+                    "method": "เบอร์มือถือ",
+                    "value": "0987451255"
+                }
+            ],
+            "contactAddress": {
+                "addressLine1": "บ้านเลขที่ 78/1",
+                "addressStreet": "วงแหวนลำลูกกา",
+                "addressSubDistrict": "บึงคำพร้อย",
+                "addressDistrict": "ลำลูกกา",
+                "addressProvince": "ปทุมธานี",
+                "addressCountry": "ไทย",
+                "addressPostalCode": "12130",
+                "latitude": "14.023695",
+                "longitude": "100.664178"
+            },
+            "membership": [
+                {
+                    "activity": "shareholder"
+                },
+                {
+                    "activity": "delivery"
+                }
+            ]
+        });
+
+        var body = {
+            "docdate": "2020-10-03"
+        };
+
+        ipi1.save(function (err, data1) {
+            ipi2.save(function (err, data2) {
+                ipi3.save(function (err, data3) {
+                    ipi4.save(function (err, data4) {
+
+                        var order1 = new Order({
+                            "docdate": "2020-10-01",
+                            "carNo": "01",
+                            "orderStatus": "draft",
+                            "contactLists": [{
+                                _id: data1._id,
+                                contactStatus: "select",
+                                membership: data1.membership
+                            }]
+                        });
+
+                        var order2 = new Order({
+                            "docdate": "2020-10-03",
+                            "carNo": "03",
+                            "orderStatus": "draft",
+                            "contactLists": [
+                                {
+                                    _id: data1._id,
+                                    contactStatus: "select",
+                                    membership: data1.membership
+                                }, {
+                                    _id: data2._id,
+                                    contactStatus: "confirm",
+                                    membership: data2.membership
+                                }
+                            ]
+                        });
+
+                        order1.save(function (err, order1) {
+                            order2.save(function (err, order2) {
+                                request(app)
+                                    .post('/api/ordersupdatemap')
+                                    .set('Authorization', 'Bearer ' + token)
+                                    .send(body)
+                                    .expect(200)
+                                    .end(function (err, res) {
+                                        if (err) {
+                                            return done(err);
+                                        }
+                                        var resp = res.body;
+                                        // console.log(resp);
+                                        assert.equal(resp.data.length, 3)
+                                        assert.equal(resp.data[0].contactStatus, 'select')
+                                        assert.equal(resp.data[1].contactStatus, 'confirm')
+                                        assert.equal(resp.data[2].contactStatus, '')
+                                        done();
+                                    });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 
     it('should be order get not use token', (done) => {
