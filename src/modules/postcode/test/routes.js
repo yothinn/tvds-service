@@ -134,7 +134,7 @@ describe('Postcode CRUD routes tests', function () {
                         }
                         var resp = res.body;
                         assert.equal(resp.data.locationcode, update.locationcode);
-                        assert.equal(resp.data.district, upadate.district);
+                        assert.equal(resp.data.district, update.district);
                         assert.equal(resp.data.province, update.province);
                         assert.equal(resp.data.postcode, update.postcode);
                         assert.equal(resp.data.subdistrict, update.subdistrict);
