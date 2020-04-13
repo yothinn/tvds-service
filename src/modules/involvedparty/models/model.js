@@ -200,7 +200,9 @@ var InvolvedpartySchema = new Schema({
     membership: {
         type: [{
             activity: {
-                type: String
+                type: String,
+                enum: ['member', 'delivery', 'driver', 'shareholder', 'supplier'],
+                default: 'delivery'
             },
             memberReference: {
                 type: String
