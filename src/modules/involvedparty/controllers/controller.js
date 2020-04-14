@@ -7,7 +7,6 @@ var mongoose = require("mongoose"),
   _ = require("lodash"),
   request = require("request");
 
-
 exports.getList = function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
@@ -126,51 +125,102 @@ exports.getUserProfile = (req, res, next) => {
 };
 
 exports.replyMessage = (req, res) => {
-    let headers = {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
-      };
-      let body = JSON.stringify({
+  let headers = {
+    "Content-Type": "application/json",
+    Authorization:
+      "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
+  };
+  let body = "";
+  switch (req.body.events[0].message.type) {
+    case "text":
+      switch (req.body.events[0].message.text) {
+        case "ยืนยันการลงทะเบียน":
+          body = JSON.stringify({
+            replyToken: req.body.events[0].replyToken,
+            messages: [
+              {
+                type: "template",
+                altText: "this is a buttons template",
+                template: {
+                  type: "buttons",
+                  actions: [
+                    {
+                      type: "uri",
+                      label: "คลิ๊กเพื่อระบุพิกัด",
+                      uri: "line://nv/location",
+                    },
+                  ],
+                  title: "ขอบคุณสำหรับการลงทะเบียน",
+                  text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
+                },
+              },
+            ],
+          });
+          break;
+        default:
+          body = JSON.stringify({
+            replyToken: req.body.events[0].replyToken,
+            messages: [
+              {
+                type: `text`,
+                text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
+              },
+            ],
+          });
+      }
+      break;
+    case "location":
+      body = JSON.stringify({
         replyToken: req.body.events[0].replyToken,
         messages: [
           {
             type: `text`,
-            text: `${JSON.stringify(req.body.events[0])}`,
+            text: `ขอบคุณสำหรับข้อมูลพิกัด`,
           },
         ],
       });
-      request.post(
-        {
-          url: "https://api.line.me/v2/bot/message/reply",
-          headers: headers,
-          body: body,
-        },
-        (err, resp, body) => {
-          console.log("status = " + resp.statusCode);
-          res.jsonp(req.body.events[0]);
-        }
-      );
+      break;
+    default:
+      text = "I have never heard of that fruit...";
+  }
+  // let body = JSON.stringify({
+  //   replyToken: req.body.events[0].replyToken,
+  //   messages: [
+  //     {
+  //       type: `text`,
+  //       text: `${JSON.stringify(req.body.events[0])}`,
+  //     },
+  //   ],
+  // });
+  request.post(
+    {
+      url: "https://api.line.me/v2/bot/message/reply",
+      headers: headers,
+      body: body,
+    },
+    (err, resp, body) => {
+      console.log("status = " + resp.statusCode);
+      res.jsonp(req.body.events[0]);
+    }
+  );
 };
 
 exports.sendMessage = (req, res) => {
-    let headers = {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
-      };
-      let body = JSON.stringify(req.body);
-      request.post(
-        {
-          url: "https://api.line.me/v2/bot/message/push",
-          headers: headers,
-          body: body,
-        },
-        (err, resp, body) => {
-          console.log("status = " + resp.statusCode);
-          res.jsonp({});
-        }
-      );
+  let headers = {
+    "Content-Type": "application/json",
+    Authorization:
+      "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
+  };
+  let body = JSON.stringify(req.body);
+  request.post(
+    {
+      url: "https://api.line.me/v2/bot/message/push",
+      headers: headers,
+      body: body,
+    },
+    (err, resp, body) => {
+      console.log("status = " + resp.statusCode);
+      res.jsonp({});
+    }
+  );
 };
-
-
