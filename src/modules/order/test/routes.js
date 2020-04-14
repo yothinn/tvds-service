@@ -380,7 +380,7 @@ describe('Order CRUD routes tests', function () {
                             "contactLists": [{
                                 _id: data1._id,
                                 contactStatus: "select",
-                                membership: data1.membership
+                                membership: "delivery"
                             }]
                         });
 
@@ -392,17 +392,23 @@ describe('Order CRUD routes tests', function () {
                                 {
                                     _id: data1._id,
                                     contactStatus: "select",
-                                    membership: data1.membership
+                                    membership: "delivery"
                                 }, {
                                     _id: data2._id,
                                     contactStatus: "confirm",
-                                    membership: data2.membership
+                                    membership: "shareholder"
                                 }
                             ]
                         });
 
                         order1.save(function (err, order1) {
+                            if (err) {
+                                return done(err);
+                            }
                             order2.save(function (err, order2) {
+                                if (err) {
+                                    return done(err);
+                                }
                                 request(app)
                                     .post('/api/ordersupdatemap')
                                     .set('Authorization', 'Bearer ' + token)
