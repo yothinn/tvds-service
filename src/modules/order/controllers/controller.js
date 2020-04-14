@@ -133,6 +133,7 @@ exports.getIpiData = function (req, res, next) {
                 if (member.activity === "delivery" || member.activity === "shareholder") {
                     ipiUseData.push({
                         _id: data._id,
+                        docno: "",
                         contactStatus: "",
                         personalInfo: data.personalInfo,
                         directContact: data.directContact,
@@ -179,6 +180,7 @@ exports.mapData = function (req, res, next) {
                 // console.log(ipiIndex);
 
                 if (ipiIndex !== -1) {
+                    ipiDatas[ipiIndex].docno = orderData.docno;
                     ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
                 };
             };

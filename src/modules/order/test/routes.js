@@ -374,6 +374,7 @@ describe('Order CRUD routes tests', function () {
                     ipi4.save(function (err, data4) {
 
                         var order1 = new Order({
+                            "docno": "2020-10-0001",
                             "docdate": "2020-10-01",
                             "carNo": "01",
                             "orderStatus": "draft",
@@ -385,6 +386,7 @@ describe('Order CRUD routes tests', function () {
                         });
 
                         var order2 = new Order({
+                            "docno": "2020-10-0002",
                             "docdate": "2020-10-03",
                             "carNo": "03",
                             "orderStatus": "draft",
@@ -422,7 +424,9 @@ describe('Order CRUD routes tests', function () {
                                         // console.log(resp);
                                         assert.equal(resp.data.length, 3)
                                         assert.equal(resp.data[0].contactStatus, 'select')
+                                        assert.equal(resp.data[0].docno, "2020-10-0002")
                                         assert.equal(resp.data[1].contactStatus, 'confirm')
+                                        assert.equal(resp.data[1].docno, "2020-10-0002")
                                         assert.equal(resp.data[2].contactStatus, '')
                                         done();
                                     });
