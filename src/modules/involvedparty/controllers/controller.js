@@ -224,3 +224,54 @@ exports.sendMessage = (req, res) => {
     }
   );
 };
+
+exports.query = function (req, res) {
+  let query = null;
+  if (req.body.lineUserId) {
+    query = {
+      "directContact.method": "lineUserId",
+      "directContact.value": req.body.lineUserId,
+    };
+  }
+
+  if (req.body.firstNameThai && req.body.lastNameThai && req.body.mobileNumber) {
+    query = {
+      $or: [
+        {
+          "personalInfo.firstNameThai": req.body.firstNameThai,
+          "personalInfo.lastNameThai": req.body.lastNameThai,
+        },
+        {
+          "personalInfo.firstNameThai": req.body.firstNameThai,
+          "directContact.method": "mobile",
+          "directContact.value": req.body.mobileNumber,
+        },
+        {
+          "personalInfo.lastNameThai": req.body.lastNameThai,
+          "directContact.method": "mobile",
+          "directContact.value": req.body.mobileNumber,
+        },
+      ],
+    };
+  }
+  // console.log(query);
+  if (!query) {
+    res.jsonp({
+      status: 200,
+    });
+  } else {
+    Involvedparty.findOne(query, function (err, data) {
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err),
+        });
+      } else {
+        res.jsonp({
+          status: 200,
+          data: data,
+        });
+      }
+    });
+  }
+};
