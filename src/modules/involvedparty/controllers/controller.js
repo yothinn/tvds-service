@@ -124,53 +124,63 @@ exports.getUserProfile = (req, res, next) => {
   next();
 };
 
-exports.replyMessage = (req, res) => {
-  let headers = {
-    "Content-Type": "application/json",
-    Authorization:
-      "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
-  };
-  let body = "";
-  switch (req.body.events[0].message.type) {
-    case "text":
-      switch (req.body.events[0].message.text) {
-        case "ยืนยันการลงทะเบียน":
-          body = JSON.stringify({
-            replyToken: req.body.events[0].replyToken,
-            messages: [
-              {
-                type: "template",
-                altText: "this is a buttons template",
-                template: {
-                  type: "buttons",
-                  actions: [
-                    {
-                      type: "uri",
-                      label: "คลิ๊กเพื่อระบุพิกัด",
-                      uri: "line://nv/location",
-                    },
-                  ],
-                  title: "ขอบคุณสำหรับการลงทะเบียน",
-                  text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
-                },
+exports.messageTypeText = (req, res, next) => {
+  if (req.body.events[0].message.type === "text") {
+    switch (req.body.events[0].message.text) {
+      case "ยืนยันการลงทะเบียน":
+        req.replyBody = JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              type: "template",
+              altText: "this is a buttons template",
+              template: {
+                type: "buttons",
+                actions: [
+                  {
+                    type: "uri",
+                    label: "คลิ๊กเพื่อระบุพิกัด",
+                    uri: "line://nv/location",
+                  },
+                ],
+                title: "ขอบคุณสำหรับการลงทะเบียน",
+                text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
               },
-            ],
-          });
-          break;
-        default:
-          body = JSON.stringify({
-            replyToken: req.body.events[0].replyToken,
-            messages: [
-              {
-                type: `text`,
-                text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
-              },
-            ],
-          });
-      }
-      break;
-    case "location":
-      body = JSON.stringify({
+            },
+          ],
+        });
+        break;
+      default:
+        req.replyBody = JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              type: `text`,
+              text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
+            },
+          ],
+        });
+    }
+    next();
+  } else {
+    next();
+  }
+};
+
+exports.messageTypeLocations = (req, res, next) => {
+  if (req.body.events[0].message.type === "location") {
+    let query = {
+      "directContact.method": "lineUserId",
+      "directContact.value": req.body.events[0].source.userId,
+    };
+    let update = {
+      contactAddress: {
+        latitude: req.body.events[0].message.latitude,
+        longitude: req.body.events[0].message.longitude,
+      },
+    };
+    Involvedparty.findOneAndUpdate(query, update, function (err, data) {
+      req.replyBody = JSON.stringify({
         replyToken: req.body.events[0].replyToken,
         messages: [
           {
@@ -179,24 +189,34 @@ exports.replyMessage = (req, res) => {
           },
         ],
       });
-      break;
-    default:
-      text = "I have never heard of that fruit...";
+      next();
+    });
+  } else {
+    next();
   }
-  // let body = JSON.stringify({
-  //   replyToken: req.body.events[0].replyToken,
-  //   messages: [
-  //     {
-  //       type: `text`,
-  //       text: `${JSON.stringify(req.body.events[0])}`,
-  //     },
-  //   ],
-  // });
+};
+
+exports.replyMessage = (req, res) => {
+  let headers = {
+    "Content-Type": "application/json",
+    Authorization:
+      "Bearer 7bmSZYoiFA0K+GJGqft+YICRldOb/ONI3LeKdOx7o4FSIvrsHVRXkvrAaQKIz5vZP4oPJO7EO/8n6gFddEgBCa6MsvyVjQnCs/ADVaT83nDEJXn3KsXXvT2Vd1Hbx5H+Lc9QD3G7lXhpbVOz6LjgaAdB04t89/1O/w1cDnyilFU=",
+  };
   request.post(
     {
       url: "https://api.line.me/v2/bot/message/reply",
       headers: headers,
-      body: body,
+      body:
+        req.replyBody ||
+        JSON.stringify({
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              type: `text`,
+              text: `ขอบคุณสำหรับสิ่งดีๆที่มอบให้ครับ`,
+            },
+          ],
+        }),
     },
     (err, resp, body) => {
       console.log("status = " + resp.statusCode);
@@ -234,7 +254,11 @@ exports.query = function (req, res) {
     };
   }
 
-  if (req.body.firstNameThai && req.body.lastNameThai && req.body.mobileNumber) {
+  if (
+    req.body.firstNameThai &&
+    req.body.lastNameThai &&
+    req.body.mobileNumber
+  ) {
     query = {
       $or: [
         {
