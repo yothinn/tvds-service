@@ -130,7 +130,7 @@ exports.getIpiData = function (req, res, next) {
             for (let j = 0; j < data.membership.length; j++) {
                 const member = data.membership[j];
                 // console.log(member);
-                if (member.activity === "delivery" || member.activity === "shareholder") {
+                if (member.activity === "delivery") {
                     ipiUseData.push({
                         _id: data._id,
                         docno: "",

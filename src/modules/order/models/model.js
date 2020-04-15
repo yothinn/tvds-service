@@ -111,7 +111,15 @@ var OrderSchema = new Schema({
                     }
                 },
                 membership: {
-                    type: String
+                    type: [{
+                        activity: {
+                            type: String,
+                            enum: ['member', 'delivery', 'driver', 'shareholder', 'supplier'],
+                        },
+                        memberReference: {
+                            type: String
+                        },
+                    }]
                 },
             }
         ]

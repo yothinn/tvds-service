@@ -52,7 +52,17 @@ describe('Order CRUD routes tests', function () {
                         "addressPostalCode": "12130",
                         "latitude": "13.7480318",
                         "longitude": "100.5848721"
-                    }
+                    },
+                    "membership": [
+                        {
+                            "activity": "shareholder",
+                            "memberReference": "1234"
+                        },
+                        {
+                            "activity": "delivery",
+                            "memberReference": "1234"
+                        }
+                    ]
                 }
             ]
         };
@@ -115,6 +125,10 @@ describe('Order CRUD routes tests', function () {
 
                         assert.equal(resp.data.contactLists.length, 1);
                         assert.equal(resp.data.contactLists[0].contactStatus, mockup.contactLists[0].contactStatus);
+                        assert.equal(resp.data.contactLists[0].membership[0].activity, mockup.contactLists[0].membership[0].activity);
+                        assert.equal(resp.data.contactLists[0].membership[0].memberReference, mockup.contactLists[0].membership[0].memberReference);
+                        assert.equal(resp.data.contactLists[0].membership[1].activity, mockup.contactLists[0].membership[1].activity);
+                        assert.equal(resp.data.contactLists[0].membership[1].memberReference, mockup.contactLists[0].membership[1].memberReference);
                         done();
                     });
             });
@@ -277,10 +291,10 @@ describe('Order CRUD routes tests', function () {
             },
             "membership": [
                 {
-                    "activity": "shareholder"
+                    "activity": "delivery"
                 },
                 {
-                    "activity": "delivery"
+                    "activity": "shareholder"
                 }
             ]
         });
@@ -381,7 +395,7 @@ describe('Order CRUD routes tests', function () {
                             "contactLists": [{
                                 _id: data1._id,
                                 contactStatus: "select",
-                                membership: "delivery"
+                                membership: data1.membership
                             }]
                         });
 
@@ -394,11 +408,11 @@ describe('Order CRUD routes tests', function () {
                                 {
                                     _id: data1._id,
                                     contactStatus: "select",
-                                    membership: "delivery"
+                                    membership: data1.membership
                                 }, {
                                     _id: data2._id,
                                     contactStatus: "confirm",
-                                    membership: "shareholder"
+                                    membership: data2.membership
                                 }
                             ]
                         });
