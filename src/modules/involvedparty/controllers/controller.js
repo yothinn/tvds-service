@@ -174,8 +174,8 @@ exports.messageTypeLocations = (req, res, next) => {
       "directContact.value": req.body.events[0].source.userId,
     };
     let update = {
-      "contactAddress.latitude": req.body.events[0].message.latitude,
-      "contactAddress.longitude": req.body.events[0].message.longitude,
+      "contactAddress.latitude": `${req.body.events[0].message.latitude}`,
+      "contactAddress.longitude": `${req.body.events[0].message.longitude}`,
     };
     Involvedparty.findOneAndUpdate(query, update, function (err, data) {
       req.replyBody = JSON.stringify({
