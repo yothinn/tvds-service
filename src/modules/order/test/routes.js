@@ -81,16 +81,29 @@ describe('Order CRUD routes tests', function () {
     });
 
     it('should be Order get use token', (done) => {
+
         request(app)
-            .get('/api/orders')
+            .post('/api/orders')
             .set('Authorization', 'Bearer ' + token)
+            .send(mockup)
             .expect(200)
-            .end((err, res) => {
+            .end(function (err, res) {
                 if (err) {
                     return done(err);
                 }
                 var resp = res.body;
-                done();
+                request(app)
+                    .get('/api/orders')
+                    .set('Authorization', 'Bearer ' + token)
+                    .expect(200)
+                    .end((err, res) => {
+                        if (err) {
+                            return done(err);
+                        }
+                        var resp = res.body;
+                        // console.log(resp.data)
+                        done();
+                    });
             });
     });
 

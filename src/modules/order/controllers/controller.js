@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
 
-exports.getList = function (req, res) {
+exports.getList = function (req, res, next) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
     var query = {};
@@ -24,13 +24,48 @@ exports.getList = function (req, res) {
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            res.jsonp({
-                status: 200,
-                data: datas
-            });
+            req.orderDatas = datas;
+            next();
         };
     });
 };
+
+exports.sumStatusList = function (req, res, next) {
+    // console.log(req.orderDatas)
+    var orderDatas = req.orderDatas;
+    var newOrderDatas = [];
+
+    for (let i = 0; i < orderDatas.length; i++) {
+        const orderData = orderDatas[i];
+
+        var confirmCount = 0;
+        var rejectCount = 0;
+        for (let j = 0; j < orderData.contactLists.length; j++) {
+            const listData = orderData.contactLists[j];
+            if (listData.contactStatus === "confirm") {
+                confirmCount += 1
+            };
+            if (listData.contactStatus === "reject") {
+                rejectCount += 1
+            };
+        };
+
+        var newData = {
+            _id: orderData._id,
+            docno: orderData.docno,
+            docdate: orderData.docdate,
+            carNo: orderData.carNo,
+            orderStatus: orderData.orderStatus,
+            cusAmount: orderData.cusAmount,
+            confirmCount: confirmCount,
+            rejectCount: rejectCount
+        };
+        newOrderDatas.push(newData);
+    };
+
+    req.returnData = newOrderDatas;
+    next();
+}
 
 exports.create = function (req, res) {
     var newOrder = new Order(req.body);
