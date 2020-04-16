@@ -126,7 +126,7 @@ exports.getUserProfile = (req, res, next) => {
 
 exports.messageTypeText = (req, res, next) => {
   if (req.body.events[0].message.type === "text") {
-    if(req.body.events[0].message.text.startswith("รับนัดหมาย")){
+    if(req.body.events[0].message.text.startsWith("รับนัดหมาย")){
       req.replyBody = JSON.stringify({
         replyToken: req.body.events[0].replyToken,
         messages: [
@@ -136,7 +136,7 @@ exports.messageTypeText = (req, res, next) => {
           },
         ],
       });
-    }else if(req.body.events[0].message.text.startswith("ปฏิเสธ")){
+    }else if(req.body.events[0].message.text.startsWith("ปฏิเสธ")){
       req.replyBody = JSON.stringify({
         replyToken: req.body.events[0].replyToken,
         messages: [
