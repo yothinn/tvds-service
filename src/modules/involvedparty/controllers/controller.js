@@ -126,40 +126,62 @@ exports.getUserProfile = (req, res, next) => {
 
 exports.messageTypeText = (req, res, next) => {
   if (req.body.events[0].message.type === "text") {
-    switch (req.body.events[0].message.text) {
-      case "ยืนยันการลงทะเบียน":
-        req.replyBody = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: [
-            {
-              type: "template",
-              altText: "this is a buttons template",
-              template: {
-                type: "buttons",
-                actions: [
-                  {
-                    type: "uri",
-                    label: "คลิ๊กเพื่อระบุพิกัด",
-                    uri: "line://nv/location",
-                  },
-                ],
-                title: "ขอบคุณสำหรับการลงทะเบียน",
-                text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
+    if(req.body.events[0].message.text.startswith("รับนัดหมาย")){
+      req.replyBody = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: [
+          {
+            type: `text`,
+            text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+          },
+        ],
+      });
+    }else if(req.body.events[0].message.text.startswith("ปฏิเสธ")){
+      req.replyBody = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: [
+          {
+            type: `text`,
+            text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+          },
+        ],
+      });
+    }else{
+      switch (req.body.events[0].message.text) {
+        case "ยืนยันการลงทะเบียน":
+          req.replyBody = JSON.stringify({
+            replyToken: req.body.events[0].replyToken,
+            messages: [
+              {
+                type: "template",
+                altText: "this is a buttons template",
+                template: {
+                  type: "buttons",
+                  actions: [
+                    {
+                      type: "uri",
+                      label: "คลิ๊กเพื่อระบุพิกัด",
+                      uri: "line://nv/location",
+                    },
+                  ],
+                  title: "ขอบคุณสำหรับการลงทะเบียน",
+                  text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
+                },
               },
-            },
-          ],
-        });
-        break;
-      default:
-        req.replyBody = JSON.stringify({
-          replyToken: req.body.events[0].replyToken,
-          messages: [
-            {
-              type: `text`,
-              text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
-            },
-          ],
-        });
+            ],
+          });
+          break;
+        default:
+          req.replyBody = JSON.stringify({
+            replyToken: req.body.events[0].replyToken,
+            messages: [
+              {
+                type: `text`,
+                text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
+              },
+            ],
+          });
+      }
     }
     next();
   } else {
