@@ -253,11 +253,14 @@ exports.confirmAndReject = (req, res, next) => {
   if (req.order) {
     req.order.contactLists.forEach((contact) => {
       contact.directContact.forEach((d) => {
-        if (d.method === "lineUserId" && d.value === req.body.lineUserId) {
+        console.log(`${d.method} === lineUserId && ${d.value} === ${req.body.events[0].source.userId}`);
+        if (d.method === "lineUserId" && d.value === req.body.events[0].source.userId) {
           contact.contactStatus = req.jobOrder.act;
+          
         }
       });
     });
+    // console.log(JSON.stringify(req.order));
     req.order.save(function (err, data) {
       if (err) {
         req.replyBody.messages.push({
