@@ -242,7 +242,6 @@ exports.getOrder = (req, res, next) => {
         });
       }
       req.order = order;
-      console.log(JSON.stringify(req.order));
       next();
     });
   } else {
@@ -287,7 +286,6 @@ exports.confirmAndReject = (req, res, next) => {
 };
 
 exports.replyMessage = (req, res) => {
-  console.log(JSON.stringify(req.replyBody));
   let headers = {
     "Content-Type": "application/json",
     Authorization:
