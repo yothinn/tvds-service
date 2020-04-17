@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("express-jwt");
 const config = require("./config");
+const socket = require('./socket.io');
 const app = express();
 
 var glob = require("glob"),
@@ -68,4 +69,7 @@ glob
     require(path.resolve(file)).invokeRolesPolicies();
   });
 
-module.exports = app;
+const http = require('http').Server(app);
+socket.connection(http);
+
+module.exports = http;
