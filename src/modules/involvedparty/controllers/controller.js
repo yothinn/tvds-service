@@ -231,7 +231,7 @@ exports.messageTypeLocations = (req, res, next) => {
   }
 };
 
-exports.getOrder = (req, res, nex) => {
+exports.getOrder = (req, res, next) => {
   if (req.jobOrder) {
     // findOrder
     Order.findOne({ docno: req.docno }, (err, order) => {
