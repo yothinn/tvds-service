@@ -129,6 +129,7 @@ exports.messageTypeText = (req, res, next) => {
   if (req.body.events[0].message.type === "text") {
     if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
       let arrMsg = req.body.events[0].message.text.split(":");
+      console.log(arrMsg.length);
       if (arrMsg.length === 3) {
         req.jobOrder = {
           no: arrMsg[2],
@@ -146,6 +147,7 @@ exports.messageTypeText = (req, res, next) => {
       };
     } else if (req.body.events[0].message.text.startsWith("ปฏิเสธ")) {
       let arrMsg = req.body.events[0].message.text.split(":");
+      console.log(arrMsg.length);
       if (arrMsg.length === 3) {
         req.jobOrder = {
           no: arrMsg[2],
