@@ -253,7 +253,7 @@ exports.confirmAndReject = (req, res, next) => {
   if (req.order) {
     req.order.contactLists.forEach((contact) => {
       contact.directContact.forEach((d) => {
-        console.log(JSON.stringify(contact));
+        console.log(`${d.method} === lineUserId && ${d.value} === ${req.body.lineUserId}`);
         if (d.method === "lineUserId" && d.value === req.body.lineUserId) {
           contact.contactStatus = req.jobOrder.act;
           
