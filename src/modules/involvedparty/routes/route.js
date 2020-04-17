@@ -19,7 +19,14 @@ module.exports = function (app) {
   // https://tvds-service.herokuapp.com/api/chatbot/channel/1654060178
   app
     .route("/api/chatbot/channel/1654060178")
-    .post(controller.getUserProfile, controller.messageTypeText, controller.messageTypeLocations, controller.replyMessage);
+    .post(
+      controller.getUserProfile,
+      controller.messageTypeText,
+      controller.messageTypeLocations,
+      controller.getOrder,
+      controller.confirmAndReject,
+      controller.replyMessage
+    );
 
   // https://tvds-service.herokuapp.com/api/chatbot/sendmessage
   app.route("/api/chatbot/sendmessage").post(controller.sendMessage);

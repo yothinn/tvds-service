@@ -3,6 +3,7 @@ var mongoose = require("mongoose"),
   model = require("../models/model"),
   mq = require("../../core/controllers/rabbitmq"),
   Involvedparty = mongoose.model("Involvedparty"),
+  Order = mongoose.model("Order"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash"),
   request = require("request");
@@ -126,30 +127,44 @@ exports.getUserProfile = (req, res, next) => {
 
 exports.messageTypeText = (req, res, next) => {
   if (req.body.events[0].message.type === "text") {
-    if(req.body.events[0].message.text.startsWith("รับนัดหมาย")){
-      req.replyBody = JSON.stringify({
+    if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
+      let arrMsg = req.body.events[0].message.text.split(":");
+      if (arrMsg.length === 3) {
+        req.jobOrder = {
+          no: arrMsg[2],
+          act: "confirm",
+        };
+      }
+      req.replyBody = {
         replyToken: req.body.events[0].replyToken,
         messages: [
           {
             type: `text`,
-            text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+            text: `ระบบกำลังดำเนินการ "ยืนยัน" นัดหมายของท่าน...`,
           },
         ],
-      });
-    }else if(req.body.events[0].message.text.startsWith("ปฏิเสธ")){
-      req.replyBody = JSON.stringify({
+      };
+    } else if (req.body.events[0].message.text.startsWith("ปฏิเสธ")) {
+      let arrMsg = req.body.events[0].message.text.split(":");
+      if (arrMsg.length === 3) {
+        req.jobOrder = {
+          no: arrMsg[2],
+          act: "reject",
+        };
+      }
+      req.replyBody = {
         replyToken: req.body.events[0].replyToken,
         messages: [
           {
             type: `text`,
-            text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+            text: `ระบบกำลังดำเนินการ "ปฏิเสธ" นัดหมายของท่าน...`,
           },
         ],
-      });
-    }else{
+      };
+    } else {
       switch (req.body.events[0].message.text) {
         case "ยืนยันการลงทะเบียน":
-          req.replyBody = JSON.stringify({
+          req.replyBody = {
             replyToken: req.body.events[0].replyToken,
             messages: [
               {
@@ -169,10 +184,10 @@ exports.messageTypeText = (req, res, next) => {
                 },
               },
             ],
-          });
+          };
           break;
         default:
-          req.replyBody = JSON.stringify({
+          req.replyBody = {
             replyToken: req.body.events[0].replyToken,
             messages: [
               {
@@ -180,7 +195,7 @@ exports.messageTypeText = (req, res, next) => {
                 text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
               },
             ],
-          });
+          };
       }
     }
     next();
@@ -200,7 +215,7 @@ exports.messageTypeLocations = (req, res, next) => {
       "contactAddress.longitude": `${req.body.events[0].message.longitude}`,
     };
     Involvedparty.findOneAndUpdate(query, update, function (err, data) {
-      req.replyBody = JSON.stringify({
+      req.replyBody = {
         replyToken: req.body.events[0].replyToken,
         messages: [
           {
@@ -208,7 +223,61 @@ exports.messageTypeLocations = (req, res, next) => {
             text: `ขอบคุณสำหรับข้อมูลพิกัด`,
           },
         ],
+      };
+      next();
+    });
+  } else {
+    next();
+  }
+};
+
+exports.getOrder = (req, res, nex) => {
+  if (req.jobOrder) {
+    // findOrder
+    Order.findOne({ docno: req.docno }, (err, order) => {
+      if (err) {
+        req.replyBody.messages.push({
+          type: `text`,
+          text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+        });
+      }
+      req.order = order;
+      next();
+    });
+  } else {
+    next();
+  }
+};
+
+exports.confirmAndReject = (req, res, next) => {
+  if (req.order) {
+    req.order.contactLists.forEach((contact) => {
+      contact.directContact.forEach((d) => {
+        if (d.method === "lineUserId" && d.value === req.body.lineUserId) {
+          contact.contactStatus = req.jobOrder.act;
+        }
       });
+    });
+    req.order.save(function (err, data) {
+      if (err) {
+        req.replyBody.messages.push({
+          type: `text`,
+          text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+        });
+      } else {
+        if(req.jobOrder.act === "confirm"){
+          req.replyBody.messages.push({
+            type: `text`,
+            text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+          });
+        }else{
+          req.replyBody.messages.push({
+            type: `text`,
+            text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+          });
+        }
+        
+      }
       next();
     });
   } else {
@@ -227,7 +296,7 @@ exports.replyMessage = (req, res) => {
       url: "https://api.line.me/v2/bot/message/reply",
       headers: headers,
       body:
-        req.replyBody ||
+        JSON.stringify(req.replyBody) ||
         JSON.stringify({
           replyToken: req.body.events[0].replyToken,
           messages: [
