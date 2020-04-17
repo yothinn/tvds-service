@@ -129,7 +129,6 @@ exports.messageTypeText = (req, res, next) => {
   if (req.body.events[0].message.type === "text") {
     if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
       let arrMsg = req.body.events[0].message.text.split(":");
-      console.log(arrMsg.length);
       if (arrMsg.length === 3) {
         req.jobOrder = {
           no: arrMsg[2],
@@ -147,7 +146,6 @@ exports.messageTypeText = (req, res, next) => {
       };
     } else if (req.body.events[0].message.text.startsWith("ปฏิเสธ")) {
       let arrMsg = req.body.events[0].message.text.split(":");
-      console.log(arrMsg.length);
       if (arrMsg.length === 3) {
         req.jobOrder = {
           no: arrMsg[2],
@@ -236,7 +234,7 @@ exports.messageTypeLocations = (req, res, next) => {
 exports.getOrder = (req, res, next) => {
   if (req.jobOrder) {
     // findOrder
-    Order.findOne({ docno: req.docno }, (err, order) => {
+    Order.findOne({ docno: req.jobOrder.no.trim() }, (err, order) => {
       if (err) {
         req.replyBody.messages.push({
           type: `text`,
@@ -244,6 +242,7 @@ exports.getOrder = (req, res, next) => {
         });
       }
       req.order = order;
+      console.log(JSON.stringify(req.order));
       next();
     });
   } else {
