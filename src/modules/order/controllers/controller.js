@@ -235,6 +235,7 @@ exports.mapData = function (req, res, next) {
       //วนหา contactLists
       for (let j = 0; j < orderData.contactLists.length; j++) {
         const contactList = orderData.contactLists[j];
+        
         // console.log(contactList);
 
         let ipiIndex = ipiDatas.findIndex((item) => {
@@ -245,7 +246,7 @@ exports.mapData = function (req, res, next) {
         if (ipiIndex !== -1) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
-          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}${contactList.contactStatus.substring(0,1)}`
+          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}${contactList.contactStatus}`
         }
       }
     }
