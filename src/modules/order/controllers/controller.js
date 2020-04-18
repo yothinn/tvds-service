@@ -183,10 +183,17 @@ exports.getIpiData = function (req, res, next) {
       //       break; //เข้าเงื่อนไขอย่างไหน ให้ออกลูปทันที
       //     }
       //   }
+      let bgColor = "ff2a2a";
+      data.membership.forEach(member => {
+        if (member.activity === "shareholder") {
+          bgColor = "167eff"; //สีน้ำเงิน
+        } 
+      })
       ipiUseData.push({
         _id: data._id,
         docno: "",
         contactStatus: "",
+        bg : bgColor,
         personalInfo: data.personalInfo,
         directContact: data.directContact,
         contactAddress: data.contactAddress,
