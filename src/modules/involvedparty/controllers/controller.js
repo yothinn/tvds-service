@@ -395,11 +395,11 @@ exports.query = function (req, res) {
           "directContact.method": "mobile",
           "directContact.value": req.body.mobileNumber,
         },
-        {
-          "personalInfo.lastNameThai": req.body.lastNameThai,
-          "directContact.method": "mobile",
-          "directContact.value": req.body.mobileNumber,
-        },
+        // {
+        //   "personalInfo.lastNameThai": req.body.lastNameThai,
+        //   "directContact.method": "mobile",
+        //   "directContact.value": req.body.mobileNumber,
+        // },
       ],
     };
   }
