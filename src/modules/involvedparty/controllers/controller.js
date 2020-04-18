@@ -40,10 +40,10 @@ exports.getList = async function (req, res) {
   if(keyword){
     filter = {
       $or: [
-        { "personalInfo.firstNameThai": { $regex: keyword, $options: 'i' } },
-        { "personalInfo.lastNameThai": { $regex: keyword, $options: 'i' } },
-        { "contactAddress.addressPostalCode": { $regex: keyword, $options: 'i' }},
-        { "directContact.value": { $regex: keyword, $options: 'i' }, "directContact.method": "mobile"},
+        { "personalInfo.firstNameThai": { $regex: "^" + keyword, $options: 'i' } },
+        { "personalInfo.lastNameThai": { $regex: "^" + keyword, $options: 'i' } },
+        { "contactAddress.addressPostalCode": { $regex: "^" + keyword, $options: 'i' }},
+        { "directContact.value": { $regex: "^" + keyword, $options: 'i' }, "directContact.method": "mobile"},
       ],
     }
   }
