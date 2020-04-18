@@ -245,7 +245,7 @@ exports.mapData = function (req, res, next) {
         if (ipiIndex !== -1) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
-          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}&name=${contactList.contactStatus}`
+          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}${contactList.contactStatus}`
         }
       }
     }
