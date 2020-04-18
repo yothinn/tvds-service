@@ -167,8 +167,15 @@ OrderSchema.pre('save', function (next) {
             var year = new Date(Order.docdate).getFullYear();
             var month = new Date(Order.docdate).getMonth() + 1;
             var fullMonth = month.toString().padStart(2, "0");
-            var num = data.length + 1;
-            var no = num.toString().padStart(4, "0");
+
+            if (data.length === 0) {
+                var num = 1;
+                var no = num.toString().padStart(4, "0");
+            } else {
+                var docnoLastest = data[data.length - 1].docno.substr(8, 4);
+                var num = Number(docnoLastest) + 1;
+                var no = num.toString().padStart(4, "0");
+            }
             Order.docno = year.toString() + '-' + fullMonth.toString() + '-' + no.toString();
             next();
         });
