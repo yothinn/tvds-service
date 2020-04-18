@@ -184,16 +184,22 @@ exports.getIpiData = function (req, res, next) {
       //     }
       //   }
       let bgColor = "ff2a2a";
-      data.membership.forEach(member => {
+      data.membership.forEach((member) => {
         if (member.activity === "shareholder") {
           bgColor = "167eff"; //สีน้ำเงิน
-        } 
-      })
+        }
+      });
       ipiUseData.push({
         _id: data._id,
         docno: "",
         contactStatus: "",
-        bg : bgColor,
+        icon: {
+          url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}`,
+          scaledSize: {
+            width: 34,
+            height: 34,
+          },
+        },
         personalInfo: data.personalInfo,
         directContact: data.directContact,
         contactAddress: data.contactAddress,
@@ -238,6 +244,7 @@ exports.mapData = function (req, res, next) {
         if (ipiIndex !== -1) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
+          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}&name=${contactList.contactStatus}`
         }
       }
     }
