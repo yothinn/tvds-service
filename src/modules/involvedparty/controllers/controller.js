@@ -52,6 +52,7 @@ exports.getList = async function (req, res) {
     Involvedparty.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
+      .sort({'personalInfo.firstNameThai': 1})
       .exec(),
     Involvedparty.countDocuments(filter).exec(),
   ]);
