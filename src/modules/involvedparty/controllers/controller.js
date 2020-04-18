@@ -11,7 +11,6 @@ var mongoose = require("mongoose"),
 exports.getList = function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
-  var query = {};
   if (pageNo < 0 || pageNo === 0) {
     response = {
       error: true,
@@ -19,20 +18,37 @@ exports.getList = function (req, res) {
     };
     return res.json(response);
   }
-  query.skip = size * (pageNo - 1);
-  query.limit = size;
-  Involvedparty.find({}, {}, query, function (err, datas) {
-    if (err) {
-      return res.status(400).send({
-        status: 400,
-        message: errorHandler.getErrorMessage(err),
-      });
-    } else {
-      res.jsonp({
-        status: 200,
-        data: datas,
-      });
-    }
+  // var query = {};
+  // query.skip = size * (pageNo - 1);
+  // query.limit = size;
+  // Involvedparty.find({}, {}, query, function (err, datas) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       status: 400,
+  //       message: errorHandler.getErrorMessage(err),
+  //     });
+  //   } else {
+  //     res.jsonp({
+  //       status: 200,
+  //       data: datas,
+  //     });
+  //   }
+  // });
+
+  const [_results, _count] = await Promise.all([
+    Involvedparty.find()
+      .skip(size * (pageNo - 1))
+      .limit(size)
+      .exec(),
+    Involvedparty.countDocuments().exec()
+  ]);
+
+  return res.json({
+    currentPage: pageNo,
+    pages: Math.ceil(_count / size),
+    currentCount: _results.length,
+    totalCount: _count,
+    data: _results
   });
 };
 
