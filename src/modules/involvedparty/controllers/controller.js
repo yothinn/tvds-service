@@ -8,7 +8,7 @@ var mongoose = require("mongoose"),
   _ = require("lodash"),
   request = require("request");
 
-exports.getList = function (req, res) {
+exports.getList = async function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
   if (pageNo < 0 || pageNo === 0) {
@@ -44,6 +44,7 @@ exports.getList = function (req, res) {
   ]);
 
   return res.json({
+    status: 200,
     currentPage: pageNo,
     pages: Math.ceil(_count / size),
     currentCount: _results.length,
