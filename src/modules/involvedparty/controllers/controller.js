@@ -11,6 +11,7 @@ var mongoose = require("mongoose"),
 exports.getList = async function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
+  var keyword = req.query.keyword;
   if (pageNo < 0 || pageNo === 0) {
     response = {
       error: true,
@@ -35,12 +36,24 @@ exports.getList = async function (req, res) {
   //   }
   // });
 
+  let filter = {};
+  if(keyword){
+    filter = {
+      $or: [
+        { "personalInfo.firstNameThai": { $regex: ".*" + keyword + ".*" } },
+        { "personalInfo.lastNameThai": { $regex: ".*" + keyword + ".*" } },
+        { "contactAddress.addressPostalCode": { $regex: ".*" + keyword + ".*" }},
+        { "directContact.value": { $regex: ".*" + keyword + ".*" }, "directContact.method": "mobile"},
+      ],
+    }
+  }
+  
   const [_results, _count] = await Promise.all([
-    Involvedparty.find()
+    Involvedparty.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
       .exec(),
-    Involvedparty.countDocuments().exec()
+    Involvedparty.countDocuments().exec(),
   ]);
 
   return res.json({
@@ -49,7 +62,7 @@ exports.getList = async function (req, res) {
     pages: Math.ceil(_count / size),
     currentCount: _results.length,
     totalCount: _count,
-    data: _results
+    data: _results,
   });
 };
 
@@ -270,10 +283,14 @@ exports.confirmAndReject = (req, res, next) => {
   if (req.order) {
     req.order.contactLists.forEach((contact) => {
       contact.directContact.forEach((d) => {
-        console.log(`${d.method} === lineUserId && ${d.value} === ${req.body.events[0].source.userId}`);
-        if (d.method === "lineUserId" && d.value === req.body.events[0].source.userId) {
+        console.log(
+          `${d.method} === lineUserId && ${d.value} === ${req.body.events[0].source.userId}`
+        );
+        if (
+          d.method === "lineUserId" &&
+          d.value === req.body.events[0].source.userId
+        ) {
           contact.contactStatus = req.jobOrder.act;
-          
         }
       });
     });
@@ -285,18 +302,17 @@ exports.confirmAndReject = (req, res, next) => {
           text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
         });
       } else {
-        if(req.jobOrder.act === "confirm"){
+        if (req.jobOrder.act === "confirm") {
           req.replyBody.messages.push({
             type: `text`,
             text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
           });
-        }else{
+        } else {
           req.replyBody.messages.push({
             type: `text`,
             text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
           });
         }
-        
       }
       next();
     });
