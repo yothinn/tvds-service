@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 module.exports.connection = function (cb) {
-    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://54.255.180.155:3099"
+    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://54.255.180.155:3099/dropAcc"
     // mongoose.set('debug', process.env.MONGO_DB_URI || process.env.MONGODB_URI ? false : true);
     var db = mongoose.connect(MONGODB_URI,{ useNewUrlParser: true, useUnifiedTopology: true }, function (err) {
         if (err) {
