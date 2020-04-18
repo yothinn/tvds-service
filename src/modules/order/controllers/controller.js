@@ -189,12 +189,13 @@ exports.getIpiData = function (req, res, next) {
           bgColor = "167eff"; //สีน้ำเงิน
         }
       });
+      let label="";
       ipiUseData.push({
         _id: data._id,
         docno: "",
         contactStatus: "",
         icon: {
-          url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}`,
+          url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}&name=${label}`,
           scaledSize: {
             width: 34,
             height: 34,
@@ -245,8 +246,6 @@ exports.mapData = function (req, res, next) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
           ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}&name=${contactList.contactStatus}`
-        }else{
-          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}&name=${""}`
         }
       }
     }
