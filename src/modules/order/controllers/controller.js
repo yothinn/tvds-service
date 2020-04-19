@@ -156,61 +156,64 @@ exports.delete = function (req, res) {
 };
 
 exports.getIpiData = function (req, res, next) {
-  Involvedparty.find({ "membership.activity": "delivery" }, function (
-    err,
-    datas
-  ) {
-    // console.log(datas);
-    var ipiUseData = [];
-    //วนรอบแรก
-    for (let i = 0; i < datas.length; i++) {
-      const data = datas[i];
-      // console.log(data._id);
-      //วน membership
-      //   for (let j = 0; j < data.membership.length; j++) {
-      //     const member = data.membership[j];
-      //     // console.log(member);
-      //     if (member.activity === "delivery") {
-      //       ipiUseData.push({
-      //         _id: data._id,
-      //         docno: "",
-      //         contactStatus: "",
-      //         personalInfo: data.personalInfo,
-      //         directContact: data.directContact,
-      //         contactAddress: data.contactAddress,
-      //         membership: data.membership,
-      //       });
-      //       break; //เข้าเงื่อนไขอย่างไหน ให้ออกลูปทันที
-      //     }
-      //   }
-      let bgColor = "ff2a2a";
-      data.membership.forEach((member) => {
-        if (member.activity === "shareholder") {
-          bgColor = "167eff"; //สีน้ำเงิน
-        }
-      });
-      let label="";
-      ipiUseData.push({
-        _id: data._id,
-        docno: "",
-        contactStatus: "",
-        icon: {
-          url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}&name=${label}`,
-          scaledSize: {
-            width: 34,
-            height: 34,
+  Involvedparty.find(
+    {
+      "membership.activity": "delivery",
+      "contactAddress.latitude": { $ne: null },
+    },
+    function (err, datas) {
+      // console.log(datas);
+      var ipiUseData = [];
+      //วนรอบแรก
+      for (let i = 0; i < datas.length; i++) {
+        const data = datas[i];
+        // console.log(data._id);
+        //วน membership
+        //   for (let j = 0; j < data.membership.length; j++) {
+        //     const member = data.membership[j];
+        //     // console.log(member);
+        //     if (member.activity === "delivery") {
+        //       ipiUseData.push({
+        //         _id: data._id,
+        //         docno: "",
+        //         contactStatus: "",
+        //         personalInfo: data.personalInfo,
+        //         directContact: data.directContact,
+        //         contactAddress: data.contactAddress,
+        //         membership: data.membership,
+        //       });
+        //       break; //เข้าเงื่อนไขอย่างไหน ให้ออกลูปทันที
+        //     }
+        //   }
+        let bgColor = "ff2a2a";
+        data.membership.forEach((member) => {
+          if (member.activity === "shareholder") {
+            bgColor = "167eff"; //สีน้ำเงิน
+          }
+        });
+        let label = "";
+        ipiUseData.push({
+          _id: data._id,
+          docno: "",
+          contactStatus: "",
+          icon: {
+            url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}&name=${label}`,
+            scaledSize: {
+              width: 34,
+              height: 34,
+            },
           },
-        },
-        personalInfo: data.personalInfo,
-        directContact: data.directContact,
-        contactAddress: data.contactAddress,
-        membership: data.membership,
-      });
+          personalInfo: data.personalInfo,
+          directContact: data.directContact,
+          contactAddress: data.contactAddress,
+          membership: data.membership,
+        });
+      }
+      // console.log(ipiUseData);
+      req.ipiData = ipiUseData;
+      next();
     }
-    // console.log(ipiUseData);
-    req.ipiData = ipiUseData;
-    next();
-  });
+  );
 };
 
 exports.getOrder = function (req, res, next) {
@@ -235,7 +238,7 @@ exports.mapData = function (req, res, next) {
       //วนหา contactLists
       for (let j = 0; j < orderData.contactLists.length; j++) {
         const contactList = orderData.contactLists[j];
-        
+
         // console.log(contactList);
 
         let ipiIndex = ipiDatas.findIndex((item) => {
@@ -246,7 +249,10 @@ exports.mapData = function (req, res, next) {
         if (ipiIndex !== -1) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
-          ipiDatas[ipiIndex].icon.url = `${ipiDatas[ipiIndex].icon.url}${contactList.contactStatus}`
+          let status = checkSymbolMarkersDefault(contactList.contactStatus);
+          ipiDatas[
+            ipiIndex
+          ].icon.url = `${ipiDatas[ipiIndex].icon.url}${status}`;
         }
       }
     }
@@ -256,6 +262,24 @@ exports.mapData = function (req, res, next) {
   req.returnData = ipiDatas;
   next();
 };
+
+function checkSymbolMarkersDefault(contactStatus) {
+  if (contactStatus === "waitapprove") {
+    return "W";
+  }
+  if (contactStatus === "confirm") {
+    return "C";
+  }
+  if (contactStatus === "reject") {
+    return "R";
+  }
+  if (contactStatus === "select") {
+    return "S";
+  }
+  if (contactStatus === "") {
+    return "";
+  }
+}
 
 exports.returnData = function (req, res) {
   res.jsonp({
