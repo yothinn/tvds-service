@@ -69,7 +69,8 @@ exports.getList = async function (req, res) {
 
 exports.create = function (req, res) {
   var newInvolvedparty = new Involvedparty(req.body);
-  newInvolvedparty.createby = req.user;
+  // newInvolvedparty.createby = req.user;
+  
   newInvolvedparty.save(function (err, data) {
     if (err) {
       return res.status(400).send({
