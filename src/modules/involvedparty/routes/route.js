@@ -25,6 +25,7 @@ module.exports = function (app) {
       controller.messageTypeLocations,
       controller.getOrder,
       controller.confirmAndReject,
+      controller.fallbackToDialogFlow,
       controller.replyMessage
     );
 
