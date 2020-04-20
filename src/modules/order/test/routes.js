@@ -449,7 +449,7 @@ describe('Order CRUD routes tests', function () {
                                         }
                                         var resp = res.body;
                                         // console.log(resp);
-                                        assert.equal(resp.data.length, 4)
+                                        assert.equal(resp.data.length, 3)
                                         assert.equal(resp.data[0].contactStatus, 'select')
                                         assert.equal(resp.data[0].docno, "2020-10-0002")
                                         assert.equal(resp.data[1].contactStatus, 'confirm')
