@@ -37,22 +37,37 @@ exports.getList = async function (req, res) {
   // });
 
   let filter = {};
-  if(keyword){
+  if (keyword) {
     filter = {
       $or: [
-        { "personalInfo.firstNameThai": { $regex: "^" + keyword, $options: 'i' } },
-        { "personalInfo.lastNameThai": { $regex: "^" + keyword, $options: 'i' } },
-        { "contactAddress.addressPostalCode": { $regex: "^" + keyword, $options: 'i' }},
-        { "directContact.value": { $regex: "^" + keyword, $options: 'i' }, "directContact.method": "mobile"},
+        {
+          "personalInfo.firstNameThai": {
+            $regex: "^" + keyword,
+            $options: "i",
+          },
+        },
+        {
+          "personalInfo.lastNameThai": { $regex: "^" + keyword, $options: "i" },
+        },
+        {
+          "contactAddress.addressPostalCode": {
+            $regex: "^" + keyword,
+            $options: "i",
+          },
+        },
+        {
+          "directContact.value": { $regex: "^" + keyword, $options: "i" },
+          "directContact.method": "mobile",
+        },
       ],
-    }
+    };
   }
-  
+
   const [_results, _count] = await Promise.all([
     Involvedparty.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
-      .sort({'personalInfo.firstNameThai': 1})
+      .sort({ "personalInfo.firstNameThai": 1 })
       .exec(),
     Involvedparty.countDocuments(filter).exec(),
   ]);
@@ -70,7 +85,7 @@ exports.getList = async function (req, res) {
 exports.create = function (req, res) {
   var newInvolvedparty = new Involvedparty(req.body);
   // newInvolvedparty.createby = req.user;
-  
+
   newInvolvedparty.save(function (err, data) {
     if (err) {
       return res.status(400).send({
@@ -219,15 +234,16 @@ exports.messageTypeText = (req, res, next) => {
           };
           break;
         default:
-          req.replyBody = {
-            replyToken: req.body.events[0].replyToken,
-            messages: [
-              {
-                type: `text`,
-                text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
-              },
-            ],
-          };
+          req.fallback = true;
+        // req.replyBody = {
+        //   replyToken: req.body.events[0].replyToken,
+        //   messages: [
+        //     {
+        //       type: `text`,
+        //       text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
+        //     },
+        //   ],
+        // };
       }
     }
     next();
@@ -317,6 +333,22 @@ exports.confirmAndReject = (req, res, next) => {
         }
       }
       next();
+    });
+  } else {
+    next();
+  }
+};
+
+exports.fallbackToDialogFlow = (req, res, next) => {
+  if (req.fallback) {
+    //https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50
+    req.headers.host = "bots.dialogflow.com";
+    request.post({
+      uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50",
+      headers: req.headers,
+      body: JSON.stringify(req.body)
+    },(err, resp, body) => {
+      res.jsonp(req.body.events[0]);
     });
   } else {
     next();
