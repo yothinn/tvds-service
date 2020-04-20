@@ -342,7 +342,7 @@ exports.confirmAndReject = (req, res, next) => {
 exports.fallbackToDialogFlow = (req, res, next) => {
   if (req.fallback) {
     //https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50
-    req.headers.host = "bots.dialogflow.com";
+    req.headers.host = "dialogflow.cloud.google.com";
     request.post({
       uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50",
       headers: req.headers,
