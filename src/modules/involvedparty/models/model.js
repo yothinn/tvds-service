@@ -265,11 +265,13 @@ InvolvedpartySchema.pre("save", function (next) {
   const model = mongoose.model("Involvedparty", InvolvedpartySchema);
   if (Involvedparty.isNew) {
     // create
-    var membership = {
-      activity: "delivery",
-      memberReference: "",
-    };
-    Involvedparty.membership = [membership];
+    if (Involvedparty.membership.length === 0) {
+      var membership = {
+        activity: "delivery",
+        memberReference: "",
+      };
+      Involvedparty.membership = [membership];
+    }
     next();
   } else {
     // update
