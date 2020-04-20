@@ -239,6 +239,7 @@ exports.mapData = function (req, res, next) {
       for (let j = 0; j < orderData.contactLists.length; j++) {
         const contactList = orderData.contactLists[j];
 
+
         // console.log(contactList);
 
         let ipiIndex = ipiDatas.findIndex((item) => {
@@ -249,6 +250,9 @@ exports.mapData = function (req, res, next) {
         if (ipiIndex !== -1) {
           ipiDatas[ipiIndex].docno = orderData.docno;
           ipiDatas[ipiIndex].contactStatus = contactList.contactStatus;
+
+          contactList.directContact = ipiDatas[ipiIndex].directContact;
+
           let status = checkSymbolMarkersDefault(contactList.contactStatus);
           ipiDatas[
             ipiIndex
@@ -259,6 +263,7 @@ exports.mapData = function (req, res, next) {
   }
 
   // console.log(ipiDatas)
+  req.orderData = orderDatas;
   req.returnData = ipiDatas;
   next();
 };
@@ -279,6 +284,18 @@ function checkSymbolMarkersDefault(contactStatus) {
   if (contactStatus === "") {
     return "";
   }
+}
+
+exports.updateOrderContactWithIPIData = async function (req, res, next) {
+  // console.log(req.orderByDate)
+  const promise = req.orderByDate.map(async (order, idx) => {
+    order.save(function (err, data) {
+      // console.log(data)
+    });
+  });
+
+  await Promise.all(promise);
+  next();
 }
 
 exports.returnData = function (req, res) {

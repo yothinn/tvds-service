@@ -23,6 +23,7 @@ module.exports = function (app) {
             controller.getIpiData,
             controller.getOrder,
             controller.mapData,
+            controller.updateOrderContactWithIPIData,
             controller.returnData
         )
 
