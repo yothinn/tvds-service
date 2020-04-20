@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 module.exports.connection = function (cb) {
-    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://tvdsowner:covid19%4020@35.244.77.191:27017/thamdata"
+    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://tvdsowner:covid1920@34.87.182.146:27017/thamdata"
     // mongoose.set('debug', process.env.MONGO_DB_URI || process.env.MONGODB_URI ? false : true);
     var db = mongoose.connect(MONGODB_URI,{ useNewUrlParser: true, useUnifiedTopology: true }, function (err) {
         if (err) {
