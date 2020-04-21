@@ -6,6 +6,7 @@ var mongoose = require("mongoose"),
   Order = mongoose.model("Order"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash"),
+  socket = require('../../../config/socket.io.js'),
   request = require("request");
 
 exports.getList = async function (req, res) {
@@ -320,6 +321,7 @@ exports.confirmAndReject = (req, res, next) => {
           text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
         });
       } else {
+        socket.io.emit('my broadcast', `server: ${data}`);
         if (req.jobOrder.act === "confirm") {
           req.replyBody.messages.push({
             type: `text`,
