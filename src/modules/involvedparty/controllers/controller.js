@@ -321,7 +321,7 @@ exports.confirmAndReject = (req, res, next) => {
           text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
         });
       } else {
-        socket.io.emit('user-confirm-reject', `server: ${data}`);
+        socket.io.emit('user-confirm-reject', data);
         if (req.jobOrder.act === "confirm") {
           req.replyBody.messages.push({
             type: `text`,
