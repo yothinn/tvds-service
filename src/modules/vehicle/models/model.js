@@ -13,35 +13,60 @@ var VehicleSchema = new Schema({
     ownerInfo: {
         type: {
             title: {
-                type: String,
-            },
-            titleThai: {
-                type: String,
+                type: String
             },
             firstName: {
-                type: String,
-            },
-            firstNameThai: {
-                type: String,
-            },
-            middleName: {
-                type: String,
-            },
-            middleNameThai: {
-                type: String,
+                type: String
             },
             lastName: {
-                type: String,
+                type: String
             },
-            lastNameThai: {
-                type: String,
+            displayName: {
+                type: String
             },
-            dateOfBirth: {
-                type: Date,
+            persanalId: {
+                type: String
             },
-            gender: {
-                type: String,
-            }
+            isShareHolder: {
+                type: Boolean,
+                default: false
+            },
+            mobileNo1: {
+                type: String
+            },
+            mobileNo2: {
+                type: String
+            },
+            mobileNo3: {
+                type: String
+            },
+            addressLine1: {
+                type: String
+            },
+            addressStreet: {
+                type: String
+            },
+            addressSubDistrict: {
+                type: String
+            },
+            addressDistrict: {
+                type: String
+            },
+            addressProvince: {
+                type: String
+            },
+            addressPostCode: {
+                type: String
+            },
+            lineUserId: {
+                type: String
+            },
+            latitude: {
+                type: String
+            },
+            longitude: {
+                type: String
+            },
         }
     },
     created: {
