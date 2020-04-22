@@ -9,67 +9,58 @@ var TvdscustomerSchema = new Schema({
         type: String,
     },
     firstName: {
-        type: String,
-        required: 'Please fill a firstnamee',
+        type: String
     },
     lastName: {
-        type: String,
-        required: 'Please fill a lastname',
+        type: String
     },
     displayName: {
         type: String,
-        unique: true,
+        unique: true
     },    
     persanalId: {
         type: String,
-        unique: true,
+        unique: true
     },   
     isShareHolder: {
         type: Boolean,
         default: 'false'
     },
     mobileNo1: {
-        type: String,
-        required: 'Please fill a mobileNo1',
+        type: String
     },
     mobileNo2: {
-        type: String,
+        type: String
     },
     mobileNo3: {
-        type: String,
+        type: String
     },
     addressLine1: {
-        type: String,
-        required: 'Please fill a addressLine1',
+        type: String
     },
     addressStreet: {
-        type: String,
-        required: 'Please fill a addressStreet',
+        type: String
     },
     addressSubdistric: {
-        type: String,
-        required: 'Please fill a addressSubdistric',
+        type: String
     },
     addressDistric: {
-        type: String,
-        required: 'Please fill a addressDistric',
+        type: String
     },
     addressProvince: {
-        type: String,
-        required: 'Please fill a addressProvince',
+        type: String
     },
     addressPostcode: {
-        type: String,
-        required: 'Please fill a addressPostcode',
+        type: String
     },
     lineUserId: {
-        type: String,
+        type: String
     },
     latitude: {
-        type: String,
+        type: String
     },
     longitude: {
-        type: String,
+        type: String
     },
     created: {
         type: Date,
