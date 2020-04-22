@@ -18,16 +18,24 @@ describe('Vehicle CRUD routes tests', function () {
         mockup = {
             "lisenceID": "ทบ-559",
             "ownerInfo": {
-                "title": "mr",
-                "titleThai": "นาย",
-                "firstName": "yut",
-                "firstNameThai": "ยุทธ",
-                "middleName": "middle",
-                "middleNameThai": "กลาง",
-                "lastName": "Rcho",
-                "lastNameThai": "อาโช",
-                "dateOfBirth": "2020-04-08",
-                "gender": "ชาย"
+                "title": "นาย",
+                "firstName": "ไข่ดิบ",
+                "lastName": "ไม่แพงแล้ว",
+                "displayName": "ไข่ดิบ ไม่แพงแล้ว",
+                "persanalId": "1159569636985",
+                "isShareHolder": true,
+                "mobileNo1": "0856953265",
+                "mobileNo2": "",
+                "mobileNo3": "",
+                "addressLine1": "82/668",
+                "addressStreet": "ลำลูกกา",
+                "addressSubDistrict": "คูคต",
+                "addressDistrict": "ลำลูกกา",
+                "addressProvince": "ปทุมธานี",
+                "addressPostCode": "12130",
+                "lineUserId": "L48K25369dbY89",
+                "latitude": "13.22202",
+                "longitude": "16.555697"
             }
         };
         credentials = {
@@ -83,15 +91,23 @@ describe('Vehicle CRUD routes tests', function () {
                         assert.equal(resp.status, 200);
                         assert.equal(resp.data.lisenceID, mockup.lisenceID);
                         assert.equal(resp.data.ownerInfo.title, mockup.ownerInfo.title);
-                        assert.equal(resp.data.ownerInfo.titleThai, mockup.ownerInfo.titleThai);
                         assert.equal(resp.data.ownerInfo.firstName, mockup.ownerInfo.firstName);
-                        assert.equal(resp.data.ownerInfo.firstNameThai, mockup.ownerInfo.firstNameThai);
-                        assert.equal(resp.data.ownerInfo.middleName, mockup.ownerInfo.middleName);
-                        assert.equal(resp.data.ownerInfo.middleNameThai, mockup.ownerInfo.middleNameThai);
                         assert.equal(resp.data.ownerInfo.lastName, mockup.ownerInfo.lastName);
-                        assert.equal(resp.data.ownerInfo.lastNameThai, mockup.ownerInfo.lastNameThai);
-                        assert.equal(resp.data.ownerInfo.dateOfBirth, mockup.ownerInfo.dateOfBirth);
-                        assert.equal(resp.data.ownerInfo.gender, mockup.ownerInfo.gender);
+                        assert.equal(resp.data.ownerInfo.displayName, mockup.ownerInfo.displayName);
+                        assert.equal(resp.data.ownerInfo.persanalId, mockup.ownerInfo.persanalId);
+                        assert.equal(resp.data.ownerInfo.isShareHolder, mockup.ownerInfo.isShareHolder);
+                        assert.equal(resp.data.ownerInfo.mobileNo1, mockup.ownerInfo.mobileNo1);
+                        assert.equal(resp.data.ownerInfo.mobileNo2, mockup.ownerInfo.mobileNo2);
+                        assert.equal(resp.data.ownerInfo.mobileNo3, mockup.ownerInfo.mobileNo3);
+                        assert.equal(resp.data.ownerInfo.addressLine1, mockup.ownerInfo.addressLine1);
+                        assert.equal(resp.data.ownerInfo.addressStreet, mockup.ownerInfo.addressStreet);
+                        assert.equal(resp.data.ownerInfo.addressSubDistrict, mockup.ownerInfo.addressSubDistrict);
+                        assert.equal(resp.data.ownerInfo.addressDistrict, mockup.ownerInfo.addressDistrict);
+                        assert.equal(resp.data.ownerInfo.addressProvince, mockup.ownerInfo.addressProvince);
+                        assert.equal(resp.data.ownerInfo.addressPostCode, mockup.ownerInfo.addressPostCode);
+                        assert.equal(resp.data.ownerInfo.lineUserId, mockup.ownerInfo.lineUserId);
+                        assert.equal(resp.data.ownerInfo.latitude, mockup.ownerInfo.latitude);
+                        assert.equal(resp.data.ownerInfo.longitude, mockup.ownerInfo.longitude);
                         done();
                     });
             });
@@ -111,15 +127,23 @@ describe('Vehicle CRUD routes tests', function () {
                 var resp = res.body;
                 assert.equal(resp.data.lisenceID, mockup.lisenceID);
                 assert.equal(resp.data.ownerInfo.title, mockup.ownerInfo.title);
-                assert.equal(resp.data.ownerInfo.titleThai, mockup.ownerInfo.titleThai);
                 assert.equal(resp.data.ownerInfo.firstName, mockup.ownerInfo.firstName);
-                assert.equal(resp.data.ownerInfo.firstNameThai, mockup.ownerInfo.firstNameThai);
-                assert.equal(resp.data.ownerInfo.middleName, mockup.ownerInfo.middleName);
-                assert.equal(resp.data.ownerInfo.middleNameThai, mockup.ownerInfo.middleNameThai);
                 assert.equal(resp.data.ownerInfo.lastName, mockup.ownerInfo.lastName);
-                assert.equal(resp.data.ownerInfo.lastNameThai, mockup.ownerInfo.lastNameThai);
-                assert.equal(resp.data.ownerInfo.dateOfBirth, mockup.ownerInfo.dateOfBirth);
-                assert.equal(resp.data.ownerInfo.gender, mockup.ownerInfo.gender);
+                assert.equal(resp.data.ownerInfo.displayName, mockup.ownerInfo.displayName);
+                assert.equal(resp.data.ownerInfo.persanalId, mockup.ownerInfo.persanalId);
+                assert.equal(resp.data.ownerInfo.isShareHolder, mockup.ownerInfo.isShareHolder);
+                assert.equal(resp.data.ownerInfo.mobileNo1, mockup.ownerInfo.mobileNo1);
+                assert.equal(resp.data.ownerInfo.mobileNo2, mockup.ownerInfo.mobileNo2);
+                assert.equal(resp.data.ownerInfo.mobileNo3, mockup.ownerInfo.mobileNo3);
+                assert.equal(resp.data.ownerInfo.addressLine1, mockup.ownerInfo.addressLine1);
+                assert.equal(resp.data.ownerInfo.addressStreet, mockup.ownerInfo.addressStreet);
+                assert.equal(resp.data.ownerInfo.addressSubDistrict, mockup.ownerInfo.addressSubDistrict);
+                assert.equal(resp.data.ownerInfo.addressDistrict, mockup.ownerInfo.addressDistrict);
+                assert.equal(resp.data.ownerInfo.addressProvince, mockup.ownerInfo.addressProvince);
+                assert.equal(resp.data.ownerInfo.addressPostCode, mockup.ownerInfo.addressPostCode);
+                assert.equal(resp.data.ownerInfo.lineUserId, mockup.ownerInfo.lineUserId);
+                assert.equal(resp.data.ownerInfo.latitude, mockup.ownerInfo.latitude);
+                assert.equal(resp.data.ownerInfo.longitude, mockup.ownerInfo.longitude);
                 done();
             });
     });
@@ -151,15 +175,23 @@ describe('Vehicle CRUD routes tests', function () {
                         var resp = res.body;
                         assert.equal(resp.data.lisenceID, update.lisenceID);
                         assert.equal(resp.data.ownerInfo.title, mockup.ownerInfo.title);
-                        assert.equal(resp.data.ownerInfo.titleThai, mockup.ownerInfo.titleThai);
                         assert.equal(resp.data.ownerInfo.firstName, mockup.ownerInfo.firstName);
-                        assert.equal(resp.data.ownerInfo.firstNameThai, mockup.ownerInfo.firstNameThai);
-                        assert.equal(resp.data.ownerInfo.middleName, mockup.ownerInfo.middleName);
-                        assert.equal(resp.data.ownerInfo.middleNameThai, mockup.ownerInfo.middleNameThai);
                         assert.equal(resp.data.ownerInfo.lastName, mockup.ownerInfo.lastName);
-                        assert.equal(resp.data.ownerInfo.lastNameThai, mockup.ownerInfo.lastNameThai);
-                        assert.equal(resp.data.ownerInfo.dateOfBirth, mockup.ownerInfo.dateOfBirth);
-                        assert.equal(resp.data.ownerInfo.gender, mockup.ownerInfo.gender);
+                        assert.equal(resp.data.ownerInfo.displayName, mockup.ownerInfo.displayName);
+                        assert.equal(resp.data.ownerInfo.persanalId, mockup.ownerInfo.persanalId);
+                        assert.equal(resp.data.ownerInfo.isShareHolder, mockup.ownerInfo.isShareHolder);
+                        assert.equal(resp.data.ownerInfo.mobileNo1, mockup.ownerInfo.mobileNo1);
+                        assert.equal(resp.data.ownerInfo.mobileNo2, mockup.ownerInfo.mobileNo2);
+                        assert.equal(resp.data.ownerInfo.mobileNo3, mockup.ownerInfo.mobileNo3);
+                        assert.equal(resp.data.ownerInfo.addressLine1, mockup.ownerInfo.addressLine1);
+                        assert.equal(resp.data.ownerInfo.addressStreet, mockup.ownerInfo.addressStreet);
+                        assert.equal(resp.data.ownerInfo.addressSubDistrict, mockup.ownerInfo.addressSubDistrict);
+                        assert.equal(resp.data.ownerInfo.addressDistrict, mockup.ownerInfo.addressDistrict);
+                        assert.equal(resp.data.ownerInfo.addressProvince, mockup.ownerInfo.addressProvince);
+                        assert.equal(resp.data.ownerInfo.addressPostCode, mockup.ownerInfo.addressPostCode);
+                        assert.equal(resp.data.ownerInfo.lineUserId, mockup.ownerInfo.lineUserId);
+                        assert.equal(resp.data.ownerInfo.latitude, mockup.ownerInfo.latitude);
+                        assert.equal(resp.data.ownerInfo.longitude, mockup.ownerInfo.longitude);
                         done();
                     });
             });
