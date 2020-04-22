@@ -16,27 +16,27 @@ exports.getList = function (req, res) {
     }
     query.skip = size * (pageNo - 1);
     query.limit = size;
-        Tvdscustomer.find({}, {}, query, function (err, datas) {
-            if (err) {
-                return res.status(400).send({
-                    status: 400,
-                    message: errorHandler.getErrorMessage(err)
-                });
-            } else {
-                res.jsonp({
-                    status: 200,
-                    data: datas
-                });
-            };
-        });
+    Tvdscustomer.find({}, {}, query, function (err, datas) {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.jsonp({
+                status: 200,
+                data: datas
+            });
+        };
+    });
 };
 
 exports.create = function (req, res) {
-    var newTvdscustomer = new Tvdscustomer (req.body);
+    var newTvdscustomer = new Tvdscustomer(req.body);
     newTvdscustomer.createby = req.user;
+    newTvdscustomer.displayName = newTvdscustomer.firstName + ' ' + newTvdscustomer.lastName;
     newTvdscustomer.save(function (err, data) {
-    newTvdscustomer.displayName = newTvdscustomer.firstName +' '+ newTvdscustomer.lastName;
-console.log(data);
+        // console.log(data);
         if (err) {
             return res.status(400).send({
                 status: 400,
