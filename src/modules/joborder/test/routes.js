@@ -6,7 +6,8 @@ var request = require('supertest'),
     jwt = require('jsonwebtoken'),
     mongoose = require('mongoose'),
     app = require('../../../config/express'),
-    Joborder = mongoose.model('Joborder');
+    Joborder = mongoose.model('Joborder'),
+    Tvdscustomer = mongoose.model('Tvdscustomer');
 
 var credentials,
     token,
@@ -21,6 +22,7 @@ describe('Joborder CRUD routes tests', function () {
             "orderStatus": "draft",
             "contactLists": [
                 {
+                    "contactStatus": "select",
                     "title": "นาย",
                     "firstName": "ไข่ดิบ",
                     "lastName": "ไม่แพงแล้ว",
@@ -235,6 +237,161 @@ describe('Joborder CRUD routes tests', function () {
                     .end(done);
             });
 
+    });
+
+    it('should be map customer and JobOrder', function (done) {
+        var cus1 = new Tvdscustomer({
+            title: 'นาย',
+            firstName: 'ประหยัด',
+            lastName: 'จันทร์อังคาร',
+            displayName: 'ประหยัด จันทร์อังคาร',
+            persanalId: '1180233302547',
+            isShareHolder: true,
+            mobileNo1: '0965874123',
+            mobileNo2: '0567896521',
+            mobileNo3: '0874563219',
+            addressLine1: '26/1',
+            addressStreet: 'วงแหวนลำลูกกา',
+            addressSubdistric: 'คูคต',
+            addressDistric: 'ลำลูกกา',
+            addressProvince: 'ปทุมธานี',
+            addressPostcode: '12130',
+            lineUserId: 'lineuserid',
+            latitude: '15.50236541',
+            longitude: '100.45678968'
+        });
+        var cus2 = new Tvdscustomer({
+            title: 'นาย',
+            firstName: 'ฟุ่มเฟือย',
+            lastName: 'พุธพฤหัส',
+            displayName: 'ฟุ่มเฟือย พุธพฤหัส',
+            persanalId: '1180233502547',
+            isShareHolder: true,
+            mobileNo1: '0965874123',
+            mobileNo2: '0567896521',
+            mobileNo3: '0874563219',
+            addressLine1: '26/1',
+            addressStreet: 'วงแหวนลำลูกกา',
+            addressSubdistric: 'คูคต',
+            addressDistric: 'ลำลูกกา',
+            addressProvince: 'ปทุมธานี',
+            addressPostcode: '12130',
+            lineUserId: 'lineuserid',
+            latitude: '15.50236541',
+            longitude: '100.45678968'
+        });
+        var cus3 = new Tvdscustomer({
+            title: 'นาย',
+            firstName: 'กินแกรบ',
+            lastName: 'วันศุกร์',
+            displayName: 'กินแกรบ วันศุกร์',
+            persanalId: '1180683302547',
+            isShareHolder: false,
+            mobileNo1: '0965874123',
+            mobileNo2: '0567896521',
+            mobileNo3: '0874563219',
+            addressLine1: '26/1',
+            addressStreet: 'วงแหวนลำลูกกา',
+            addressSubdistric: 'คูคต',
+            addressDistric: 'ลำลูกกา',
+            addressProvince: 'ปทุมธานี',
+            addressPostcode: '12130',
+            lineUserId: 'lineuserid',
+            latitude: '15.50236541',
+            longitude: '100.45678968'
+        });
+        var cus4 = new Tvdscustomer({
+            title: 'นาย',
+            firstName: 'วันหยุด',
+            lastName: 'เสาร์อาทิตย์',
+            displayName: 'วันหยุด เสาร์อาทิตย์',
+            persanalId: '1180773302547',
+            isShareHolder: false,
+            mobileNo1: '0965874123',
+            mobileNo2: '0567896521',
+            mobileNo3: '0874563219',
+            addressLine1: '26/1',
+            addressStreet: 'วงแหวนลำลูกกา',
+            addressSubdistric: 'คูคต',
+            addressDistric: 'ลำลูกกา',
+            addressProvince: 'ปทุมธานี',
+            addressPostcode: '12130',
+            lineUserId: 'lineuserid',
+            latitude: '15.50236541',
+            longitude: ''
+        });
+
+        var body = {
+            "docdate": "2020-10-03"
+        };
+
+        cus1.save(function (err, data1) {
+            if (err) return done(err);
+            cus2.save(function (err, data2) {
+                if (err) return done(err);
+                cus3.save(function (err, data3) {
+                    if (err) return done(err);
+                    cus4.save(function (err, data4) {
+                        if (err) return done(err);
+
+                        var job1 = new Joborder({
+                            "docno": "2020-10-0001",
+                            "docdate": "2020-10-01",
+                            "carNo": "01",
+                            "orderStatus": "draft",
+                            "contactLists": [{
+                                _id: data1._id,
+                                contactStatus: "select",
+                                isShareHolder: data1.isShareHolder
+                            }]
+                        });
+
+                        var job2 = new Joborder({
+                            "docno": "2020-10-0002",
+                            "docdate": "2020-10-03",
+                            "carNo": "03",
+                            "orderStatus": "draft",
+                            "contactLists": [{
+                                _id: data2._id,
+                                contactStatus: "confirm",
+                                isShareHolder: data2.isShareHolder
+                            }, {
+                                _id: data3._id,
+                                contactStatus: "reject",
+                                isShareHolder: data3.isShareHolder
+                            }]
+                        });
+
+                        job1.save(function (err, job1) {
+                            if (err) return done(err);
+                            job2.save(function (err, job2) {
+                                if (err) return done(err);
+
+                                request(app)
+                                    .post('/api/jobordersupdatemap')
+                                    .set('Authorization', 'Bearer ' + token)
+                                    .send(body)
+                                    .expect(200)
+                                    .end(function (err, res) {
+                                        if (err) {
+                                            return done(err);
+                                        }
+                                        var resp = res.body;
+                                        // console.log(resp.data);
+                                        assert.equal(resp.data.length, 3)
+                                        assert.equal(resp.data[0].contactStatus, '')
+                                        assert.equal(resp.data[1].contactStatus, 'confirm')
+                                        assert.equal(resp.data[1].docno, "2020-10-0002")
+                                        assert.equal(resp.data[2].contactStatus, 'reject')
+                                        assert.equal(resp.data[2].docno, "2020-10-0002")
+                                        done();
+                                    });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 
     it('should be joborder get not use token', (done) => {

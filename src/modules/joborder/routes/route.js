@@ -6,13 +6,26 @@ module.exports = function (app) {
     var url = '/api/joborders';
     var urlWithParam = '/api/joborders/:joborderId';
     app.route(url).all(policy.isAllowed)
-        .get(controller.getList)
+        .get(
+            controller.getList,
+            controller.sumStatusList,
+            controller.returnData
+        )
         .post(controller.create);
 
     app.route(urlWithParam).all(policy.isAllowed)
         .get(controller.read)
         .put(controller.update)
         .delete(controller.delete);
+
+    app.route('/api/jobordersupdatemap').all(policy.isAllowed)
+        .post(
+            controller.getCusData,
+            controller.getJobOrder,
+            controller.mapData,
+            controller.updateJobOrderContactWithCusData,
+            controller.returnData
+        )
 
     app.param('joborderId', controller.getByID);
 
