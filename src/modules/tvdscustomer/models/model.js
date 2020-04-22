@@ -20,7 +20,6 @@ var TvdscustomerSchema = new Schema({
     },    
     persanalId: {
         type: String,
-        unique: true
     },   
     isShareHolder: {
         type: Boolean,
