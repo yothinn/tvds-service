@@ -88,6 +88,7 @@ exports.update = function (req, res) {
     var updTvdscustomer = _.extend(req.data, req.body);
     updTvdscustomer.updated = new Date();
     updTvdscustomer.updateby = req.user;
+    updTvdscustomer.displayName = updTvdscustomer.firstName + ' ' + updTvdscustomer.lastName;
     updTvdscustomer.save(function (err, data) {
         if (err) {
             return res.status(400).send({
