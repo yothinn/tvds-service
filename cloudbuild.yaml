@@ -9,6 +9,6 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', 'tvds-service', '--image', 'gcr.io/$PROJECT_ID/tvds-service', '--region', 'asia-east1','--platform', 'managed', '--allow-unauthenticated']
   # Deploy container image to Cloud Run : Production Environment
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'tvds-service-prod', '--image', 'gcr.io/$PROJECT_ID/tvds-service', '--region', 'asia-east1','--platform', 'managed', '--allow-unauthenticated']
+  # - name: 'gcr.io/cloud-builders/gcloud'
+  #   args: ['run', 'deploy', 'tvds-service-prod', '--image', 'gcr.io/$PROJECT_ID/tvds-service', '--region', 'asia-east1','--platform', 'managed', '--allow-unauthenticated']
     
