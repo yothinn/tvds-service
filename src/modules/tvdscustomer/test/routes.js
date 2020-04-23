@@ -28,10 +28,10 @@ describe('Tvdscustomer CRUD routes tests', function () {
             mobileNo3: '0874563219',
             addressLine1: '26/1',
             addressStreet: 'วงแหวนลำลูกกา',
-            addressSubdistric: 'คูคต',
-            addressDistric: 'ลำลูกกา',
+            addressSubDistrict: 'คูคต',
+            addressDistrict: 'ลำลูกกา',
             addressProvince: 'ปทุมธานี',
-            addressPostcode: '12130',
+            addressPostCode: '12130',
             lineUserId: 'lineuserid',
             latitude: '15.50236541',
             longitude: '100.45678968'
@@ -98,10 +98,10 @@ describe('Tvdscustomer CRUD routes tests', function () {
                         assert.equal(resp.data.mobileNo3, mockup.mobileNo3);
                         assert.equal(resp.data.addressLine1, mockup.addressLine1);
                         assert.equal(resp.data.addressStreet, mockup.addressStreet);
-                        assert.equal(resp.data.addressSubdistric, mockup.addressSubdistric);
-                        assert.equal(resp.data.addressDistric, mockup.addressDistric);
+                        assert.equal(resp.data.addressSubDistrict, mockup.addressSubDistrict);
+                        assert.equal(resp.data.addressDistrict, mockup.addressDistrict);
                         assert.equal(resp.data.addressProvince, mockup.addressProvince);
-                        assert.equal(resp.data.addressPostcode, mockup.addressPostcode);
+                        assert.equal(resp.data.addressPostCode, mockup.addressPostCode);
                         assert.equal(resp.data.lineUserId, mockup.lineUserId);
                         assert.equal(resp.data.latitude, mockup.latitude);
                         assert.equal(resp.data.longitude, mockup.longitude);
@@ -134,10 +134,10 @@ describe('Tvdscustomer CRUD routes tests', function () {
                         assert.equal(resp.data.mobileNo3, mockup.mobileNo3);
                         assert.equal(resp.data.addressLine1, mockup.addressLine1);
                         assert.equal(resp.data.addressStreet, mockup.addressStreet);
-                        assert.equal(resp.data.addressSubdistric, mockup.addressSubdistric);
-                        assert.equal(resp.data.addressDistric, mockup.addressDistric);
+                        assert.equal(resp.data.addressSubDistrict, mockup.addressSubDistrict);
+                        assert.equal(resp.data.addressDistrict, mockup.addressDistrict);
                         assert.equal(resp.data.addressProvince, mockup.addressProvince);
-                        assert.equal(resp.data.addressPostcode, mockup.addressPostcode);
+                        assert.equal(resp.data.addressPostCode, mockup.addressPostCode);
                         assert.equal(resp.data.lineUserId, mockup.lineUserId);
                         assert.equal(resp.data.latitude, mockup.latitude);
                         assert.equal(resp.data.longitude, mockup.longitude);
@@ -181,10 +181,10 @@ describe('Tvdscustomer CRUD routes tests', function () {
                         assert.equal(resp.data.mobileNo3, mockup.mobileNo3);
                         assert.equal(resp.data.addressLine1, mockup.addressLine1);
                         assert.equal(resp.data.addressStreet, mockup.addressStreet);
-                        assert.equal(resp.data.addressSubdistric, mockup.addressSubdistric);
-                        assert.equal(resp.data.addressDistric, mockup.addressDistric);
+                        assert.equal(resp.data.addressSubDistric, mockup.addressSubDistric);
+                        assert.equal(resp.data.addressDistrict, mockup.addressDistrict);
                         assert.equal(resp.data.addressProvince, mockup.addressProvince);
-                        assert.equal(resp.data.addressPostcode, mockup.addressPostcode);
+                        assert.equal(resp.data.addressPostCode, mockup.addressPostCode);
                         assert.equal(resp.data.lineUserId, mockup.lineUserId);
                         assert.equal(resp.data.latitude, mockup.latitude);
                         assert.equal(resp.data.longitude, mockup.longitude);

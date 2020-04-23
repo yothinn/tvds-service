@@ -228,7 +228,7 @@ describe('Vehicle CRUD routes tests', function () {
 
     });
 
-    it('should be vehicle get not use token', (done) => {
+    xit('should be vehicle get not use token', (done) => {
         request(app)
             .get('/api/vehicles')
             .expect(403)
@@ -239,7 +239,7 @@ describe('Vehicle CRUD routes tests', function () {
             .end(done);
     });
 
-    it('should be vehicle post not use token', function (done) {
+    xit('should be vehicle post not use token', function (done) {
 
         request(app)
             .post('/api/vehicles')
@@ -253,7 +253,7 @@ describe('Vehicle CRUD routes tests', function () {
 
     });
 
-    it('should be vehicle put not use token', function (done) {
+    xit('should be vehicle put not use token', function (done) {
 
         request(app)
             .post('/api/vehicles')
@@ -281,7 +281,7 @@ describe('Vehicle CRUD routes tests', function () {
 
     });
 
-    it('should be vehicle delete not use token', function (done) {
+    xit('should be vehicle delete not use token', function (done) {
 
         request(app)
             .post('/api/vehicles')
