@@ -84,7 +84,7 @@ var JoborderSchema = new Schema({
                 },
                 longitude: {
                     type: String
-                },
+                }
             }
         ]
     },
