@@ -6,11 +6,15 @@ var Schema = mongoose.Schema;
 
 var VehicleSchema = new Schema({
     lisenceID: {
-        type: String,
-        unique: true,
-        required: 'Please fill a Vehicle lisenceID',
+        type: String
     },
-    ownerInfo: {
+    startDate: {
+        type: Date
+    },
+    endDate: {
+        type: Date
+    },
+    driverInfo: {
         type: {
             title: {
                 type: String
