@@ -189,10 +189,10 @@ exports.getCusData = function (req, res, next) {
                 mobileNo3: data.mobileNo3,
                 addressLine1: data.addressLine1,
                 addressStreet: data.addressStreet,
-                addressSubdistric: data.addressSubdistric,
-                addressDistric: data.addressDistric,
+                addressSubDistrict: data.addressSubDistrict,
+                addressDistrict: data.addressDistrict,
                 addressProvince: data.addressProvince,
-                addressPostcode: data.addressPostcode,
+                addressPostCode: data.addressPostCode,
                 lineUserId: data.lineUserId,
                 latitude: data.latitude,
                 longitude: data.longitude,
@@ -275,7 +275,7 @@ function checkSymbolMarkersDefault(contactStatus) {
 exports.updateJobOrderContactWithCusData = async function (req, res, next) {
     // console.log(req.jobOrderByDate)
     const promise = req.jobOrderByDate.map(async (jobOrder, idx) => {
-        console.log(Joborder)
+        // console.log(Joborder)
         jobOrder.save(function (err, data) {
             // console.log(data)
         });
