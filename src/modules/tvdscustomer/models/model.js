@@ -20,7 +20,6 @@ var TvdscustomerSchema = new Schema({
     },    
     persanalId: {
         type: String,
-        unique: true
     },   
     isShareHolder: {
         type: Boolean,
@@ -41,16 +40,16 @@ var TvdscustomerSchema = new Schema({
     addressStreet: {
         type: String
     },
-    addressSubdistric: {
+    addressSubDistrict: {
         type: String
     },
-    addressDistric: {
+    addressDistrict: {
         type: String
     },
     addressProvince: {
         type: String
     },
-    addressPostcode: {
+    addressPostCode: {
         type: String
     },
     lineUserId: {

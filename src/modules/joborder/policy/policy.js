@@ -23,6 +23,10 @@ exports.invokeRolesPolicies = function() {
         {
           resources: "/api/joborders/:joborderId",
           permissions: "*"
+        },
+        {
+          resources: "/api/jobordersupdatemap",
+          permissions: "*"
         }
       ]
     }
