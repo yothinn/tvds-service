@@ -14,6 +14,8 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
+    app.route("/api/tvdscustomers/query").post(controller.query);
+
     app.param('tvdscustomerId', controller.getByID);
 
     /**

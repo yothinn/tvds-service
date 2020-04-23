@@ -118,3 +118,51 @@ exports.delete = function (req, res) {
         };
     });
 };
+
+exports.query = function (req, res) {
+    let query = null;
+    if (req.body.lineUserId) {
+      query = {
+        "lineUserId": req.body.lineUserId,
+      };
+    }
+  
+    if (
+      req.body.firstNameThai &&
+      req.body.lastNameThai &&
+      req.body.mobileNumber
+    ) {
+      query = {
+        $or: [
+          {
+            "firstName": req.body.firstNameThai,
+            "lastNameThai": req.body.lastNameThai,
+          },
+          {
+            "firstNameThai": req.body.firstNameThai,
+            "mobileNo1": req.body.mobileNumber,
+          },
+        ],
+      };
+    }
+    // console.log(query);
+    if (!query) {
+      res.jsonp({
+        status: 200,
+      });
+    } else {
+      Tvdscustomer.findOne(query, function (err, data) {
+        if (err) {
+          return res.status(400).send({
+            status: 400,
+            message: errorHandler.getErrorMessage(err),
+          });
+        } else {
+          res.jsonp({
+            status: 200,
+            data: data,
+          });
+        }
+      });
+    }
+  };
