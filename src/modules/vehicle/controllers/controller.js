@@ -6,28 +6,45 @@ var mongoose = require('mongoose'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
 
-exports.getList = function (req, res) {
+exports.getList = async function (req, res) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
-    var query = {};
+    var keyword = req.query.keyword;
     if (pageNo < 0 || pageNo === 0) {
         response = { "error": true, "message": "invalid page number, should start with 1" };
         return res.json(response);
     }
-    query.skip = size * (pageNo - 1);
-    query.limit = size;
-    Vehicle.find({}, {}, query, function (err, datas) {
-        if (err) {
-            return res.status(400).send({
-                status: 400,
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.jsonp({
-                status: 200,
-                data: datas
-            });
+
+    let filter = {};
+    if (keyword) {
+        filter = {
+            $or: [
+                {
+                    "lisenceID": { $regex: "^" + keyword, $options: "i", },
+                },
+                {
+                    "driverInfo.displayName": { $regex: "^" + keyword, $options: "i" },
+                }
+            ],
         };
+    }
+
+    const [_results, _count] = await Promise.all([
+        Vehicle.find(filter)
+            .skip(size * (pageNo - 1))
+            .limit(size)
+            .sort({ "firstName": 1 })
+            .exec(),
+            Vehicle.countDocuments(filter).exec(),
+    ]);
+
+    return res.json({
+        status: 200,
+        currentPage: pageNo,
+        pages: Math.ceil(_count / size),
+        currentCount: _results.length,
+        totalCount: _count,
+        data: _results,
     });
 };
 
