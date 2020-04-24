@@ -4,12 +4,14 @@ var mongoose = require('mongoose'),
     mq = require('../../core/controllers/rabbitmq'),
     Tvdscustomer = mongoose.model('Tvdscustomer'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
+    moment = require('moment'),
     _ = require('lodash');
 
 exports.getList = async function (req, res) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
     var keyword = req.query.keyword;
+
     if (pageNo < 0 || pageNo === 0) {
         response = {
             error: true,
@@ -29,14 +31,29 @@ exports.getList = async function (req, res) {
                     "lastName": { $regex: "^" + keyword, $options: "i" },
                 },
                 {
-                    "addressLine1": { $regex: "^" + keyword, $options: "i", },
+                    "addressStreet": { $regex: "^" + keyword, $options: "i", },
                 },
                 {
-                    "addressPostcode": { $regex: "^" + keyword, $options: "i", },
+                    "addressSubDistrict": { $regex: "^" + keyword, $options: "i", },
+                },
+                {
+                    "addressDistrict": { $regex: "^" + keyword, $options: "i", },
+                },
+                {
+                    "addressProvince": { $regex: "^" + keyword, $options: "i", },
+                },
+                {
+                    "addressPostCode": { $regex: "^" + keyword, $options: "i", },
                 },
                 {
                     "mobileNo1": { $regex: "^" + keyword, $options: "i" },
                 },
+                // {
+                //     "created": { $regex: "^" + keyword, $options: "i" },
+                // },
+                // {
+                //     "updated": { $regex: "^" + keyword, $options: "i" },
+                // },
             ],
         };
     }
@@ -172,47 +189,47 @@ exports.delete = function (req, res) {
 exports.query = function (req, res) {
     let query = null;
     if (req.body.lineUserId) {
-      query = {
-        "lineUserId": req.body.lineUserId,
-      };
+        query = {
+            "lineUserId": req.body.lineUserId,
+        };
     }
-  
+
     if (
-      req.body.firstNameThai &&
-      req.body.lastNameThai &&
-      req.body.mobileNumber
+        req.body.firstNameThai &&
+        req.body.lastNameThai &&
+        req.body.mobileNumber
     ) {
-      query = {
-        $or: [
-          {
-            "firstName": req.body.firstNameThai,
-            "lastNameThai": req.body.lastNameThai,
-          },
-          {
-            "firstNameThai": req.body.firstNameThai,
-            "mobileNo1": req.body.mobileNumber,
-          },
-        ],
-      };
+        query = {
+            $or: [
+                {
+                    "firstName": req.body.firstNameThai,
+                    "lastNameThai": req.body.lastNameThai,
+                },
+                {
+                    "firstNameThai": req.body.firstNameThai,
+                    "mobileNo1": req.body.mobileNumber,
+                },
+            ],
+        };
     }
     // console.log(query);
     if (!query) {
-      res.jsonp({
-        status: 200,
-      });
-    } else {
-      Tvdscustomer.findOne(query, function (err, data) {
-        if (err) {
-          return res.status(400).send({
-            status: 400,
-            message: errorHandler.getErrorMessage(err),
-          });
-        } else {
-          res.jsonp({
+        res.jsonp({
             status: 200,
-            data: data,
-          });
-        }
-      });
+        });
+    } else {
+        Tvdscustomer.findOne(query, function (err, data) {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err),
+                });
+            } else {
+                res.jsonp({
+                    status: 200,
+                    data: data,
+                });
+            }
+        });
     }
-  };
+};
