@@ -203,7 +203,7 @@ exports.query = function (req, res) {
             $or: [
                 {
                     "firstName": req.body.firstName,
-                    "lastName": req.body.lastNam,
+                    "lastName": req.body.lastName,
                 },
                 {
                     "firstName": req.body.firstName,
