@@ -195,19 +195,19 @@ exports.query = function (req, res) {
     }
 
     if (
-        req.body.firstNameThai &&
-        req.body.lastNameThai &&
-        req.body.mobileNumber
+        req.body.firstName &&
+        req.body.lastName &&
+        req.body.mobileNo1
     ) {
         query = {
             $or: [
                 {
-                    "firstName": req.body.firstNameThai,
-                    "lastNameThai": req.body.lastNameThai,
+                    "firstName": req.body.firstName,
+                    "lastName": req.body.lastNam,
                 },
                 {
-                    "firstNameThai": req.body.firstNameThai,
-                    "mobileNo1": req.body.mobileNumber,
+                    "firstName": req.body.firstName,
+                    "mobileNo1": req.body.mobileNo1,
                 },
             ],
         };
