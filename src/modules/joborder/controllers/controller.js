@@ -264,7 +264,7 @@ function checkSymbolMarkersDefault(contactStatus) {
     if (contactStatus === "reject") {
         return "R";
     }
-    if (contactStatus === "select") {
+    if (contactStatus === "select" || contactStatus === "waitcontact") {
         return "S";
     }
     if (contactStatus === "") {
