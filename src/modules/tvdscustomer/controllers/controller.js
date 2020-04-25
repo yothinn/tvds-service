@@ -53,7 +53,7 @@ exports.getList = async function (req, res) {
             },
           ],
         };
-        console.log(filter);
+        console.log(JSON.stringify(filter));
       } catch (error) {}
     } else {
       filter = {
