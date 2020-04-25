@@ -42,7 +42,7 @@ module.exports.pushMessage = function (body) {
       {
         url: "https://api.line.me/v2/bot/message/push",
         headers: headers,
-        body: body,
+        body: JSON.stringify(body),
       },
       (err, resp, body) => {
         if (err) {
