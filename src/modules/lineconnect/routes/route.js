@@ -4,22 +4,24 @@ var controller = require("../controllers/controller"),
   policy = require("../policy/policy");
 module.exports = function (app) {
   var url = "/api/lineconnects";
-  var urlWithParam = "/api/lineconnects/:lineconnectId";
-  app
-    .route(url)
-    .all(policy.isAllowed)
-    .get(controller.getList)
-    .post(controller.create);
+//   var urlWithParam = "/api/lineconnects/:lineconnectId";
+//   app
+//     .route(url)
+//     .all(policy.isAllowed)
+//     .get(controller.getList)
+//     .post(controller.create);
+
+//   app
+//     .route(urlWithParam)
+//     .all(policy.isAllowed)
+//     .get(controller.read)
+//     .put(controller.update)
+//     .delete(controller.delete);
+
+//   app.param("lineconnectId", controller.getByID);
 
   app
-    .route(urlWithParam)
-    .all(policy.isAllowed)
-    .get(controller.read)
-    .put(controller.update)
-    .delete(controller.delete);
-
-  app
-    .route(url + "members/hook")
+    .route(url + "/members/hook")
     .post(
       controller.hook,
       controller.registerIntent,
@@ -29,7 +31,7 @@ module.exports = function (app) {
       controller.completedChat
     );
 
-  app.param("lineconnectId", controller.getByID);
+
 
   /**
    * Message Queue
