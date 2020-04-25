@@ -53,6 +53,7 @@ exports.getList = async function (req, res) {
             },
           ],
         };
+        console.log(filter);
       } catch (error) {}
     } else {
       filter = {
