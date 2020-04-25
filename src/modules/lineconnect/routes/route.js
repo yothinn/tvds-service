@@ -31,6 +31,8 @@ module.exports = function (app) {
       controller.completedChat
     );
 
+    app.route(url + "/members/push").post(controller.pushMessage);
+
 
 
   /**

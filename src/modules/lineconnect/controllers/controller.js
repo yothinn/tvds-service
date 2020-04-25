@@ -7,6 +7,7 @@ var mongoose = require("mongoose"),
   Joborder = mongoose.model("Joborder"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   lineChat = require("../../core/controllers/lineChat"),
+  socket = require("../../../config/socket.io.js"),
   _ = require("lodash");
 
 exports.getList = function (req, res) {
@@ -234,46 +235,62 @@ exports.confirmAndRejectIntent = async function (req, res, next) {
         },
       ];
 
-      let reply = await lineChat.replyMessage(
-        req.body.events[0].replyToken,
-        messages
-      );
-      res.jsonp({
-        status: 200,
-        data: req.body.events[0],
-      });
+      // let reply = await lineChat.replyMessage(
+      //   req.body.events[0].replyToken,
+      //   messages
+      // );
+      // res.jsonp({
+      //   status: 200,
+      //   data: req.body.events[0],
+      // });
 
-      //   Joborder.findOne(
-      //     { docno: arrMsg[2].trim() },
-      //     async (err, order) => {
-      //       if (err) {
-      //         messages.push({
-      //           type: `text`,
-      //           text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
-      //         });
-      //       } else {
-      //         if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
-      //           messages.push({
-      //             type: `text`,
-      //             text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
-      //           });
-      //         } else {
-      //           messages.push({
-      //             type: `text`,
-      //             text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
-      //           });
-      //         }
-      //       }
-      //       let reply = await lineChat.replyMessage(
-      //         req.body.events[0].replyToken,
-      //         messages
-      //       );
-      //       res.jsonp({
-      //         status: 200,
-      //         data: req.body.events[0],
-      //       });
-      //     }
-      //   );
+      Joborder.findOne({ docno: arrMsg[2].trim() }, async (err, order) => {
+        if (err) {
+          messages.push({
+            type: `text`,
+            text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+          });
+        } else {
+          order.contactLists.forEach((contact) => {
+            if (contact.lineUserId === req.body.events[0].source.userId) {
+              contact.contactStatus = req.body.events[0].message.text.startsWith(
+                "รับนัดหมาย"
+              )
+                ? "confirm"
+                : "reject";
+            }
+          });
+          order.save(async function (err, data) {
+            if (err) {
+              req.replyBody.messages.push({
+                type: `text`,
+                text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+              });
+            } else {
+              socket.io.emit("user-confirm-reject", data);
+              if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
+                messages.push({
+                  type: `text`,
+                  text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+                });
+              } else {
+                messages.push({
+                  type: `text`,
+                  text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+                });
+              }
+            }
+            let reply = await lineChat.replyMessage(
+              req.body.events[0].replyToken,
+              messages
+            );
+            res.jsonp({
+              status: 200,
+              data: req.body.events[0],
+            });
+          });
+        }
+      });
     }
   } else {
     next();
@@ -285,19 +302,17 @@ exports.fallbackIntent = function (req, res, next) {
 };
 
 exports.completedChat = async function (req, res) {
-  let messages = [
-    {
-      type: `text`,
-      text: JSON.stringify(req.body),
-    },
-  ];
-
-  let reply = await lineChat.replyMessage(
-    req.body.events[0].replyToken,
-    messages
-  );
   res.jsonp({
     status: 200,
     data: req.body.events[0],
+  });
+};
+
+exports.pushMessage = async function (req, res) {
+  let body = JSON.stringify(req.body);
+  let push = await lineChat.pushMessage(req.body);
+  res.jsonp({
+    status: 200,
+    data: req.body,
   });
 };
