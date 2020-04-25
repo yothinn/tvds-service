@@ -19,7 +19,7 @@ module.exports = function (app) {
     .delete(controller.delete);
 
   app
-    .route(url + "/hook")
+    .route(url + "members/hook")
     .post(
       controller.hook,
       controller.registerIntent,
