@@ -180,6 +180,25 @@ exports.registerLocationIntent = async function (req, res, next) {
       longitude: `${req.body.events[0].message.longitude}`,
     };
     Tvdscustomer.findOneAndUpdate(query, update, async function (err, data) {
+      if (err) {
+        let message = [];
+        messages.push({
+          type: `text`,
+          text: `คุณยังไม่เคยลงทะเบียนกับรถธรรมธุรกิจ`,
+        });
+        messages.push({
+          type: `text`,
+          text: `กรุณาเลือก เมนู > ข้อมูลสมาชิก`,
+        });
+        let reply = await lineChat.replyMessage(
+          req.body.events[0].replyToken,
+          messages
+        );
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err),
+        });
+      }
       let messages = [
         {
           type: `text`,
@@ -269,7 +288,7 @@ exports.completedChat = async function (req, res) {
   let messages = [
     {
       type: `text`,
-      text: `ระบบกำลังดำเนินการ "ยืนยัน" นัดหมายของท่าน...`,
+      text: JSON.stringify(req.body),
     },
   ];
 
