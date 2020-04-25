@@ -265,7 +265,18 @@ exports.fallbackIntent = function (req, res, next) {
   next();
 };
 
-exports.completedChat = function (req, res) {
+exports.completedChat = async function (req, res) {
+  let messages = [
+    {
+      type: `text`,
+      text: `ระบบกำลังดำเนินการ "ยืนยัน" นัดหมายของท่าน...`,
+    },
+  ];
+
+  let reply = await lineChat.replyMessage(
+    req.body.events[0].replyToken,
+    messages
+  );
   res.jsonp({
     status: 200,
     data: req.body.events[0],
