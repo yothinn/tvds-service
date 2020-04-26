@@ -665,3 +665,34 @@ exports.pushMessage = async function (req, res) {
     data: req.body,
   });
 };
+
+exports.replyMessage = async function (req, res){
+
+  let message = [{
+    type: `text`,
+    text: `${req.body.message}`,
+  }];
+  let reply = await lineChat.replyMessage(
+    req.body.replyToken,
+    messages
+  );
+  // res.jsonp({
+  //   status: 200,
+  //   data: req.body.events[0],
+  // });
+  var newLineconnect = new Lineconnect(req.body);
+  newLineconnect.createby = req.user;
+  newLineconnect.save(function (err, data) {
+    if (err) {
+      return res.status(400).send({
+        status: 400,
+        message: errorHandler.getErrorMessage(err),
+      });
+    } else {
+      res.jsonp({
+        status: 200,
+        data: data,
+      });
+    }
+  });
+}

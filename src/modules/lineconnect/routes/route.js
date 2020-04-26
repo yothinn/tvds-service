@@ -4,21 +4,21 @@ var controller = require("../controllers/controller"),
   policy = require("../policy/policy");
 module.exports = function (app) {
   var url = "/api/lineconnects";
-//   var urlWithParam = "/api/lineconnects/:lineconnectId";
-//   app
-//     .route(url)
-//     .all(policy.isAllowed)
-//     .get(controller.getList)
-//     .post(controller.create);
+  //   var urlWithParam = "/api/lineconnects/:lineconnectId";
+  //   app
+  //     .route(url)
+  //     .all(policy.isAllowed)
+  //     .get(controller.getList)
+  //     .post(controller.create);
 
-//   app
-//     .route(urlWithParam)
-//     .all(policy.isAllowed)
-//     .get(controller.read)
-//     .put(controller.update)
-//     .delete(controller.delete);
+  //   app
+  //     .route(urlWithParam)
+  //     .all(policy.isAllowed)
+  //     .get(controller.read)
+  //     .put(controller.update)
+  //     .delete(controller.delete);
 
-//   app.param("lineconnectId", controller.getByID);
+  //   app.param("lineconnectId", controller.getByID);
 
   app
     .route(url + "/members/hook")
@@ -33,9 +33,9 @@ module.exports = function (app) {
       controller.completedChat
     );
 
-    app.route(url + "/members/push").post(controller.pushMessage);
+  app.route(url + "/members/reply").post(controller.replyMessage);
 
-
+  app.route(url + "/members/push").post(controller.pushMessage);
 
   /**
    * Message Queue
