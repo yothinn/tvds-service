@@ -623,7 +623,30 @@ exports.getJobOrderIntent = async function (req, res, next) {
 };
 
 exports.fallbackIntent = function (req, res, next) {
-  next();
+  if (req.body.events[0].message.type === "text") {
+    var newLineconnect = new Lineconnect({
+      replyToken: req.body.events[0].replyToken,
+      userId: req.body.events[0].source.userId,
+      timestamp: req.body.events[0].timestamp,
+      message: req.body.events[0].message.text,
+    });
+    newLineconnect.save(function (err, data) {
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err),
+        });
+      } else {
+        socket.io.emit("user-send-message", data);
+        res.jsonp({
+          status: 200,
+          data: data,
+        });
+      }
+    });
+  } else {
+    next();
+  }
 };
 
 exports.completedChat = async function (req, res) {
