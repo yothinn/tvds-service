@@ -689,7 +689,7 @@ exports.replyMessage = async function (req, res) {
     } else {
       res.jsonp({
         status: 200,
-        data: data,
+        data: reply,
       });
     }
   });
