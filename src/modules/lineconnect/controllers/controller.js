@@ -629,6 +629,7 @@ exports.fallbackIntent = function (req, res, next) {
       userId: req.body.events[0].source.userId,
       timestamp: req.body.events[0].timestamp,
       message: req.body.events[0].message.text,
+      destination: req.body.destination
     });
     newLineconnect.save(function (err, data) {
       if (err) {
