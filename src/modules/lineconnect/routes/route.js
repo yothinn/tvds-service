@@ -27,6 +27,8 @@ module.exports = function (app) {
       controller.registerIntent,
       controller.registerLocationIntent,
       controller.confirmAndRejectIntent,
+      controller.getAppooimentsIntent,
+      controller.getJobOrderIntent,
       controller.fallbackIntent,
       controller.completedChat
     );
