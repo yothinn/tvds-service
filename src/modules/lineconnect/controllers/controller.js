@@ -629,7 +629,7 @@ exports.fallbackIntent = function (req, res, next) {
       userId: req.body.events[0].source.userId,
       timestamp: req.body.events[0].timestamp,
       message: req.body.events[0].message.text,
-      destination: req.body.destination
+      destination: req.body.destination,
     });
     newLineconnect.save(function (err, data) {
       if (err) {
@@ -666,16 +666,15 @@ exports.pushMessage = async function (req, res) {
   });
 };
 
-exports.replyMessage = async function (req, res){
-
-  let message = [{
-    type: `text`,
-    text: `${req.body.message}`,
-  }];
-  let reply = await lineChat.replyMessage(
-    req.body.replyToken,
-    messages
-  );
+exports.replyMessage = async function (req, res) {
+  console.log(JSON.stringify(req.body));
+  let message = [
+    {
+      type: `text`,
+      text: `${req.body.message}`,
+    },
+  ];
+  let reply = await lineChat.replyMessage(req.body.replyToken, messages);
   // res.jsonp({
   //   status: 200,
   //   data: req.body.events[0],
@@ -695,4 +694,4 @@ exports.replyMessage = async function (req, res){
       });
     }
   });
-}
+};
