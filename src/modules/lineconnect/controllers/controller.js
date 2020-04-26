@@ -299,7 +299,7 @@ exports.getAppooimentsIntent = async function (req, res, next) {
         altText: "this is a carousel template",
         template: {
           type: "carousel",
-          contents: [
+          columns: [
             {
               type: "bubble",
               styles: {
