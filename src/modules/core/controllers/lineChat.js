@@ -9,9 +9,6 @@ module.exports.replyMessage = function (replyToken, messages) {
   };
 
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("Delay Hello");
-    }, 1000);
     request.post(
       {
         url: "https://api.line.me/v2/bot/message/reply",

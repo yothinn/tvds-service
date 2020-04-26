@@ -667,7 +667,6 @@ exports.pushMessage = async function (req, res) {
 };
 
 exports.replyMessage = async function (req, res) {
-  console.log(JSON.stringify(req.body));
   let messages = [
     {
       type: `text`,
