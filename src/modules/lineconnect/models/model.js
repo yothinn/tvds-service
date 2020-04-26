@@ -11,7 +11,7 @@ var LineconnectSchema = new Schema({
     type: String,
   },
   timestamp: {
-    type: Number,
+    type: Date,
   },
   message: {
     type: String,
