@@ -13,67 +13,68 @@ var JoborderSchema = new Schema({
     type: Date,
   },
   carNo: {
-    type: String,
-  },
-  lisenceID: {
-    type: String,
-  },
-  driverInfo: {
     type: {
-      title: {
+      lisenceID: {
         type: String,
       },
-      firstName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
-      },
-      displayName: {
-        type: String,
-      },
-      persanalId: {
-        type: String,
-      },
-      isShareHolder: {
-        type: Boolean,
-        default: false,
-      },
-      mobileNo1: {
-        type: String,
-      },
-      mobileNo2: {
-        type: String,
-      },
-      mobileNo3: {
-        type: String,
-      },
-      addressLine1: {
-        type: String,
-      },
-      addressStreet: {
-        type: String,
-      },
-      addressSubDistrict: {
-        type: String,
-      },
-      addressDistrict: {
-        type: String,
-      },
-      addressProvince: {
-        type: String,
-      },
-      addressPostCode: {
-        type: String,
-      },
-      lineUserId: {
-        type: String,
-      },
-      latitude: {
-        type: String,
-      },
-      longitude: {
-        type: String,
+      driverInfo: {
+        type: {
+          title: {
+            type: String,
+          },
+          firstName: {
+            type: String,
+          },
+          lastName: {
+            type: String,
+          },
+          displayName: {
+            type: String,
+          },
+          persanalId: {
+            type: String,
+          },
+          isShareHolder: {
+            type: Boolean,
+            default: false,
+          },
+          mobileNo1: {
+            type: String,
+          },
+          mobileNo2: {
+            type: String,
+          },
+          mobileNo3: {
+            type: String,
+          },
+          addressLine1: {
+            type: String,
+          },
+          addressStreet: {
+            type: String,
+          },
+          addressSubDistrict: {
+            type: String,
+          },
+          addressDistrict: {
+            type: String,
+          },
+          addressProvince: {
+            type: String,
+          },
+          addressPostCode: {
+            type: String,
+          },
+          lineUserId: {
+            type: String,
+          },
+          latitude: {
+            type: String,
+          },
+          longitude: {
+            type: String,
+          },
+        },
       },
     },
   },
