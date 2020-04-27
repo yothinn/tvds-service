@@ -363,17 +363,17 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "ทะเบียนรถ : " + order.carNo.split(")")[0].replace("(",""),
+                    text: "ทะเบียนรถ: " + order.carNo,
                     size: "lg",
                     weight: "bold",
                     color: "#000000",
                   },
-                  {
-                    type: "text",
-                    text: "คนขับรถ : คุณ " + order.carNo.split(")")[1].trim(),
-                    size: "xs",
-                    color: "#B2B2B2",
-                  },
+                  // {
+                  //   type: "text",
+                  //   text: "คนขับรถ : คุณ " + order.carNo.split(")")[1].trim(),
+                  //   size: "xs",
+                  //   color: "#B2B2B2",
+                  // },
                   {
                     type: "text",
                     text: "สถานะ : ยืนยันนัดหมายแล้ว",
