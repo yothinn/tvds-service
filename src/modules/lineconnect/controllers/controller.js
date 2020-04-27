@@ -343,6 +343,8 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               );
             });
 
+            console.log(me);
+
             let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
               start.getFullYear() + 543
             }`;
