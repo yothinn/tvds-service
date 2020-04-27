@@ -346,7 +346,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                 contents: [
                   {
                     type: "text",
-                    text: weekday[order.docdate.getDay()],
+                    text: weekday[order.docdate.getDay() + 1],
                     size: "lg",
                     align: "start",
                     weight: "bold",
@@ -354,23 +354,23 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: `${order.docdate.getDate()} ${
+                    text: `${order.docdate.getDate() + 1} ${
                       months[order.docdate.getMonth()]
-                    } ${order.docdate.getFullYear()}`,
+                    } ${order.docdate.getFullYear() + 543}`,
                     size: "3xl",
                     weight: "bold",
                     color: "#000000",
                   },
-                  // {
-                  //   type: "text",
-                  //   text: "ทะเบียนรถ: " + order.carNo,
-                  //   size: "lg",
-                  //   weight: "bold",
-                  //   color: "#000000",
-                  // },
                   {
                     type: "text",
-                    text: "ทะเบียนรถและคนขับรถ: " + order.carNo,
+                    text: "ทะเบียนรถ: " + order.carNo.lisenceID,
+                    size: "lg",
+                    weight: "bold",
+                    color: "#000000",
+                  },
+                  {
+                    type: "text",
+                    text: "คนขับรถ: " + order.carNo.driverInfo.displayName,
                     size: "xs",
                     color: "#B2B2B2",
                   },
