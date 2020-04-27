@@ -335,93 +335,110 @@ exports.getAppointmentsIntent = async function (req, res, next) {
     })
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
-        results.forEach((order) => {
-          messages[0].contents.contents.push({
-            type: "bubble",
-            direction: "ltr",
-            header: {
-              type: "box",
-              layout: "vertical",
-              contents: [
-                {
-                  type: "text",
-                  text: weekday[order.docdate.getDay()],
-                  size: "lg",
-                  align: "start",
-                  weight: "bold",
-                  color: "#009813",
-                },
-                {
-                  type: "text",
-                  text: "30 เม.ย. 2563"`${order.docdate.getDate()} ${
-                    months[order.docdate.getMonth()]
-                  } ${order.docdate.getFullYear()}`,
-                  size: "3xl",
-                  weight: "bold",
-                  color: "#000000",
-                },
-                {
-                  type: "text",
-                  text: "ทะเบียนรถ : " + carNo,
-                  size: "lg",
-                  weight: "bold",
-                  color: "#000000",
-                },
-                {
-                  type: "text",
-                  text: "คนขับรถ : คุณ " + driver,
-                  size: "xs",
-                  color: "#B2B2B2",
-                },
-                {
-                  type: "text",
-                  text: "สถานะ : ยืนยันนัดหมายแล้ว",
-                  margin: "lg",
-                  size: "lg",
-                  color: "#000000",
-                },
-              ],
-            },
-            footer: {
-              type: "box",
-              layout: "horizontal",
-              contents: [
-                {
-                  type: "text",
-                  text: "ยกเลิกนัดหมาย",
-                  size: "lg",
-                  align: "center",
-                  color: "#FF0000",
-                  action: {
-                    type: "uri",
-                    label: "ยกเลิกนัดหมาย",
-                    uri: "https://google.co.th/",
+        if (results.length > 0) {
+          results.forEach((order) => {
+            messages[0].contents.contents.push({
+              type: "bubble",
+              direction: "ltr",
+              header: {
+                type: "box",
+                layout: "vertical",
+                contents: [
+                  {
+                    type: "text",
+                    text: weekday[order.docdate.getDay()],
+                    size: "lg",
+                    align: "start",
+                    weight: "bold",
+                    color: "#009813",
                   },
-                },
-                {
-                  type: "text",
-                  text: "ดูรายละเอียด",
-                  size: "lg",
-                  align: "center",
-                  color: "#0084B6",
-                  action: {
-                    type: "uri",
-                    label: "ดูรายละเอียด",
-                    uri: "https://google.co.th/",
+                  {
+                    type: "text",
+                    text: `${order.docdate.getDate()} ${
+                      months[order.docdate.getMonth()]
+                    } ${order.docdate.getFullYear()}`,
+                    size: "3xl",
+                    weight: "bold",
+                    color: "#000000",
                   },
-                },
-              ],
-            },
+                  {
+                    type: "text",
+                    text: "ทะเบียนรถ : " + carNo,
+                    size: "lg",
+                    weight: "bold",
+                    color: "#000000",
+                  },
+                  {
+                    type: "text",
+                    text: "คนขับรถ : คุณ " + driver,
+                    size: "xs",
+                    color: "#B2B2B2",
+                  },
+                  {
+                    type: "text",
+                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
+                    margin: "lg",
+                    size: "lg",
+                    color: "#000000",
+                  },
+                ],
+              },
+              footer: {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "ยกเลิกนัดหมาย",
+                    size: "lg",
+                    align: "center",
+                    color: "#FF0000",
+                    action: {
+                      type: "uri",
+                      label: "ยกเลิกนัดหมาย",
+                      uri: "https://google.co.th/",
+                    },
+                  },
+                  {
+                    type: "text",
+                    text: "ดูรายละเอียด",
+                    size: "lg",
+                    align: "center",
+                    color: "#0084B6",
+                    action: {
+                      type: "uri",
+                      label: "ดูรายละเอียด",
+                      uri: "https://google.co.th/",
+                    },
+                  },
+                ],
+              },
+            });
           });
-        });
-        let reply = await lineChat.replyMessage(
-          req.body.events[0].replyToken,
-          messages
-        );
-        res.jsonp({
-          status: 200,
-          data: req.body.events[0],
-        });
+          let reply = await lineChat.replyMessage(
+            req.body.events[0].replyToken,
+            messages
+          );
+          res.jsonp({
+            status: 200,
+            data: req.body.events[0],
+          });
+        } else {
+          messages = [
+            {
+              type: `text`,
+              text: `ไม่มีการนัดหมายค่ะ`,
+            },
+          ];
+          let reply = await lineChat.replyMessage(
+            req.body.events[0].replyToken,
+            messages
+          );
+          res.jsonp({
+            status: 200,
+            data: req.body.events[0],
+          });
+        }
       });
   } else {
     next();
