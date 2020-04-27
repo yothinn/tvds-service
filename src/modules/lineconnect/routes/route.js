@@ -33,6 +33,15 @@ module.exports = function (app) {
       controller.completedChat
     );
 
+    app
+    .route(url + "/staffs/hook")
+    .post(
+      controller.hook,
+      controller.getJobOrderIntent,
+      controller.fallbackIntent,
+      controller.completedChat
+    );
+
   app.route(url + "/members/reply").post(controller.replyMessage);
 
   app.route(url + "/members/push").post(controller.pushMessage);
