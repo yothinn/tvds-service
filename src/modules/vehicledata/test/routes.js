@@ -92,6 +92,7 @@ describe('Vehicledata CRUD routes tests', function () {
                         }
                         var resp = res.body;
                         assert.equal(resp.status, 200);
+                        
                         assert.equal(resp.data.lisenceID, mockup.lisenceID);
 
                         assert.equal(resp.data.vehicleType, mockup.vehicleType);
