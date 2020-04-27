@@ -340,7 +340,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             const me = order.contactLists.filter((contact) => {
               return (
                 contact.lineUserId === `${req.body.events[0].source.userId}`
-              );
+              )[0];
             });
 
             console.log(me);
