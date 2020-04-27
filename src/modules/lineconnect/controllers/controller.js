@@ -327,6 +327,8 @@ exports.getAppointmentsIntent = async function (req, res, next) {
         },
       },
     ];
+    var start = new Date();
+    start.setHours(0, 0, 0, 0);
     Joborder.find({
       docdate: { $gte: start },
       "contactLists.lineUserId": req.body.events[0].source.userId,
