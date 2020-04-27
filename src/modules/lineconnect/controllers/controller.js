@@ -2,6 +2,7 @@
 var mongoose = require("mongoose"),
   model = require("../models/model"),
   mq = require("../../core/controllers/rabbitmq"),
+  moment = require("moment"),
   Lineconnect = mongoose.model("Lineconnect"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   Joborder = mongoose.model("Joborder"),
@@ -9,6 +10,29 @@ var mongoose = require("mongoose"),
   lineChat = require("../../core/controllers/lineChat"),
   socket = require("../../../config/socket.io.js"),
   _ = require("lodash");
+
+var weekday = new Array(7);
+weekday[0] = "อาทิตย์";
+weekday[1] = "จันทร์";
+weekday[2] = "อังคาร";
+weekday[3] = "พุธ";
+weekday[4] = "พฤหัสบดี";
+weekday[5] = "ศุกร์";
+weekday[6] = "เสาร์";
+
+var months = new Array(12);
+months[0] = "ม.ค.";
+months[1] = "ก.พ.";
+months[2] = "มี.ค.";
+months[3] = "เม.ย.";
+months[4] = "พ.ค.";
+months[5] = "มิ.ย.";
+months[6] = "ก.ค.";
+months[7] = "ส.ค.";
+months[8] = "ก.ย.";
+months[9] = "ต.ค.";
+months[10] = "พ.ย.";
+months[11] = "ธ.ค.";
 
 exports.getList = function (req, res) {
   var pageNo = parseInt(req.query.pageNo);
@@ -299,169 +323,104 @@ exports.getAppointmentsIntent = async function (req, res, next) {
         altText: "ตารางการนัดหมาย",
         contents: {
           type: "carousel",
-          contents: [
-            {
-              type: "bubble",
-              direction: "ltr",
-              header: {
-                type: "box",
-                layout: "vertical",
-                contents: [
-                  {
-                    type: "text",
-                    text: "วันอาทิตย์",
-                    size: "lg",
-                    align: "start",
-                    weight: "bold",
-                    color: "#009813",
-                  },
-                  {
-                    type: "text",
-                    text: "30 เม.ย. 2563",
-                    size: "3xl",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "ทะเบียนรถ : XXXXX",
-                    size: "lg",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "คนขับรถ : นาย xxxx  xxxxxx",
-                    size: "xs",
-                    color: "#B2B2B2",
-                  },
-                  {
-                    type: "text",
-                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
-                    margin: "lg",
-                    size: "lg",
-                    color: "#000000",
-                  },
-                ],
-              },
-              footer: {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "ยกเลิกนัดหมาย",
-                    size: "lg",
-                    align: "center",
-                    color: "#FF0000",
-                    action: {
-                      type: "uri",
-                      label: "ยกเลิกนัดหมาย",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                  {
-                    type: "text",
-                    text: "ดูรายละเอียด",
-                    size: "lg",
-                    align: "center",
-                    color: "#0084B6",
-                    action: {
-                      type: "uri",
-                      label: "ดูรายละเอียด",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              type: "bubble",
-              direction: "ltr",
-              header: {
-                type: "box",
-                layout: "vertical",
-                contents: [
-                  {
-                    type: "text",
-                    text: "วันอาทิตย์",
-                    size: "lg",
-                    align: "start",
-                    weight: "bold",
-                    color: "#009813",
-                  },
-                  {
-                    type: "text",
-                    text: "7 พ.ค. 2563",
-                    size: "3xl",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "ทะเบียนรถ : XXXXX",
-                    size: "lg",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "คนขับรถ : นาย xxxx  xxxxxx",
-                    size: "xs",
-                    color: "#B2B2B2",
-                  },
-                  {
-                    type: "text",
-                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
-                    margin: "lg",
-                    size: "lg",
-                    color: "#000000",
-                  },
-                ],
-              },
-              footer: {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "ยกเลิกนัดหมาย",
-                    size: "lg",
-                    align: "center",
-                    color: "#FF0000",
-                    action: {
-                      type: "uri",
-                      label: "ยกเลิกนัดหมาย",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                  {
-                    type: "text",
-                    text: "ดูรายละเอียด",
-                    size: "lg",
-                    align: "center",
-                    color: "#0084B6",
-                    action: {
-                      type: "uri",
-                      label: "ดูรายละเอียด",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                ],
-              },
-            },
-          ],
+          contents: [],
         },
       },
     ];
-    let reply = await lineChat.replyMessage(
-      req.body.events[0].replyToken,
-      messages
-    );
-    res.jsonp({
-      status: 200,
-      data: req.body.events[0],
-    });
+    Joborder.find({
+      docdate: { $gte: start },
+      "contactLists.lineUserId": req.body.events[0].source.userId,
+    })
+      .sort({ docdate: 1 })
+      .exec(async function (err, results) {
+        results.forEach((order) => {
+          messages[0].contents.contents.push({
+            type: "bubble",
+            direction: "ltr",
+            header: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "text",
+                  text: weekday[order.docdate.getDay()],
+                  size: "lg",
+                  align: "start",
+                  weight: "bold",
+                  color: "#009813",
+                },
+                {
+                  type: "text",
+                  text: "30 เม.ย. 2563"`${order.docdate.getDate()} ${
+                    months[order.docdate.getMonth()]
+                  } ${order.docdate.getFullYear()}`,
+                  size: "3xl",
+                  weight: "bold",
+                  color: "#000000",
+                },
+                {
+                  type: "text",
+                  text: "ทะเบียนรถ : " + carNo,
+                  size: "lg",
+                  weight: "bold",
+                  color: "#000000",
+                },
+                {
+                  type: "text",
+                  text: "คนขับรถ : คุณ " + driver,
+                  size: "xs",
+                  color: "#B2B2B2",
+                },
+                {
+                  type: "text",
+                  text: "สถานะ : ยืนยันนัดหมายแล้ว",
+                  margin: "lg",
+                  size: "lg",
+                  color: "#000000",
+                },
+              ],
+            },
+            footer: {
+              type: "box",
+              layout: "horizontal",
+              contents: [
+                {
+                  type: "text",
+                  text: "ยกเลิกนัดหมาย",
+                  size: "lg",
+                  align: "center",
+                  color: "#FF0000",
+                  action: {
+                    type: "uri",
+                    label: "ยกเลิกนัดหมาย",
+                    uri: "https://google.co.th/",
+                  },
+                },
+                {
+                  type: "text",
+                  text: "ดูรายละเอียด",
+                  size: "lg",
+                  align: "center",
+                  color: "#0084B6",
+                  action: {
+                    type: "uri",
+                    label: "ดูรายละเอียด",
+                    uri: "https://google.co.th/",
+                  },
+                },
+              ],
+            },
+          });
+        });
+        let reply = await lineChat.replyMessage(
+          req.body.events[0].replyToken,
+          messages
+        );
+        res.jsonp({
+          status: 200,
+          data: req.body.events[0],
+        });
+      });
   } else {
     next();
   }
