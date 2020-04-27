@@ -337,7 +337,24 @@ exports.getAppointmentsIntent = async function (req, res, next) {
       .exec(async function (err, results) {
         if (results.length > 0) {
           results.forEach((order) => {
-            messages[0].contents.contents.push({
+            const me = order.contactLists.filter((contact) => {
+              return (
+                contact.lineUserId === `${req.body.events[0].source.userId}`
+              );
+            });
+
+            let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
+              start.getFullYear() + 543
+            }`;
+
+            let dateTH = `${order.docdate.getDate() + 1} ${
+              months[order.docdate.getMonth()]
+            } ${order.docdate.getFullYear() + 543}`;
+
+            let sameToday = toDayTH === dateTH ? true : false;
+            let isConfirmed = me.contactStatus === "confirm" ? true : false;
+
+            let message = {
               type: "bubble",
               direction: "ltr",
               header: {
@@ -354,9 +371,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: `${order.docdate.getDate() + 1} ${
-                      months[order.docdate.getMonth()]
-                    } ${order.docdate.getFullYear() + 543}`,
+                    text: dateTH,
                     size: "3xl",
                     weight: "bold",
                     color: "#000000",
@@ -376,7 +391,11 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
+                    text:
+                      "สถานะ: " +
+                      (me.contactStatus === "confirm"
+                        ? "ยืนยันนัดหมาย"
+                        : "ปฏิเสธนัดหมาย"),
                     margin: "lg",
                     size: "lg",
                     color: "#000000",
@@ -386,35 +405,88 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               footer: {
                 type: "box",
                 layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "ยกเลิกนัดหมาย",
-                    size: "lg",
-                    align: "center",
-                    color: "#FF0000",
-                    action: {
-                      type: "uri",
-                      label: "ยกเลิกนัดหมาย",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                  {
-                    type: "text",
-                    text: "ดูรายละเอียด",
-                    size: "lg",
-                    align: "center",
-                    color: "#0084B6",
-                    action: {
-                      type: "uri",
-                      label: "ดูรายละเอียด",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                ],
+                contents: [],
               },
-            });
+            };
+
+            if (!sameToday) {
+              if (isConfirmed) {
+                message.footer.contents.push({
+                  type: "text",
+                  text: "ยกเลิกนัดหมาย",
+                  size: "lg",
+                  align: "center",
+                  color: "#FF0000",
+                  action: {
+                    type: "message",
+                    label: "ยกเลิกนัดหมาย",
+                    text: "ปฏิเสธ วัน" +
+                    weekday[order.docdate.getDay() + 1] +
+                    "ที่: " +
+                    dateTH +
+                    " เลขเอกสาร: " +
+                    order.docno,
+                  },
+                });
+              } else {
+                message.footer.contents.push({
+                  type: "text",
+                  text: "รับนัดหมาย",
+                  size: "lg",
+                  align: "center",
+                  color: "#FF0000",
+                  action: {
+                    type: "message",
+                    label: "รับนัดหมาย",
+                    text: "รับนัดหมาย วัน" +
+                    weekday[order.docdate.getDay() + 1] +
+                    "ที่: " +
+                    dateTH +
+                    " เลขเอกสาร: " +
+                    order.docno,
+                  },
+                });
+              }
+              message.footer.contents.push({
+                type: "text",
+                text: "ดูรายละเอียด",
+                size: "lg",
+                align: "center",
+                color: "#0084B6",
+                action: {
+                  type: "uri",
+                  label: "ดูรายละเอียด",
+                  uri: "line://app/1654060178-Pk1wOJB4",
+                },
+              });
+            }
+
+            messages[0].contents.contents.push(message);
           });
+
+          // {
+          //   type: "text",
+          //   text: "ยกเลิกนัดหมาย",
+          //   size: "lg",
+          //   align: "center",
+          //   color: "#FF0000",
+          //   action: {
+          //     type: "uri",
+          //     label: "ยกเลิกนัดหมาย",
+          //     uri: "https://google.co.th/",
+          //   },
+          // },
+          // {
+          //   type: "text",
+          //   text: "ดูรายละเอียด",
+          //   size: "lg",
+          //   align: "center",
+          //   color: "#0084B6",
+          //   action: {
+          //     type: "uri",
+          //     label: "ดูรายละเอียด",
+          //     uri: "https://google.co.th/",
+          //   }
           let reply = await lineChat.replyMessage(
             req.body.events[0].replyToken,
             messages
