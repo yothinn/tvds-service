@@ -3,8 +3,8 @@ var controller = require('../controllers/controller'),
     mq = require('../../core/controllers/rabbitmq'),
     policy = require('../policy/policy');
 module.exports = function (app) {
-    var url = '/api/vehicles';
-    var urlWithParam = '/api/vehicles/:vehicleId';
+    var url = '/api/vehicledatas';
+    var urlWithParam = '/api/vehicledatas/:vehicledataId';
     app.route(url).all(policy.isAllowed)
         .get(controller.getList)
         .post(controller.create);
@@ -14,7 +14,7 @@ module.exports = function (app) {
         .put(controller.update)
         .delete(controller.delete);
 
-    app.param('vehicleId', controller.getByID);
+    app.param('vehicledataId', controller.getByID);
 
     /**
      * Message Queue
@@ -24,6 +24,6 @@ module.exports = function (app) {
      */
     // mq.consume('exchange', 'qname', 'keymsg', (msg)=>{
     //     console.log(JSON.parse(msg.content));
-
+        
     // });
 }

@@ -2,56 +2,39 @@
 var mongoose = require('mongoose'),
     model = require('../models/model'),
     mq = require('../../core/controllers/rabbitmq'),
-    Vehicle = mongoose.model('Vehicle'),
+    Vehicledata = mongoose.model('Vehicledata'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
 
-exports.getList = async function (req, res) {
+exports.getList = function (req, res) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
-    var keyword = req.query.keyword;
+    var query = {};
     if (pageNo < 0 || pageNo === 0) {
         response = { "error": true, "message": "invalid page number, should start with 1" };
         return res.json(response);
     }
-
-    let filter = {};
-    if (keyword) {
-        filter = {
-            $or: [
-                {
-                    "lisenceID": { $regex: "^" + keyword, $options: "i", },
-                },
-                {
-                    "driverInfo.displayName": { $regex: "^" + keyword, $options: "i" },
-                }
-            ],
-        };
-    }
-
-    const [_results, _count] = await Promise.all([
-        Vehicle.find(filter)
-            .skip(size * (pageNo - 1))
-            .limit(size)
-            .sort({ "firstName": 1 })
-            .exec(),
-            Vehicle.countDocuments(filter).exec(),
-    ]);
-
-    return res.json({
-        status: 200,
-        currentPage: pageNo,
-        pages: Math.ceil(_count / size),
-        currentCount: _results.length,
-        totalCount: _count,
-        data: _results,
-    });
+    query.skip = size * (pageNo - 1);
+    query.limit = size;
+        Vehicledata.find({}, {}, query, function (err, datas) {
+            if (err) {
+                return res.status(400).send({
+                    status: 400,
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp({
+                    status: 200,
+                    data: datas
+                });
+            };
+        });
 };
 
 exports.create = function (req, res) {
-    var newVehicle = new Vehicle(req.body);
-    newVehicle.createby = req.user;
-    newVehicle.save(function (err, data) {
+    var newVehicledata = new Vehicledata (req.body);
+    newVehicledata.createby = req.user;
+    newVehicledata.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -79,7 +62,7 @@ exports.getByID = function (req, res, next, id) {
         });
     }
 
-    Vehicle.findById(id, function (err, data) {
+    Vehicledata.findById(id, function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -100,10 +83,10 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-    var updVehicle = _.extend(req.data, req.body);
-    updVehicle.updated = new Date();
-    updVehicle.updateby = req.user;
-    updVehicle.save(function (err, data) {
+    var updVehicledata = _.extend(req.data, req.body);
+    updVehicledata.updated = new Date();
+    updVehicledata.updateby = req.user;
+    updVehicledata.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,

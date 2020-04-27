@@ -245,16 +245,20 @@ exports.messageTypeText = (req, res, next) => {
           };
           break;
         default:
-          req.fallback = true;
-        // req.replyBody = {
-        //   replyToken: req.body.events[0].replyToken,
-        //   messages: [
-        //     {
-        //       type: `text`,
-        //       text: `ผมเข้าใจคำสั่งเพียงบางคำสั่ง ตาม Rich Menu กรุณาเลือกทำรายการจาก Rich Menu`,
-        //     },
-        //   ],
-        // };
+          // req.fallback = true;
+        req.replyBody = {
+          replyToken: req.body.events[0].replyToken,
+          messages: [
+            {
+              type: `text`,
+              text: `ระบบกำลังพัฒนาอยู่ค่ะ ยังไม่สามารถโต้ตอบได้ค่ะ`,
+            },
+            {
+              type: `text`,
+              text: `รบกวนติดต่อที่ไลน์ @thamturakit ก่อนนะคะ`,
+            }
+          ],
+        };
       }
     }
     next();
@@ -384,8 +388,12 @@ exports.replyMessage = (req, res) => {
           messages: [
             {
               type: `text`,
-              text: `ขอบคุณสำหรับสิ่งดีๆที่มอบให้ครับ`,
+              text: `ระบบกำลังพัฒนาอยู่ค่ะ ยังไม่สามารถโต้ตอบได้ค่ะ`,
             },
+            {
+              type: `text`,
+              text: `รบกวนติดต่อที่ไลน์ @thamturakit ก่อนนะคะ`,
+            }
           ],
         }),
     },
