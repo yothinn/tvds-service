@@ -20,7 +20,7 @@ var VehicledataSchema = new Schema({
     },
     isOwner: {
         type: Boolean,
-        default: 'true'
+        default: true
     },
     ownerInfo: {
         type: {
@@ -38,7 +38,7 @@ var VehicledataSchema = new Schema({
             },
             isCompany: {
                 type: Boolean,
-                default: 'false'
+                default: false
             },
             refId: {
                 type: String
