@@ -363,14 +363,14 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "ทะเบียนรถ : " + carNo,
+                    text: "ทะเบียนรถ : " + order.carNo.split(")")[0].replace("(",""),
                     size: "lg",
                     weight: "bold",
                     color: "#000000",
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ : คุณ " + driver,
+                    text: "คนขับรถ : คุณ " + order.carNo.split(")")[1].trim(),
                     size: "xs",
                     color: "#B2B2B2",
                   },
