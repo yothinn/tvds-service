@@ -340,7 +340,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             const me = order.contactLists.filter((contact) => {
               return (
                 contact.lineUserId === `${req.body.events[0].source.userId}`
-              )[0];
+              );
             });
 
             console.log(me);
@@ -354,7 +354,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             } ${order.docdate.getFullYear() + 543}`;
 
             let sameToday = toDayTH === dateTH ? true : false;
-            let isConfirmed = me.contactStatus === "confirm" ? true : false;
+            let isConfirmed = me[0].contactStatus === "confirm" ? true : false;
 
             let message = {
               type: "bubble",
@@ -395,7 +395,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                     type: "text",
                     text:
                       "สถานะ: " +
-                      (me.contactStatus === "confirm"
+                      (me[0].contactStatus === "confirm"
                         ? "ยืนยันนัดหมาย"
                         : "ปฏิเสธนัดหมาย"),
                     margin: "lg",
