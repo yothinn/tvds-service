@@ -111,18 +111,18 @@ var VehicledataSchema = new Schema({
         }
     }
 });
-VehicledataSchema.pre('save', function(next){
+VehicledataSchema.pre('save', function (next) {
     let Vehicledata = this;
     const model = mongoose.model("Vehicledata", VehicledataSchema);
     if (Vehicledata.isNew) {
         // create
         next();
-    }else{
+    } else {
         // update
         Vehicledata.updated = new Date();
         next();
     }
-    
-    
+
+
 })
 mongoose.model("Vehicledata", VehicledataSchema);
