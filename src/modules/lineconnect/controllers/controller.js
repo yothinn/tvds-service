@@ -436,7 +436,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   text: "รับนัดหมาย",
                   size: "lg",
                   align: "center",
-                  color: "#FF0000",
+                  color: "#008000",
                   action: {
                     type: "message",
                     label: "รับนัดหมาย",
@@ -466,29 +466,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             messages[0].contents.contents.push(message);
           });
 
-          // {
-          //   type: "text",
-          //   text: "ยกเลิกนัดหมาย",
-          //   size: "lg",
-          //   align: "center",
-          //   color: "#FF0000",
-          //   action: {
-          //     type: "uri",
-          //     label: "ยกเลิกนัดหมาย",
-          //     uri: "https://google.co.th/",
-          //   },
-          // },
-          // {
-          //   type: "text",
-          //   text: "ดูรายละเอียด",
-          //   size: "lg",
-          //   align: "center",
-          //   color: "#0084B6",
-          //   action: {
-          //     type: "uri",
-          //     label: "ดูรายละเอียด",
-          //     uri: "https://google.co.th/",
-          //   }
+          
           let reply = await lineChat.replyMessage(
             req.body.events[0].replyToken,
             messages
