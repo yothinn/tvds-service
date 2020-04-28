@@ -1,4 +1,13 @@
 "use strict";
+
+const CHANNEL_ACCESS_TOKEN =
+  process.env.CHANNEL_ACCESS_TOKEN ||
+  "4A287j6ijUzndwahgTuuucdZTEJOUN/hxlsEX/kjr6WlpPxxxYogNRcx+sZfhfTETeLeLy2jP67GcrOz1AsoJaPkL8t/Pfn+8ZeAYHliSBV3FJNcoVPbodNseuO3sQdAmdxaFFK5TohdUAa3b7UmKQdB04t89/1O/w1cDnyilFU=";
+
+  const SATFF_CHANNEL_ACCESS_TOKEN =
+  process.env.SATFF_CHANNEL_ACCESS_TOKEN ||
+  "WblrHOmUiMEGo8R+sKJEfp3tYJF6lZCiljPGAPYRf8kXgFdFZKh9Qrz4bQN9mJ1gYglgjg7R05CL5zACB9rlxGptxzJMC6pvxpvFCxXVVVyftk5SEqLX4vhin0MWj8jPTFxbezCyvT9D4IEO8KX2qAdB04t89/1O/w1cDnyilFU=";
+
 var mongoose = require("mongoose"),
   model = require("../models/model"),
   mq = require("../../core/controllers/rabbitmq"),
@@ -183,6 +192,7 @@ exports.registerIntent = async function (req, res, next) {
       },
     ];
     let reply = await lineChat.replyMessage(
+      CHANNEL_ACCESS_TOKEN,
       req.body.events[0].replyToken,
       messages
     );
@@ -231,6 +241,7 @@ exports.registerLocationIntent = async function (req, res, next) {
         },
       ];
       let reply = await lineChat.replyMessage(
+        CHANNEL_ACCESS_TOKEN,
         req.body.events[0].replyToken,
         messages
       );
@@ -296,6 +307,7 @@ exports.confirmAndRejectIntent = async function (req, res, next) {
               }
             }
             let reply = await lineChat.replyMessage(
+              CHANNEL_ACCESS_TOKEN,
               req.body.events[0].replyToken,
               messages
             );
@@ -468,6 +480,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
 
           
           let reply = await lineChat.replyMessage(
+            CHANNEL_ACCESS_TOKEN,
             req.body.events[0].replyToken,
             messages
           );
@@ -639,7 +652,8 @@ exports.getJobOrderIntent = async function (req, res, next) {
         },
       },
     ];
-    let reply = await lineChat.replyStaffMessage(
+    let reply = await lineChat.replyMessage(
+      SATFF_CHANNEL_ACCESS_TOKEN,
       req.body.events[0].replyToken,
       messages
     );
@@ -690,7 +704,7 @@ exports.completedChat = async function (req, res) {
 
 exports.pushMessage = async function (req, res) {
   let body = JSON.stringify(req.body);
-  let push = await lineChat.pushMessage(req.body);
+  let push = await lineChat.pushMessage(CHANNEL_ACCESS_TOKEN, req.body);
   res.jsonp({
     status: 200,
     data: req.body,
@@ -704,7 +718,7 @@ exports.replyMessage = async function (req, res) {
       text: `${req.body.message}`,
     },
   ];
-  let reply = await lineChat.replyMessage(req.body.replyToken, messages);
+  let reply = await lineChat.replyMessage(CHANNEL_ACCESS_TOKEN, req.body.replyToken, messages);
   // res.jsonp({
   //   status: 200,
   //   data: req.body.events[0],
