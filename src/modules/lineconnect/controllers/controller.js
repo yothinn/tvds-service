@@ -497,7 +497,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               action: {
                 type: "uri",
                 label: "ดูรายละเอียด",
-                uri: "line://app/1654060178-Pk1wOJB4",
+                uri: "line://app/1654123534-5rYewYVq?id=" + order._id,
               },
             });
             messages[0].contents.contents.push(message);
@@ -630,7 +630,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
               action: {
                 type: "uri",
                 label: "ดูรายละเอียด",
-                uri: "line://app/1654060178-Pk1wOJB4",
+                uri: "line://app/1654123534-5rYewYVq?id=" + order._id,
               },
             });
             messages[0].contents.contents.push(message);
