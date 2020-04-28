@@ -395,14 +395,14 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "ทะเบียนรถ: " + order.carNo.lisenceID,
+                    text: "ทะเบียนรถ: " + order.carNo.lisenceID || "ไม่ระบุ",
                     size: "lg",
                     weight: "bold",
                     color: "#000000",
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ: " + order.carNo.driverInfo.displayName,
+                    text: "คนขับรถ: " + order.carNo.driverInfo ? order.carNo.driverInfo.displayName : "ไม่ระบุ",
                     size: "xs",
                     color: "#B2B2B2",
                   },
@@ -590,14 +590,14 @@ exports.getJobOrderIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "ทะเบียนรถ: " + order.carNo.lisenceID,
+                    text: "ทะเบียนรถ: " + order.carNo.lisenceID || "ไม่ระบุ",
                     size: "lg",
                     weight: "bold",
                     color: "#000000",
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ: " + order.carNo.driverInfo.displayName,
+                    text: "คนขับรถ: " + order.carNo.driverInfo ? order.carNo.driverInfo.displayName : "ไม่ระบุ",
                     size: "xs",
                     color: "#B2B2B2",
                   },
