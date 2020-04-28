@@ -521,147 +521,119 @@ exports.getJobOrderIntent = async function (req, res, next) {
         altText: "ตารางการนัดหมาย",
         contents: {
           type: "carousel",
-          contents: [
-            {
-              type: "bubble",
-              direction: "ltr",
-              header: {
-                type: "box",
-                layout: "vertical",
-                contents: [
-                  {
-                    type: "text",
-                    text: "วันอาทิตย์",
-                    size: "lg",
-                    align: "start",
-                    weight: "bold",
-                    color: "#009813",
-                  },
-                  {
-                    type: "text",
-                    text: "30 เม.ย. 2563",
-                    size: "3xl",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "ทะเบียนรถ : XXXXX",
-                    size: "lg",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "คนขับรถ : นาย xxxx  xxxxxx",
-                    size: "xs",
-                    color: "#B2B2B2",
-                  },
-                  {
-                    type: "text",
-                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
-                    margin: "lg",
-                    size: "lg",
-                    color: "#000000",
-                  },
-                ],
-              },
-              footer: {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "ดูรายละเอียด",
-                    size: "lg",
-                    align: "center",
-                    color: "#0084B6",
-                    action: {
-                      type: "uri",
-                      label: "View Details",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              type: "bubble",
-              direction: "ltr",
-              header: {
-                type: "box",
-                layout: "vertical",
-                contents: [
-                  {
-                    type: "text",
-                    text: "วันอาทิตย์",
-                    size: "lg",
-                    align: "start",
-                    weight: "bold",
-                    color: "#009813",
-                  },
-                  {
-                    type: "text",
-                    text: "7 พ.ค. 2563",
-                    size: "3xl",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "ทะเบียนรถ : XXXXX",
-                    size: "lg",
-                    weight: "bold",
-                    color: "#000000",
-                  },
-                  {
-                    type: "text",
-                    text: "คนขับรถ : นาย xxxx  xxxxxx",
-                    size: "xs",
-                    color: "#B2B2B2",
-                  },
-                  {
-                    type: "text",
-                    text: "สถานะ : ยืนยันนัดหมายแล้ว",
-                    margin: "lg",
-                    size: "lg",
-                    color: "#000000",
-                  },
-                ],
-              },
-              footer: {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "ดูรายละเอียด",
-                    size: "lg",
-                    align: "center",
-                    color: "#0084B6",
-                    action: {
-                      type: "uri",
-                      label: "View Details",
-                      uri: "https://google.co.th/",
-                    },
-                  },
-                ],
-              },
-            },
-          ],
+          contents: [],
         },
       },
     ];
-    let reply = await lineChat.replyMessage(
-      SATFF_CHANNEL_ACCESS_TOKEN,
-      req.body.events[0].replyToken,
-      messages
-    );
-    console.log(JSON.stringify(reply));
-    res.jsonp({
-      status: 200,
-      data: req.body.events[0],
-    });
+    var start = new Date();
+    start.setHours(0, 0, 0, 0);
+    Joborder.find({
+      docdate: { $gte: start },
+      // "contactLists.lineUserId": req.body.events[0].source.userId,
+    })
+      .sort({ docdate: 1 })
+      .exec(async function (err, results) {
+        if (results.length > 0) {
+          results.forEach((order) => {
+            
+            let message = {
+              type: "bubble",
+              direction: "ltr",
+              header: {
+                type: "box",
+                layout: "vertical",
+                contents: [
+                  {
+                    type: "text",
+                    text: weekday[order.docdate.getDay() + 1],
+                    size: "lg",
+                    align: "start",
+                    weight: "bold",
+                    color: "#009813",
+                  },
+                  {
+                    type: "text",
+                    text: dateTH,
+                    size: "3xl",
+                    weight: "bold",
+                    color: "#000000",
+                  },
+                  {
+                    type: "text",
+                    text: "ทะเบียนรถ: " + order.carNo.lisenceID,
+                    size: "lg",
+                    weight: "bold",
+                    color: "#000000",
+                  },
+                  {
+                    type: "text",
+                    text: "คนขับรถ: " + order.carNo.driverInfo.displayName,
+                    size: "xs",
+                    color: "#B2B2B2",
+                  },
+                  // {
+                  //   type: "text",
+                  //   text:
+                  //     "สถานะ: " +
+                  //     (me[0].contactStatus === "confirm"
+                  //       ? "ยืนยันนัดหมาย"
+                  //       : "ปฏิเสธนัดหมาย"),
+                  //   margin: "lg",
+                  //   size: "lg",
+                  //   color: "#000000",
+                  // },
+                ],
+              },
+              footer: {
+                type: "box",
+                layout: "horizontal",
+                contents: [],
+              },
+            };
+
+            
+            message.footer.contents.push({
+              type: "text",
+              text: "ดูรายละเอียด",
+              size: "lg",
+              align: "center",
+              color: "#0084B6",
+              action: {
+                type: "uri",
+                label: "ดูรายละเอียด",
+                uri: "line://app/1654060178-Pk1wOJB4",
+              },
+            });
+            messages[0].contents.contents.push(message);
+          });
+
+          
+          let reply = await lineChat.replyMessage(
+            CHANNEL_ACCESS_TOKEN,
+            req.body.events[0].replyToken,
+            messages
+          );
+          res.jsonp({
+            status: 200,
+            data: req.body.events[0],
+          });
+        } else {
+          messages = [
+            {
+              type: `text`,
+              text: `ไม่มีการนัดหมายค่ะ`,
+            },
+          ];
+          let reply = await lineChat.replyMessage(
+            req.body.events[0].replyToken,
+            messages
+          );
+          res.jsonp({
+            status: 200,
+            data: req.body.events[0],
+          });
+        }
+      });
   } else {
     next();
   }
