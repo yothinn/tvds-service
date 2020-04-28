@@ -625,7 +625,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
           messages = [
             {
               type: `text`,
-              text: `ไม่มีการนัดหมายค่ะ`,
+              text: `ไม่มีใบงานค่ะ`,
             },
           ];
           let reply = await lineChat.replyMessage(
