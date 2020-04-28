@@ -532,7 +532,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
     start.setHours(0, 0, 0, 0);
     Joborder.find({
       docdate: { $gte: start },
-      // "contactLists.lineUserId": req.body.events[0].source.userId,
+      "carNo.driverInfo.lineUserId": req.body.events[0].source.userId,
     })
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
