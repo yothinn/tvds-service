@@ -9,12 +9,15 @@ var TvdscustomerSchema = new Schema({
   },
   firstName: {
     type: String,
+    require: true,
   },
   lastName: {
     type: String,
+    require: true,
   },
   displayName: {
     type: String,
+    require: true,
     unique: true,
   },
   persanalId: {
