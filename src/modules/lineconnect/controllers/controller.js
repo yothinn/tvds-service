@@ -466,6 +466,27 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                 });
               }
+            }else{
+              if (isConfirmed) {
+                message.footer.contents.push({
+                  type: "text",
+                  text: "ยกเลิกนัดหมาย",
+                  size: "lg",
+                  align: "center",
+                  color: "#FF0000",
+                  action: {
+                    type: "message",
+                    label: "ยกเลิกนัดหมาย",
+                    text:
+                      "ปฏิเสธ วัน" +
+                      weekday[order.docdate.getDay() + 1] +
+                      "ที่: " +
+                      dateTH +
+                      " เลขเอกสาร: " +
+                      order.docno,
+                  },
+                });
+              }
             }
             message.footer.contents.push({
               type: "text",
