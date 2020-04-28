@@ -535,6 +535,9 @@ exports.getJobOrderIntent = async function (req, res, next) {
       .exec(async function (err, results) {
         if (results.length > 0) {
           results.forEach((order) => {
+            let dateTH = `${order.docdate.getDate() + 1} ${
+              months[order.docdate.getMonth()]
+            } ${order.docdate.getFullYear() + 543}`;
             
             let message = {
               type: "bubble",
