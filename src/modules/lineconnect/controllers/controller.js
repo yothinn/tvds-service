@@ -340,8 +340,9 @@ exports.getAppointmentsIntent = async function (req, res, next) {
         },
       },
     ];
-    var start = new Date();
+    var start = new Date(new Date().setDate(new Date().getDate()-1))//new Date();
     start.setHours(0, 0, 0, 0);
+    console.log(start);
     Joborder.find({
       docdate: { $gte: start },
       "contactLists.lineUserId": req.body.events[0].source.userId,
@@ -528,8 +529,9 @@ exports.getJobOrderIntent = async function (req, res, next) {
         },
       },
     ];
-    var start = new Date();
+    var start = new Date(new Date().setDate(new Date().getDate()-1))//new Date();
     start.setHours(0, 0, 0, 0);
+    console.log(start);
     Joborder.find({
       docdate: { $gte: start },
       "carNo.driverInfo.lineUserId": req.body.events[0].source.userId,
