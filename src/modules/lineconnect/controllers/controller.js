@@ -348,6 +348,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
     })
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
+        console.log(results.length);
         if (results.length > 0) {
           results.forEach((order) => {
             const me = order.contactLists.filter((contact) => {
@@ -464,20 +465,19 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                 });
               }
-              message.footer.contents.push({
-                type: "text",
-                text: "ดูรายละเอียด",
-                size: "lg",
-                align: "center",
-                color: "#0084B6",
-                action: {
-                  type: "uri",
-                  label: "ดูรายละเอียด",
-                  uri: "line://app/1654060178-Pk1wOJB4",
-                },
-              });
             }
-
+            message.footer.contents.push({
+              type: "text",
+              text: "ดูรายละเอียด",
+              size: "lg",
+              align: "center",
+              color: "#0084B6",
+              action: {
+                type: "uri",
+                label: "ดูรายละเอียด",
+                uri: "line://app/1654060178-Pk1wOJB4",
+              },
+            });
             messages[0].contents.contents.push(message);
           });
 
@@ -536,6 +536,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
     })
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
+        console.log(results.length);
         if (results.length > 0) {
           results.forEach((order) => {
             let dateTH = `${order.docdate.getDate() + 1} ${
