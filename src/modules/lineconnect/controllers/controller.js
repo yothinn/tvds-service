@@ -342,7 +342,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
     ];
     var start = new Date(new Date().setDate(new Date().getDate()-1))//new Date();
     start.setHours(0, 0, 0, 0);
-    console.log(start);
+    // console.log(start);
     Joborder.find({
       docdate: { $gte: start },
       "contactLists.lineUserId": req.body.events[0].source.userId,
@@ -358,7 +358,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               );
             });
 
-            console.log(me);
+            // console.log(me);
 
             let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
               start.getFullYear() + 543
