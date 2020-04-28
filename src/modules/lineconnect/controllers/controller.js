@@ -358,6 +358,12 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               );
             });
 
+            let driver = "ไม่ระบุ";
+
+            if(order.carNo.driverInfo){
+              driver = order.carNo.driverInfo.displayName;
+            }
+
             // console.log(me);
 
             let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
@@ -402,7 +408,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ: ",
+                    text: "คนขับรถ: " + driver,
                     size: "xs",
                     color: "#B2B2B2",
                   },
