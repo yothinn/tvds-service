@@ -500,7 +500,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
 exports.getJobOrderIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
-    req.body.events[0].message.text === "ดูใบงาน"
+    req.body.events[0].message.text === "ใบงาน"
   ) {
     let messages = [
       {
@@ -639,7 +639,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
         },
       },
     ];
-    let reply = await lineChat.replyMessage(
+    let reply = await lineChat.replyStaffMessage(
       req.body.events[0].replyToken,
       messages
     );

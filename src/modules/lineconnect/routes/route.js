@@ -38,7 +38,6 @@ module.exports = function (app) {
     .post(
       controller.hook,
       controller.getJobOrderIntent,
-      controller.fallbackIntent,
       controller.completedChat
     );
 
