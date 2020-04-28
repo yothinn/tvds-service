@@ -90,7 +90,10 @@ var JoborderSchema = new Schema({
       {
         contactStatus: {
           type: String,
-          enum: ["select", "waitapprove", "waitcontact", "confirm", "reject", "arrival", "departure"],
+          enum: ["select", "waitapprove", "waitcontact", "confirm", "reject", "arrival", "departure", "driver-reject"],
+        },
+        remark: {
+          type: String
         },
         title: {
           type: String,
