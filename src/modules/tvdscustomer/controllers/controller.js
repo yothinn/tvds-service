@@ -129,8 +129,8 @@ exports.getList = async function (req, res) {
 exports.create = function (req, res) {
   var newTvdscustomer = new Tvdscustomer(req.body);
   newTvdscustomer.createby = req.user;
-  newTvdscustomer.displayName =
-    newTvdscustomer.firstName + " " + newTvdscustomer.lastName;
+  // newTvdscustomer.displayName =
+  //   newTvdscustomer.firstName + " " + newTvdscustomer.lastName;
   newTvdscustomer.save(function (err, data) {
     // console.log(data);
     if (err) {
@@ -183,8 +183,8 @@ exports.update = function (req, res) {
   var updTvdscustomer = _.extend(req.data, req.body);
   updTvdscustomer.updated = new Date();
   updTvdscustomer.updateby = req.user;
-  updTvdscustomer.displayName =
-    updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
+  // updTvdscustomer.displayName =
+  //   updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
   updTvdscustomer.save(function (err, data) {
     if (err) {
       return res.status(400).send({
