@@ -500,7 +500,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
 exports.getJobOrderIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
-    req.body.events[0].message.text === "ใบงาน"
+    req.body.events[0].message.text === "ดูใบงาน"
   ) {
     let messages = [
       {
@@ -643,6 +643,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
       req.body.events[0].replyToken,
       messages
     );
+    console.log(JSON.stringify(reply));
     res.jsonp({
       status: 200,
       data: req.body.events[0],
