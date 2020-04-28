@@ -9,16 +9,16 @@ var TvdscustomerSchema = new Schema({
   },
   firstName: {
     type: String,
-    require: true,
+    required: "Please fill in your first name"
   },
   lastName: {
     type: String,
-    require: true,
+    required: "Please fill in your last name"
   },
   displayName: {
     type: String,
-    require: true,
-    unique: true,
+    required: "Please fill in your full name",
+    unique: "Full name already exists"
   },
   persanalId: {
     type: String,
