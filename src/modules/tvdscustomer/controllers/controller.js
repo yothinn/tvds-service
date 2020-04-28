@@ -27,15 +27,15 @@ exports.getList = async function (req, res) {
         let arrDate = keyword.split("/");
         let nextDay = parseInt(arrDate[0]) + 1;
         let nextDayStr = "";
-        if(nextDay<10){
-            nextDayStr = `0${nextDay}`;
-        }else{
-            nextDayStr = `${nextDay}`;
+        if (nextDay < 10) {
+          nextDayStr = `0${nextDay}`;
+        } else {
+          nextDayStr = `${nextDay}`;
         }
         let startDateString = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
         let endDateString = `${arrDate[2]}-${arrDate[1]}-${nextDayStr}`;
 
-        console.log(`${startDateString} - ${endDateString}`)
+        console.log(`${startDateString} - ${endDateString}`);
 
         filter = {
           $or: [
@@ -129,8 +129,8 @@ exports.getList = async function (req, res) {
 exports.create = function (req, res) {
   var newTvdscustomer = new Tvdscustomer(req.body);
   newTvdscustomer.createby = req.user;
-  // newTvdscustomer.displayName =
-  //   newTvdscustomer.firstName + " " + newTvdscustomer.lastName;
+  newTvdscustomer.displayName =
+    newTvdscustomer.firstName + " " + newTvdscustomer.lastName;
   newTvdscustomer.save(function (err, data) {
     // console.log(data);
     if (err) {
@@ -181,10 +181,11 @@ exports.read = function (req, res) {
 
 exports.update = function (req, res) {
   var updTvdscustomer = _.extend(req.data, req.body);
+  updTvdscustomer.displayName =
+    updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
   updTvdscustomer.updated = new Date();
   updTvdscustomer.updateby = req.user;
-  // updTvdscustomer.displayName =
-  //   updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
+
   updTvdscustomer.save(function (err, data) {
     if (err) {
       return res.status(400).send({
