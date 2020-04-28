@@ -402,7 +402,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ: " + order.carNo.driverInfo ? order.carNo.driverInfo.displayName : "ไม่ระบุ",
+                    text: "คนขับรถ: ",
                     size: "xs",
                     color: "#B2B2B2",
                   },
