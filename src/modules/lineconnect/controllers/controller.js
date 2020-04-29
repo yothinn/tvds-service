@@ -545,6 +545,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
   }
 };
 
+
 exports.getJobOrderIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
@@ -579,7 +580,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
               let dateTH = `${order.docdate.getDate() + 1} ${
                 months[order.docdate.getMonth()]
               } ${order.docdate.getFullYear() + 543}`;
-              
+
               dayOfweek = weekday[order.docdate.getDay() + 1];
             } catch (error) {}
             let message = {
