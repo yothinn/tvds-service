@@ -340,7 +340,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
         },
       },
     ];
-    var start = new Date(new Date().setDate(new Date().getDate()-1))//new Date();
+    var start = new Date(new Date().setDate(new Date().getDate() - 1)); //new Date();
     start.setHours(0, 0, 0, 0);
     // console.log(start);
     Joborder.find({
@@ -360,11 +360,15 @@ exports.getAppointmentsIntent = async function (req, res, next) {
 
             let driver = "ไม่ระบุ";
 
-            if(order.carNo.driverInfo){
+            if (order.carNo.driverInfo) {
               driver = order.carNo.driverInfo.displayName;
             }
 
             // console.log(me);
+            let dayOfweek = "-";
+            try {
+              dayOfweek = weekday[order.docdate.getDay() + 1];
+            } catch (error) {}
 
             let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
               start.getFullYear() + 543
@@ -386,7 +390,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                 contents: [
                   {
                     type: "text",
-                    text: weekday[order.docdate.getDay() + 1],
+                    text: dayOfweek,
                     size: "lg",
                     align: "start",
                     weight: "bold",
@@ -472,7 +476,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                   },
                 });
               }
-            }else{
+            } else {
               if (isConfirmed) {
                 message.footer.contents.push({
                   type: "text",
@@ -556,7 +560,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
         },
       },
     ];
-    var start = new Date(new Date().setDate(new Date().getDate()-1))//new Date();
+    var start = new Date(new Date().setDate(new Date().getDate() - 1)); //new Date();
     start.setHours(0, 0, 0, 0);
     console.log(start);
     Joborder.find({
@@ -568,10 +572,16 @@ exports.getJobOrderIntent = async function (req, res, next) {
         console.log(results.length);
         if (results.length > 0) {
           results.forEach((order) => {
-            let dateTH = `${order.docdate.getDate() + 1} ${
-              months[order.docdate.getMonth()]
-            } ${order.docdate.getFullYear() + 543}`;
-
+            let dateTH = "";
+            
+            let dayOfweek = "-";
+            try {
+              let dateTH = `${order.docdate.getDate() + 1} ${
+                months[order.docdate.getMonth()]
+              } ${order.docdate.getFullYear() + 543}`;
+              
+              dayOfweek = weekday[order.docdate.getDay() + 1];
+            } catch (error) {}
             let message = {
               type: "bubble",
               direction: "ltr",
@@ -581,7 +591,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
                 contents: [
                   {
                     type: "text",
-                    text: weekday[order.docdate.getDay() + 1],
+                    text: dayOfweek,
                     size: "lg",
                     align: "start",
                     weight: "bold",
@@ -603,7 +613,10 @@ exports.getJobOrderIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "คนขับรถ: " + order.carNo.driverInfo ? order.carNo.driverInfo.displayName : "ไม่ระบุ",
+                    text:
+                      "คนขับรถ: " + order.carNo.driverInfo
+                        ? order.carNo.driverInfo.displayName
+                        : "ไม่ระบุ",
                     size: "xs",
                     color: "#B2B2B2",
                   },
