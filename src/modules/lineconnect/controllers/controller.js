@@ -367,7 +367,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             // console.log(me);
             let dayOfweek = "-";
             try {
-              console.log(order.docdate.getDay());
+              console.log(`getAppointmentsIntent : ${order.docdate.getDay()}`);
               dayOfweek = weekday[order.docdate.getDay() + 1];
             } catch (error) {
               console.log(JSON.stringify(error));
@@ -521,6 +521,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             req.body.events[0].replyToken,
             messages
           );
+          console.log(JSON.stringify(reply));
           res.jsonp({
             status: 200,
             data: req.body.events[0],
@@ -580,7 +581,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
             
             let dayOfweek = "-";
             try {
-              console.log(order.docdate.getDay());
+              console.log(`getJobOrderIntent : ${order.docdate.getDay()}`);
               let dateTH = `${order.docdate.getDate() + 1} ${
                 months[order.docdate.getMonth()]
               } ${order.docdate.getFullYear() + 543}`;
@@ -667,6 +668,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
             req.body.events[0].replyToken,
             messages
           );
+          console.log(JSON.stringify(reply));
           res.jsonp({
             status: 200,
             data: req.body.events[0],
