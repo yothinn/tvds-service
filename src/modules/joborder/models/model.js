@@ -17,6 +17,78 @@ var JoborderSchema = new Schema({
       lisenceID: {
         type: String,
       },
+      vehicleType: {
+        type: String,
+      },
+      vehicleColor: {
+        type: String,
+      },
+      vehicleBrand: {
+        type: String,
+      },
+      isOwner: {
+        type: Boolean,
+        default: true,
+      },
+      ownerInfo: {
+        type: {
+          title: {
+            type: String,
+          },
+          firstName: {
+            type: String,
+          },
+          lastName: {
+            type: String,
+          },
+          displayName: {
+            type: String,
+          },
+          isCompany: {
+            type: Boolean,
+            default: false,
+          },
+          refId: {
+            type: String,
+          },
+          mobileNo1: {
+            type: String,
+          },
+          mobileNo2: {
+            type: String,
+          },
+          mobileNo3: {
+            type: String,
+          },
+          addressLine1: {
+            type: String,
+          },
+          addressStreet: {
+            type: String,
+          },
+          addressSubDistrict: {
+            type: String,
+          },
+          addressDistrict: {
+            type: String,
+          },
+          addressProvince: {
+            type: String,
+          },
+          addressPostCode: {
+            type: String,
+          },
+          lineUserId: {
+            type: String,
+          },
+          latitude: {
+            type: String,
+          },
+          longitude: {
+            type: String,
+          },
+        },
+      },
       driverInfo: {
         type: {
           title: {
@@ -90,10 +162,19 @@ var JoborderSchema = new Schema({
       {
         contactStatus: {
           type: String,
-          enum: ["select", "waitapprove", "waitcontact", "confirm", "reject", "arrival", "departure", "driver-reject"],
+          enum: [
+            "select",
+            "waitapprove",
+            "waitcontact",
+            "confirm",
+            "reject",
+            "arrival",
+            "departure",
+            "driver-reject",
+          ],
         },
         remark: {
-          type: String
+          type: String,
         },
         title: {
           type: String,
