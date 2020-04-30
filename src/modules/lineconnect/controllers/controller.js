@@ -367,8 +367,11 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             // console.log(me);
             let dayOfweek = "-";
             try {
+              console.log(order.docdate.getDay());
               dayOfweek = weekday[order.docdate.getDay() + 1];
-            } catch (error) {}
+            } catch (error) {
+              console.log(JSON.stringify(error));
+            }
 
             let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
               start.getFullYear() + 543
@@ -577,12 +580,15 @@ exports.getJobOrderIntent = async function (req, res, next) {
             
             let dayOfweek = "-";
             try {
+              console.log(order.docdate.getDay());
               let dateTH = `${order.docdate.getDate() + 1} ${
                 months[order.docdate.getMonth()]
               } ${order.docdate.getFullYear() + 543}`;
 
               dayOfweek = weekday[order.docdate.getDay() + 1];
-            } catch (error) {}
+            } catch (error) {
+              console.log(JSON.stringify(error));
+            }
             let message = {
               type: "bubble",
               direction: "ltr",
