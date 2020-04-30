@@ -21,13 +21,14 @@ var mongoose = require("mongoose"),
   _ = require("lodash");
 
 var weekday = new Array(7);
-weekday[0] = "อาทิตย์";
-weekday[1] = "จันทร์";
-weekday[2] = "อังคาร";
-weekday[3] = "พุธ";
-weekday[4] = "พฤหัสบดี";
-weekday[5] = "ศุกร์";
-weekday[6] = "เสาร์";
+
+weekday[0] = "จันทร์";
+weekday[1] = "อังคาร";
+weekday[2] = "พุธ";
+weekday[3] = "พฤหัสบดี";
+weekday[4] = "ศุกร์";
+weekday[5] = "เสาร์";
+weekday[6] = "อาทิตย์";
 
 var months = new Array(12);
 months[0] = "ม.ค.";
@@ -368,7 +369,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             let dayOfweek = "-";
             try {
               console.log(`getAppointmentsIntent : ${order.docdate.getDay()}`);
-              dayOfweek = weekday[order.docdate.getDay() + 1];
+              dayOfweek = weekday[order.docdate.getDay()];
             } catch (error) {
               console.log(JSON.stringify(error));
             }
@@ -585,7 +586,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
                 months[order.docdate.getMonth()]
               } ${order.docdate.getFullYear() + 543}`;
 
-              dayOfweek = weekday[order.docdate.getDay() + 1];
+              dayOfweek = weekday[order.docdate.getDay()];
             } catch (error) {
               console.log(JSON.stringify(error));
             }
