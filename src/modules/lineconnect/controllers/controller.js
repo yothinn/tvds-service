@@ -576,12 +576,12 @@ exports.getJobOrderIntent = async function (req, res, next) {
         console.log(results.length);
         if (results.length > 0) {
           results.forEach((order) => {
-            let dateTH = "";
+            let dateTH = "-";
 
             let dayOfweek = "-";
             try {
               console.log(`getJobOrderIntent : ${order.docdate.getDay()}`);
-              let dateTH = `${order.docdate.getDate() + 1} ${
+              dateTH = `${order.docdate.getDate() + 1} ${
                 months[order.docdate.getMonth()]
               } ${order.docdate.getFullYear() + 543}`;
 
