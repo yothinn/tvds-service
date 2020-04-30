@@ -549,7 +549,6 @@ exports.getAppointmentsIntent = async function (req, res, next) {
   }
 };
 
-
 exports.getJobOrderIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
@@ -578,7 +577,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
         if (results.length > 0) {
           results.forEach((order) => {
             let dateTH = "";
-            
+
             let dayOfweek = "-";
             try {
               console.log(`getJobOrderIntent : ${order.docdate.getDay()}`);
@@ -662,7 +661,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
             });
             messages[0].contents.contents.push(message);
           });
-
+          console.log(JSON.stringify(messages));
           let reply = await lineChat.replyMessage(
             SATFF_CHANNEL_ACCESS_TOKEN,
             req.body.events[0].replyToken,
