@@ -64,7 +64,7 @@ exports.getList = async function (req, res, next) {
   await Promise.all(
     _results.map(async (jobOrderData) => {
       let confirmArray = jobOrderData.contactLists.filter((contact) => {
-        return contact.contactStatus === "confirm" || "arrival" || "departure" || "driver-reject";
+        return contact.contactStatus === "confirm";
       });
       let rejectArray = jobOrderData.contactLists.filter((contact) => {
         return contact.contactStatus === "reject";
