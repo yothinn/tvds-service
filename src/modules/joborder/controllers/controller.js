@@ -60,10 +60,20 @@ exports.getList = async function (req, res, next) {
   //   rec.confirmCount = 1;
   //   rec.rejectCount = 2;
   // })
+  var newJobOrderDatas = [];
   await Promise.all(
     _results.map(async (rec) => {
-      rec["confirmCount"] = 1;
-      rec["rejectCount"] = 2;
+      var newData = {
+        _id: jobOrderData._id,
+        docno: jobOrderData.docno,
+        docdate: jobOrderData.docdate,
+        carNo: jobOrderData.carNo,
+        orderStatus: jobOrderData.orderStatus,
+        cusAmount: jobOrderData.cusAmount,
+        confirmCount: confirmCount,
+        rejectCount: rejectCount,
+      };
+      newJobOrderDatas.push(newData);
     })
   );
 
@@ -71,9 +81,9 @@ exports.getList = async function (req, res, next) {
     status: 200,
     currentPage: pageNo,
     pages: Math.ceil(_count / size),
-    currentCount: _results.length,
+    currentCount: newJobOrderDatas.length,
     totalCount: _count,
-    data: _results,
+    data: newJobOrderDatas,
   });
 
   // var query = {};
