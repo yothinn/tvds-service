@@ -257,7 +257,76 @@ exports.registerLocationIntent = async function (req, res, next) {
   }
 };
 
-exports.confirmAndRejectIntent = async function (req, res, next) {
+exports.confirmIntent = async function (req, res, next) {
+  if (
+    req.body.events[0].message.type === "text" &&
+    (req.body.events[0].message.text.startsWith("รับนัดหมาย") ||
+      req.body.events[0].message.text.startsWith("ปฏิเสธ"))
+  ) {
+    let arrMsg = req.body.events[0].message.text.split(":");
+    if (arrMsg.length === 3) {
+      let messages = [
+        {
+          type: `text`,
+          text: `ระบบกำลังดำเนินการ "ยืนยัน" นัดหมายของท่าน...`,
+        },
+      ];
+
+      Joborder.findOne({ docno: arrMsg[2].trim() }, async (err, order) => {
+        if (err) {
+          messages.push({
+            type: `text`,
+            text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+          });
+        } else {
+          order.contactLists.forEach((contact) => {
+            if (contact.lineUserId === req.body.events[0].source.userId) {
+              contact.contactStatus = req.body.events[0].message.text.startsWith(
+                "รับนัดหมาย"
+              )
+                ? "confirm"
+                : "reject";
+            }
+          });
+          order.save(async function (err, data) {
+            if (err) {
+              req.replyBody.messages.push({
+                type: `text`,
+                text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
+              });
+            } else {
+              socket.io.emit("user-confirm-reject", data);
+              if (req.body.events[0].message.text.startsWith("รับนัดหมาย")) {
+                messages.push({
+                  type: `text`,
+                  text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+                });
+              } else {
+                messages.push({
+                  type: `text`,
+                  text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+                });
+              }
+            }
+            let reply = await lineChat.replyMessage(
+              CHANNEL_ACCESS_TOKEN,
+              req.body.events[0].replyToken,
+              messages
+            );
+            res.jsonp({
+              status: 200,
+              data: req.body.events[0],
+            });
+          });
+        }
+      });
+    }
+  } else {
+    next();
+  }
+};
+
+exports.rejectIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
     (req.body.events[0].message.text.startsWith("รับนัดหมาย") ||
