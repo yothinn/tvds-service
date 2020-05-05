@@ -262,6 +262,8 @@ exports.confirmIntent = async function (req, res, next) {
     req.body.events[0].message.type === "text" &&
     req.body.events[0].message.text.startsWith("รับนัดหมาย")
   ) {
+    var today = new Date(new Date().setDate(new Date().getDate() - 1)); //new Date();
+    today.setHours(0, 0, 0, 0);
     let arrMsg = req.body.events[0].message.text.split(":");
     if (arrMsg.length === 3) {
       let messages = [
@@ -278,6 +280,18 @@ exports.confirmIntent = async function (req, res, next) {
             text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
           });
         } else {
+          let toDayTH = `${start.getDate() + 1} ${months[start.getMonth()]} ${
+            start.getFullYear() + 543
+          }`;
+
+          let dateTH = `${order.docdate.getDate() + 1} ${
+            months[order.docdate.getMonth()]
+          } ${order.docdate.getFullYear() + 543}`;
+
+          let sameToday = toDayTH === dateTH ? true : false;
+
+          console.log(`sameToday id ${sameToday}`);
+
           order.contactLists.forEach((contact) => {
             if (contact.lineUserId === req.body.events[0].source.userId) {
               contact.contactStatus = "confirm";
@@ -290,6 +304,7 @@ exports.confirmIntent = async function (req, res, next) {
                 text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
               });
             } else {
+              socket.io.emit("user-confirm-reject", data);
               messages.push({
                 type: `text`,
                 text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยค่ะ`,
