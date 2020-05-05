@@ -671,7 +671,7 @@ exports.getExistStaffIntent = async function (req, res, next) {
   ) {
     Vehiclestaff.find(
       { lineUserId: req.body.events[0].source.userId },
-      function (err, data) {
+      async function (err, data) {
         if (data.length <= 0) {
           let messages = [
             {
