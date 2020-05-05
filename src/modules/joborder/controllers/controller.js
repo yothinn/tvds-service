@@ -62,8 +62,8 @@ exports.getList = async function (req, res, next) {
   // })
   await Promise.all(
     _results.map(async (rec) => {
-      rec.confirmCount = 1;
-      rec.rejectCount = 2;
+      rec["confirmCount"] = 1;
+      rec["rejectCount"] = 2;
     })
   );
 
