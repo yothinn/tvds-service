@@ -292,11 +292,22 @@ exports.confirmIntent = async function (req, res, next) {
 
           console.log(`sameToday id ${sameToday}`);
 
+          //สถานะสำหรับการ reconfirm สำหรับสมาชิกที่เคยปฏิเสธการนัดหมายมาก่อนหน้านี้ default = true
+          // แต่จะไม่สามารถ re confirm ในวันนัดหมาย
+          let canReConirm = true;
+
           order.contactLists.forEach((contact) => {
             if (contact.lineUserId === req.body.events[0].source.userId) {
-              contact.contactStatus = "confirm";
+
+              if(contact.contactStatus === "reject" && sameToday){
+                canReConirm = false;
+              }else{
+                contact.contactStatus = "confirm";
+              }
+              
             }
           });
+
           order.save(async function (err, data) {
             if (err) {
               req.replyBody.messages.push({
@@ -305,10 +316,18 @@ exports.confirmIntent = async function (req, res, next) {
               });
             } else {
               socket.io.emit("user-confirm-reject", data);
-              messages.push({
-                type: `text`,
-                text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยค่ะ`,
-              });
+              if(canReConirm){
+                messages.push({
+                  type: `text`,
+                  text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยค่ะ`,
+                });
+              }else{
+                messages.push({
+                  type: `text`,
+                  text: `ขออภัยค่ะ ท่านไม่สามารถยืนยันนัดหมายในวันเดินทางได้ค่ะ`,
+                });
+              }
+              
             }
             let reply = await lineChat.replyMessage(
               CHANNEL_ACCESS_TOKEN,
