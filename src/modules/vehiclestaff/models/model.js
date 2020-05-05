@@ -94,14 +94,22 @@ VehiclestaffSchema.pre("save", function (next) {
   if (Vehiclestaff.isNew) {
     // create
     if (!Vehiclestaff.createby) {
-      Vehiclestaff.createby = "Line:" + Vehiclestaff.lineUserId;
+      Vehiclestaff.createby = {
+        _id: Vehiclestaff.lineUserId,
+        username: "Line:" + Vehiclestaff.lineUserId,
+        displayname: "Line:" + Vehiclestaff.lineUserId,
+      };
     }
     next();
   } else {
     // update
     Vehiclestaff.updated = new Date();
     if (!Vehiclestaff.updateby) {
-      Vehiclestaff.updateby = "Line:" + Vehiclestaff.lineUserId;
+      Vehiclestaff.updateby = {
+        _id: Vehiclestaff.lineUserId,
+        username: "Line:" + Vehiclestaff.lineUserId,
+        displayname: "Line:" + Vehiclestaff.lineUserId,
+      };
     }
     next();
   }

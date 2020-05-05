@@ -9,16 +9,16 @@ var TvdscustomerSchema = new Schema({
   },
   firstName: {
     type: String,
-    required: "Please fill in your first name"
+    required: "Please fill in your first name",
   },
   lastName: {
     type: String,
-    required: "Please fill in your last name"
+    required: "Please fill in your last name",
   },
   displayName: {
     type: String,
     required: "Please fill in your full name",
-    unique: "Full name already exists"
+    unique: "Full name already exists",
   },
   persanalId: {
     type: String,
@@ -101,8 +101,12 @@ TvdscustomerSchema.pre("save", function (next) {
     if (Tvdscustomer.displayName) {
       Tvdscustomer.displayName = `${Tvdscustomer.firstName.trim()} ${Tvdscustomer.lastName.trim()}`;
     }
-    if(!Tvdscustomer.createby){
-      Tvdscustomer.createby = "Line:" + Tvdscustomer.lineUserId;
+    if (!Tvdscustomer.createby) {
+      Tvdscustomer.createby = {
+        _id: Vehiclestaff.lineUserId,
+        username: "Line:" + Tvdscustomer.lineUserId,
+        displayname: "Line:" + Tvdscustomer.lineUserId,
+      };
     }
     next();
   } else {
@@ -111,8 +115,12 @@ TvdscustomerSchema.pre("save", function (next) {
       Tvdscustomer.displayName = `${Tvdscustomer.firstName.trim()} ${Tvdscustomer.lastName.trim()}`;
     }
     Tvdscustomer.updated = new Date();
-    if(!Tvdscustomer.updateby){
-      Tvdscustomer.updateby = "Line:" + Tvdscustomer.lineUserId;
+    if (!Tvdscustomer.updateby) {
+      Tvdscustomer.updateby = {
+        _id: Vehiclestaff.lineUserId,
+        username: "Line:" + Tvdscustomer.lineUserId,
+        displayname: "Line:" + Tvdscustomer.lineUserId,
+      };
     }
     next();
   }
