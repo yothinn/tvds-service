@@ -461,6 +461,11 @@ exports.getAppointmentsIntent = async function (req, res, next) {
     Joborder.find({
       docdate: { $gte: start },
       "contactLists.lineUserId": req.body.events[0].source.userId,
+      $or: [
+        { orderStatus: "orderavailable" },
+        { orderStatus: "serviceprepared" },
+        { orderStatus: "golive" },
+      ],
     })
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
@@ -680,8 +685,8 @@ exports.getExistStaffIntent = async function (req, res, next) {
             },
             {
               type: `text`,
-              text: "คุณสามารถลงทะเบียนข้อมูล โดยผ่านเมนู ข้อมูลคนขับ"
-            }
+              text: "คุณสามารถลงทะเบียนข้อมูล โดยผ่านเมนู ข้อมูลคนขับ",
+            },
           ];
           let reply = await lineChat.replyMessage(
             SATFF_CHANNEL_ACCESS_TOKEN,
@@ -692,7 +697,7 @@ exports.getExistStaffIntent = async function (req, res, next) {
             status: 200,
             data: req.body.events[0],
           });
-        }else{
+        } else {
           next();
         }
       }
@@ -723,6 +728,11 @@ exports.getJobOrderIntent = async function (req, res, next) {
     Joborder.find({
       docdate: { $gte: start },
       "carNo.driverInfo.lineUserId": req.body.events[0].source.userId,
+      $or: [
+        { orderStatus: "orderavailable" },
+        { orderStatus: "serviceprepared" },
+        { orderStatus: "golive" },
+      ],
     })
       .limit(10)
       .sort({ docdate: 1 })
