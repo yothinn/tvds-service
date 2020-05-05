@@ -11,9 +11,10 @@ exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
   var keyword = req.query.keyword;
-  var orderBy = `"${req.query.orderBy}"`;
+  var orderBy = req.query.orderBy};
   var orderDir = req.query.orderDir;
   var sortSign = -1;
+  var sort = { docdate: -1 }
 
   if (pageNo < 0 || pageNo === 0) {
     response = {
@@ -23,13 +24,15 @@ exports.getList = async function (req, res, next) {
     return res.json(response);
   }
 
-  if (!orderBy) {
-    orderBy = "docdate";
-  }
+  
 
   if (orderDir) {
     sortSign = orderDir === "asc" ? 1 : -1;
   }
+
+
+
+  
 
   let filter = {};
   if (keyword) {
@@ -63,7 +66,7 @@ exports.getList = async function (req, res, next) {
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
-      .sort({ "docdate": sortSign })
+      .sort(sort)
       .exec(),
     Joborder.countDocuments(filter).exec(),
   ]);
