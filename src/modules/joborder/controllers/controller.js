@@ -45,6 +45,9 @@ exports.getList = async function (req, res, next) {
       // code block
       sort = { orderStatus: sortSign };
       break;
+    case "cusAmount":
+      sort = { cusAmount: sortSign };
+      break;
   }
 
   let filter = {};
