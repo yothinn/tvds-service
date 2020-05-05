@@ -129,6 +129,14 @@ exports.getList = async function (req, res) {
 exports.create = function (req, res) {
   var newTvdscustomer = new Tvdscustomer(req.body);
   newTvdscustomer.createby = req.user;
+  if (req.user) {
+    newTvdscustomer.createby = req.user;
+  } else {
+    newTvdscustomer.createby = {
+      username: "Line:" + newTvdscustomer.lineUserId,
+      displayname: "Line:" + newTvdscustomer.lineUserId,
+    };
+  }
   newTvdscustomer.displayName =
     newTvdscustomer.firstName + " " + newTvdscustomer.lastName;
   newTvdscustomer.save(function (err, data) {
@@ -184,7 +192,14 @@ exports.update = function (req, res) {
   updTvdscustomer.displayName =
     updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
   updTvdscustomer.updated = new Date();
-  updTvdscustomer.updateby = req.user;
+  if (req.user) {
+    updTvdscustomer.updateby = req.user;
+  } else {
+    updTvdscustomer.updateby = {
+      username: "Line:" + updTvdscustomer.lineUserId,
+      displayname: "Line:" + updTvdscustomer.lineUserId,
+    };
+  }
 
   updTvdscustomer.save(function (err, data) {
     if (err) {

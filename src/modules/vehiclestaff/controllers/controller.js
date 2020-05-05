@@ -36,7 +36,15 @@ exports.getList = function (req, res) {
 
 exports.create = function (req, res) {
   var newVehiclestaff = new Vehiclestaff(req.body);
-  newVehiclestaff.createby = req.user;
+
+  if (req.user) {
+    newVehiclestaff.createby = req.user;
+  } else {
+    newVehiclestaff.createby = {
+      username: "Line:" + newVehiclestaff.lineUserId,
+      displayname: "Line:" + newVehiclestaff.lineUserId,
+    };
+  }
   newVehiclestaff.displayName =
     newVehiclestaff.firstName + " " + newVehiclestaff.lastName;
   newVehiclestaff.save(function (err, data) {
