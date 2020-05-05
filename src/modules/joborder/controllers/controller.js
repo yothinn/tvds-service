@@ -11,7 +11,9 @@ exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
   var keyword = req.query.keyword;
-  var sort = req.query.sort;
+  var orderBy = req.query.orderBy;
+  var orderDir = req.query.orderDir;
+  var sortSign = -1;
 
   if (pageNo < 0 || pageNo === 0) {
     response = {
@@ -19,6 +21,14 @@ exports.getList = async function (req, res, next) {
       message: "invalid page number, should start with 1",
     };
     return res.json(response);
+  }
+
+  if (!orderBy) {
+    orderBy = "docdate";
+  }
+
+  if (orderDir) {
+    sortSign = orderDir === "asc" ? 1 : -1;
   }
 
   let filter = {};
@@ -51,7 +61,7 @@ exports.getList = async function (req, res, next) {
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
-      .sort({ docdate: -1 })
+      .sort({ orderBy: sortSign })
       .exec(),
     Joborder.countDocuments(filter).exec(),
   ]);
