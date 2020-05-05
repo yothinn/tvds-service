@@ -177,7 +177,7 @@ exports.registerIntent = async function (req, res, next) {
     let messages = [
       {
         type: "template",
-        altText: "this is a buttons template",
+        altText: "ยืนยันการลงทะเบียน",
         template: {
           type: "buttons",
           actions: [
@@ -188,7 +188,7 @@ exports.registerIntent = async function (req, res, next) {
             },
           ],
           title: "ขอบคุณสำหรับการลงทะเบียน",
-          text: "กรุณาระบุพิกัดสำหรับขอรับบริการรถธรรมธุรกิจ",
+          text: "ได้รับข้อมูลของท่านเรียบร้อยแล้ว และเพื่อให้เราบริการท่าน ได้ถูกต้องแม่นยำ กรุณาระบุพิกัดตำแหน่ง การขอรับบริการของท่าน โดยการกด ลิ้งค์ด้านล่างนี้",
         },
       },
     ];
