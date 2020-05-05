@@ -8,8 +8,8 @@ module.exports = function (app) {
     app.route(url).all(policy.isAllowed)
         .get(
             controller.getList,
-            controller.sumStatusList,
-            controller.returnData
+            // controller.sumStatusList,
+            // controller.returnData
         )
         .post(controller.create);
 
