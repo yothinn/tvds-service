@@ -214,6 +214,7 @@ exports.registerLocationIntent = async function (req, res, next) {
     let update = {
       latitude: `${req.body.events[0].message.latitude}`,
       longitude: `${req.body.events[0].message.longitude}`,
+      updated: new Date()
     };
     Tvdscustomer.findOneAndUpdate(query, update, async function (err, data) {
       if (err) {
@@ -290,7 +291,7 @@ exports.confirmIntent = async function (req, res, next) {
 
           let sameToday = toDayTH === dateTH ? true : false;
 
-          console.log(`sameToday id ${sameToday}`);
+          console.log(`sameToday id ${sameToday} (${toDayTH} : ${dateTH})`);
 
           //สถานะสำหรับการ reconfirm สำหรับสมาชิกที่เคยปฏิเสธการนัดหมายมาก่อนหน้านี้ default = true
           // แต่จะไม่สามารถ re confirm ในวันนัดหมาย
