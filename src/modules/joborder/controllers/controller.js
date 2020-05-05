@@ -14,8 +14,7 @@ exports.getList = async function (req, res, next) {
   var orderBy = req.query.orderBy;
   var orderDir = req.query.orderDir;
   var sortSign = -1;
-  var sort = { docdate: -1};
-  
+  var sort = { docdate: -1 };
 
   if (pageNo < 0 || pageNo === 0) {
     response = {
@@ -25,15 +24,28 @@ exports.getList = async function (req, res, next) {
     return res.json(response);
   }
 
-  
-
   if (orderDir) {
     sortSign = orderDir === "asc" ? 1 : -1;
   }
 
-
-
-  
+  switch (orderBy) {
+    case "docno":
+      // code block
+      sort = { docno: sortSign };
+      break;
+    case "docdate":
+      // code block
+      sort = { docdate: sortSign };
+      break;
+    case "carNo":
+      // code block
+      sort = { "carNo.lisenceID": sortSign };
+      break;
+    case "orderStatus":
+      // code block
+      sort = { orderStatus: sortSign };
+      break;
+  }
 
   let filter = {};
   if (keyword) {
