@@ -155,7 +155,7 @@ var JoborderSchema = new Schema({
   },
   orderStatus: {
     type: String,
-    enum: ["draft", "golive", "close"],
+    enum: ["draft", "waitapprove", "orderavailable", "serviceprepared", "ordercancel", "golive", "close", "closewithcondition"],
   },
   contactLists: {
     type: [
