@@ -87,7 +87,12 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
     var updVehiclestaff = _.extend(req.data, req.body);
     updVehiclestaff.updated = new Date();
-    updVehiclestaff.updateby = req.user;
+    if(req.user){
+        updVehiclestaff.updateby = req.user;
+    }else{
+
+    }
+   
     updVehiclestaff.displayName = updVehiclestaff.firstName + " " +
                                     updVehiclestaff.lastName;
     updVehiclestaff.save(function (err, data) {
