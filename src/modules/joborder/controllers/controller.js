@@ -70,8 +70,8 @@ exports.getList = async function (req, res, next) {
         carNo: jobOrderData.carNo,
         orderStatus: jobOrderData.orderStatus,
         cusAmount: jobOrderData.cusAmount,
-        confirmCount: confirmCount,
-        rejectCount: rejectCount,
+        confirmCount: 1,
+        rejectCount: 2,
       };
       newJobOrderDatas.push(newData);
     })
