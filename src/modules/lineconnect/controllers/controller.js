@@ -208,6 +208,32 @@ exports.registerIntent = async function (req, res, next) {
   }
 };
 
+exports.registerStaffIntent = async function (req, res, next) {
+  if (
+    req.body.events[0].message.type === "text" &&
+    req.body.events[0].message.text === "ยืนยันการลงทะเบียน"
+  ) {
+    let messages = [
+      {
+        type: "text",
+        text: "ได้รับข้อมูลของท่านเรียบร้อยแล้ว  ท่านสามารถปรับปรุงข้อมูลส่วนตัวของท่าน โดยผ่านเมนู ข้อมูลคนขับ"
+      },
+    ];
+    let reply = await lineChat.replyMessage(
+      SATFF_CHANNEL_ACCESS_TOKEN,
+      req.body.events[0].replyToken,
+      messages
+    );
+    console.log(JSON.stringify(reply));
+    res.jsonp({
+      status: 200,
+      data: req.body.events[0],
+    });
+  } else {
+    next();
+  }
+};
+
 exports.registerLocationIntent = async function (req, res, next) {
   if (req.body.events[0].message.type === "location") {
     let query = {

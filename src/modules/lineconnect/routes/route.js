@@ -38,6 +38,7 @@ module.exports = function (app) {
     .route(url + "/staffs/hook")
     .post(
       controller.hook,
+      controller.registerStaffIntent,
       controller.getJobOrderIntent,
       controller.completedChat
     );
