@@ -93,28 +93,28 @@ VehiclestaffSchema.pre("save", function (next) {
   const model = mongoose.model("Vehiclestaff", VehiclestaffSchema);
   if (Vehiclestaff.isNew) {
     // create
-    console.log(`BF-> Vehiclestaff.createby : ${JSON.stringify(Vehiclestaff.createby)}`)
-    if (!Vehiclestaff.createby) {
-      Vehiclestaff.createby = {
-        _id: Vehiclestaff.lineUserId,
-        username: "Line:" + Vehiclestaff.lineUserId,
-        displayname: "Line:" + Vehiclestaff.lineUserId,
-      };
-      console.log(`EF-> Vehiclestaff.createby : ${JSON.stringify(Vehiclestaff.createby)}`)
-    }
+    // console.log(`BF-> Vehiclestaff.createby : ${JSON.stringify(Vehiclestaff.createby)}`)
+    // if (!Vehiclestaff.createby) {
+    //   Vehiclestaff.createby = {
+    //     _id: Vehiclestaff.lineUserId,
+    //     username: "Line:" + Vehiclestaff.lineUserId,
+    //     displayname: "Line:" + Vehiclestaff.lineUserId,
+    //   };
+    //   console.log(`EF-> Vehiclestaff.createby : ${JSON.stringify(Vehiclestaff.createby)}`)
+    // }
     next();
   } else {
     // update
     Vehiclestaff.updated = new Date();
-    console.log(`BF-> Vehiclestaff.updateby : ${JSON.stringify(Vehiclestaff.updateby)}`)
-    if (!Vehiclestaff.updateby) {
-      Vehiclestaff.updateby = {
-        _id: Vehiclestaff.lineUserId,
-        username: "Line:" + Vehiclestaff.lineUserId,
-        displayname: "Line:" + Vehiclestaff.lineUserId,
-      };
-      console.log(`EF-> Vehiclestaff.updateby : ${JSON.stringify(Vehiclestaff.updateby)}`)
-    }
+    // console.log(`BF-> Vehiclestaff.updateby : ${JSON.stringify(Vehiclestaff.updateby)}`)
+    // if (!Vehiclestaff.updateby) {
+    //   Vehiclestaff.updateby = {
+    //     _id: Vehiclestaff.lineUserId,
+    //     username: "Line:" + Vehiclestaff.lineUserId,
+    //     displayname: "Line:" + Vehiclestaff.lineUserId,
+    //   };
+    //   console.log(`EF-> Vehiclestaff.updateby : ${JSON.stringify(Vehiclestaff.updateby)}`)
+    // }
     next();
   }
 });
