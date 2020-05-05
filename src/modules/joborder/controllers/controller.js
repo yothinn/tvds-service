@@ -57,11 +57,13 @@ exports.getList = async function (req, res, next) {
     };
   }
 
+  console.log(orderBy);
+  console.log(sortSign);
   const [_results, _count] = await Promise.all([
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
-      .sort({ orderBy: -1 })
+      .sort({ orderBy: sortSign })
       .exec(),
     Joborder.countDocuments(filter).exec(),
   ]);
