@@ -63,7 +63,7 @@ exports.getList = async function (req, res, next) {
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
       .limit(size)
-      .sort({ orderBy: sortSign })
+      .sort({ "docdate": sortSign })
       .exec(),
     Joborder.countDocuments(filter).exec(),
   ]);
