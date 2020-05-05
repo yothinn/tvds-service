@@ -188,7 +188,8 @@ exports.registerIntent = async function (req, res, next) {
             },
           ],
           title: "ขอบคุณสำหรับการลงทะเบียน",
-          text: "ได้รับข้อมูลของท่านเรียบร้อยแล้ว กรุณาระบุพิกัดตำแหน่งการขอรับบริการของท่าน",
+          text:
+            "ได้รับข้อมูลของท่านเรียบร้อยแล้ว กรุณาระบุพิกัดตำแหน่งการขอรับบริการของท่าน",
         },
       },
     ];
@@ -215,7 +216,7 @@ exports.registerLocationIntent = async function (req, res, next) {
     let update = {
       latitude: `${req.body.events[0].message.latitude}`,
       longitude: `${req.body.events[0].message.longitude}`,
-      updated: new Date()
+      updated: new Date(),
     };
     Tvdscustomer.findOneAndUpdate(query, update, async function (err, data) {
       if (err) {
@@ -241,8 +242,16 @@ exports.registerLocationIntent = async function (req, res, next) {
       let messages = [
         {
           type: `text`,
-          text: `ขอบคุณสำหรับข้อมูลพิกัด`,
+          text: `ได้รับข้อมูลพิกัดการให้บริการเรียบร้อยค่ะ`,
         },
+        {
+          type: "text",
+          text: "โปรดรอรับการนัดหมายจากทาง รถธรรมธุรกิจ",
+        },
+        {
+          type: "text",
+          text: "เรา ขอขอบคุณที่ให้ความสนใจในการใช้บริการมา ณ ทีนี้ค่ะ"
+        }
       ];
       let reply = await lineChat.replyMessage(
         CHANNEL_ACCESS_TOKEN,
@@ -300,13 +309,11 @@ exports.confirmIntent = async function (req, res, next) {
 
           order.contactLists.forEach((contact) => {
             if (contact.lineUserId === req.body.events[0].source.userId) {
-
-              if(contact.contactStatus === "reject" && sameToday){
+              if (contact.contactStatus === "reject" && sameToday) {
                 canReConirm = false;
-              }else{
+              } else {
                 contact.contactStatus = "confirm";
               }
-              
             }
           });
 
@@ -318,18 +325,17 @@ exports.confirmIntent = async function (req, res, next) {
               });
             } else {
               socket.io.emit("user-confirm-reject", data);
-              if(canReConirm){
+              if (canReConirm) {
                 messages.push({
                   type: `text`,
                   text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยค่ะ`,
                 });
-              }else{
+              } else {
                 messages.push({
                   type: `text`,
                   text: `ขออภัยค่ะ ท่านไม่สามารถยืนยันนัดหมายในวันเดินทางได้ค่ะ`,
                 });
               }
-              
             }
             let reply = await lineChat.replyMessage(
               CHANNEL_ACCESS_TOKEN,

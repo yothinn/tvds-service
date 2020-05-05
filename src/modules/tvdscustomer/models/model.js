@@ -101,6 +101,9 @@ TvdscustomerSchema.pre("save", function (next) {
     if (Tvdscustomer.displayName) {
       Tvdscustomer.displayName = `${Tvdscustomer.firstName.trim()} ${Tvdscustomer.lastName.trim()}`;
     }
+    if(!Tvdscustomer.createby){
+      Tvdscustomer.createby = "Line:" + Tvdscustomer.lineUserId;
+    }
     next();
   } else {
     // update
@@ -108,6 +111,9 @@ TvdscustomerSchema.pre("save", function (next) {
       Tvdscustomer.displayName = `${Tvdscustomer.firstName.trim()} ${Tvdscustomer.lastName.trim()}`;
     }
     Tvdscustomer.updated = new Date();
+    if(!Tvdscustomer.updateby){
+      Tvdscustomer.updateby = "Line:" + Tvdscustomer.lineUserId;
+    }
     next();
   }
 });
