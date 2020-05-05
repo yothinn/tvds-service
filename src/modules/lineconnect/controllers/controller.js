@@ -216,7 +216,8 @@ exports.registerStaffIntent = async function (req, res, next) {
     let messages = [
       {
         type: "text",
-        text: "ได้รับข้อมูลของท่านเรียบร้อยแล้ว  ท่านสามารถปรับปรุงข้อมูลส่วนตัวของท่าน โดยผ่านเมนู ข้อมูลคนขับ"
+        text:
+          "ได้รับข้อมูลของท่านเรียบร้อยแล้ว  ท่านสามารถปรับปรุงข้อมูลส่วนตัวของท่าน โดยผ่านเมนู ข้อมูลคนขับ",
       },
     ];
     let reply = await lineChat.replyMessage(
@@ -276,8 +277,8 @@ exports.registerLocationIntent = async function (req, res, next) {
         },
         {
           type: "text",
-          text: "เรา ขอขอบคุณที่ให้ความสนใจในการใช้บริการมา ณ ทีนี้ค่ะ"
-        }
+          text: "เรา ขอขอบคุณที่ให้ความสนใจในการใช้บริการมา ณ ทีนี้ค่ะ",
+        },
       ];
       let reply = await lineChat.replyMessage(
         CHANNEL_ACCESS_TOKEN,
@@ -643,7 +644,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
           messages = [
             {
               type: `text`,
-              text: `ไม่มีการนัดหมายค่ะ`,
+              text: `ณ ตอนนี้ยังไม่มีนัดหมายของท่าน กรุณาตรวสอบใหม่อีกครั้ง ภายหลังค่ะ`,
             },
           ];
           let reply = await lineChat.replyMessage(
@@ -684,6 +685,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
       docdate: { $gte: start },
       "carNo.driverInfo.lineUserId": req.body.events[0].source.userId,
     })
+      .limit(10)
       .sort({ docdate: 1 })
       .exec(async function (err, results) {
         console.log(results.length);
@@ -740,17 +742,13 @@ exports.getJobOrderIntent = async function (req, res, next) {
                     size: "xs",
                     color: "#B2B2B2",
                   },
-                  // {
-                  //   type: "text",
-                  //   text:
-                  //     "สถานะ: " +
-                  //     (me[0].contactStatus === "confirm"
-                  //       ? "ยืนยันนัดหมาย"
-                  //       : "ปฏิเสธนัดหมาย"),
-                  //   margin: "lg",
-                  //   size: "lg",
-                  //   color: "#000000",
-                  // },
+                  {
+                    type: "text",
+                    text: "จำนวนนัดหมาย: " + order.contactLists.length,//order.contactLists.filter((contact)=>{ return contact.contactStatus === "confirm"}).length,
+                    margin: "lg",
+                    size: "lg",
+                    color: "#000000",
+                  },
                 ],
               },
               footer: {
@@ -789,7 +787,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
           messages = [
             {
               type: `text`,
-              text: `ไม่มีใบงานค่ะ`,
+              text: `ณ ตอนนี้ยังไม่มีใบงานของท่าน กรุณาตรวสอบใหม่อีกครั้ง ภายหลังค่ะ`,
             },
           ];
           let reply = await lineChat.replyMessage(
