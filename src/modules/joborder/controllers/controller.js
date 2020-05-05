@@ -32,7 +32,10 @@ exports.getList = async function (req, res, next) {
           "carNo.lisenceID": { $regex: "^" + keyword, $options: "i" },
         },
         {
-          "carNo.driverInfo.firstName": { $regex: "^" + keyword, $options: "i" },
+          "carNo.driverInfo.firstName": {
+            $regex: "^" + keyword,
+            $options: "i",
+          },
         },
         {
           "carNo.driverInfo.lastName": { $regex: "^" + keyword, $options: "i" },
@@ -40,8 +43,8 @@ exports.getList = async function (req, res, next) {
         {
           orderStatus: { $regex: "^" + keyword, $options: "i" },
         },
-      ]
-    }
+      ],
+    };
   }
 
   const [_results, _count] = await Promise.all([
@@ -52,6 +55,17 @@ exports.getList = async function (req, res, next) {
       .exec(),
     Joborder.countDocuments(filter).exec(),
   ]);
+
+  // _results.forEach((rec)=>{
+  //   rec.confirmCount = 1;
+  //   rec.rejectCount = 2;
+  // })
+  await Promise.all(
+    _results.map(async (rec) => {
+      rec.confirmCount = 1;
+      rec.rejectCount = 2;
+    })
+  );
 
   return res.json({
     status: 200,
