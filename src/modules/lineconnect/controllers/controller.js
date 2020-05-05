@@ -15,6 +15,7 @@ var mongoose = require("mongoose"),
   Lineconnect = mongoose.model("Lineconnect"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   Joborder = mongoose.model("Joborder"),
+  Vehiclestaff = mongoose.model("Vehiclestaff"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   lineChat = require("../../core/controllers/lineChat"),
   socket = require("../../../config/socket.io.js"),
@@ -663,6 +664,44 @@ exports.getAppointmentsIntent = async function (req, res, next) {
   }
 };
 
+exports.getExistStaffIntent = async function (req, res, next) {
+  if (
+    req.body.events[0].message.type === "text" &&
+    req.body.events[0].message.text === "ดูใบงาน"
+  ) {
+    Vehiclestaff.find(
+      { lineUserId: req.body.events[0].source.userId },
+      function (err, data) {
+        if (data.length <= 0) {
+          let messages = [
+            {
+              type: `text`,
+              text: `คุณยังไม่ได้ลงทะเบียนข้อมูล คนขับรถธรรมธุรกิจ!`,
+            },
+            {
+              type: `text`,
+              text: "คุณสามารถลงทะเบียนข้อมูล โดยผ่านเมนู ข้อมูลคนขับ"
+            }
+          ];
+          let reply = await lineChat.replyMessage(
+            SATFF_CHANNEL_ACCESS_TOKEN,
+            req.body.events[0].replyToken,
+            messages
+          );
+          res.jsonp({
+            status: 200,
+            data: req.body.events[0],
+          });
+        }else{
+          next();
+        }
+      }
+    );
+  } else {
+    next();
+  }
+};
+
 exports.getJobOrderIntent = async function (req, res, next) {
   if (
     req.body.events[0].message.type === "text" &&
@@ -744,7 +783,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
-                    text: "จำนวนนัดหมาย: " + order.contactLists.length,//order.contactLists.filter((contact)=>{ return contact.contactStatus === "confirm"}).length,
+                    text: "จำนวนนัดหมาย: " + order.contactLists.length, //order.contactLists.filter((contact)=>{ return contact.contactStatus === "confirm"}).length,
                     margin: "lg",
                     size: "lg",
                     color: "#000000",

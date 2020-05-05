@@ -39,6 +39,7 @@ module.exports = function (app) {
     .post(
       controller.hook,
       controller.registerStaffIntent,
+      controller.getExistStaffIntent,
       controller.getJobOrderIntent,
       controller.completedChat
     );
