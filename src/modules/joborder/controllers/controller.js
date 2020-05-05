@@ -63,6 +63,14 @@ exports.getList = async function (req, res, next) {
   var newJobOrderDatas = [];
   await Promise.all(
     _results.map(async (jobOrderData) => {
+      let confirmArray = jobOrderData.contactLists.filter((contact) => {
+        return contact.contactStatus === "confirm" || "arrival" || "departure" || "driver-reject";
+      });
+      let rejectArray = jobOrderData.contactLists.filter((contact) => {
+        return contact.contactStatus === "reject";
+      });
+      var confirmCount = confirmArray.length;
+      var rejectCount = rejectArray.length;
       var newData = {
         _id: jobOrderData._id,
         docno: jobOrderData.docno,
@@ -70,8 +78,8 @@ exports.getList = async function (req, res, next) {
         carNo: jobOrderData.carNo,
         orderStatus: jobOrderData.orderStatus,
         cusAmount: jobOrderData.cusAmount,
-        confirmCount: 1,
-        rejectCount: 2,
+        confirmCount: confirmCount,
+        rejectCount: rejectCount,
       };
       newJobOrderDatas.push(newData);
     })
