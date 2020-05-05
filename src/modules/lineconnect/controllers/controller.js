@@ -197,6 +197,7 @@ exports.registerIntent = async function (req, res, next) {
       req.body.events[0].replyToken,
       messages
     );
+    console.log(JSON.stringify(reply));
     res.jsonp({
       status: 200,
       data: req.body.events[0],
