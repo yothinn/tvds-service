@@ -11,7 +11,7 @@ exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
   var size = parseInt(req.query.size);
   var keyword = req.query.keyword;
-  var orderBy = req.query.orderBy;
+  var orderBy = `"${req.query.orderBy}"`;
   var orderDir = req.query.orderDir;
   var sortSign = -1;
 
