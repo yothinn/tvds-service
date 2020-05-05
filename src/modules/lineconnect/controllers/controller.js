@@ -280,7 +280,7 @@ exports.confirmIntent = async function (req, res, next) {
             text: `เกิดข้อผิดพลาดในการยืนยันนัดหมาย! กรุณาติดต่อกลับหาเรา`,
           });
         } else {
-          let toDayTH = `${today.getDate() + 1} ${today[start.getMonth()]} ${
+          let toDayTH = `${today.getDate() + 1} ${today[today.getMonth()]} ${
             today.getFullYear() + 543
           }`;
 
