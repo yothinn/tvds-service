@@ -62,7 +62,7 @@ exports.getList = async function (req, res, next) {
   // })
   var newJobOrderDatas = [];
   await Promise.all(
-    _results.map(async (rec) => {
+    _results.map(async (jobOrderData) => {
       var newData = {
         _id: jobOrderData._id,
         docno: jobOrderData.docno,
@@ -81,7 +81,7 @@ exports.getList = async function (req, res, next) {
     status: 200,
     currentPage: pageNo,
     pages: Math.ceil(_count / size),
-    currentCount: newJobOrderDatas.length,
+    currentCount: _results.length,
     totalCount: _count,
     data: newJobOrderDatas,
   });
