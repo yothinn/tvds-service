@@ -184,11 +184,7 @@ exports.update = function (req, res) {
   updTvdscustomer.displayName =
     updTvdscustomer.firstName + " " + updTvdscustomer.lastName;
   updTvdscustomer.updated = new Date();
-  updTvdscustomer.updateby = {
-    _id: Vehiclestaff.lineUserId,
-    username: "Line:" + updTvdscustomer.lineUserId,
-    displayname: "Line:" + updTvdscustomer.lineUserId,
-  };
+  updTvdscustomer.updateby = req.user;
 
   updTvdscustomer.save(function (err, data) {
     if (err) {
