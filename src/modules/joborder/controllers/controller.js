@@ -63,6 +63,7 @@ exports.getList = async function (req, res, next) {
     if ("จบบริการยกเลิก)".startsWith(keyword))
       orderStatus = "closewithcondition";
     if ("จบบริการ".startsWith(keyword)) orderStatus = "close";
+
     filter = {
       $or: [
         {
@@ -418,4 +419,26 @@ exports.returnData = function (req, res) {
     status: 200,
     data: req.returnData ? req.returnData : [],
   });
+};
+
+exports.checkValidJob = function (req, res) {
+  Joborder.find(
+    {
+      docdate: req.body.docdate,
+      "carNo.lisenceID": req.body.lisenceID,
+      $or: [
+        { orderStatus: "draft" },
+        { orderStatus: "waitapprove" },
+        { orderStatus: "orderavailable" },
+        { orderStatus: "serviceprepared" },
+        { orderStatus: "golive" },
+      ],
+    },
+    function (err, data) {
+      res.jsonp({
+        status: 200,
+        data: data,
+      });
+    }
+  );
 };

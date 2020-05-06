@@ -27,6 +27,10 @@ exports.invokeRolesPolicies = function() {
         {
           resources: "/api/jobordersupdatemap",
           permissions: "*"
+        },
+        {
+          resources: "/api/checkvalidjob",
+          permissions: "*"
         }
       ]
     }
