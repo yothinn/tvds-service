@@ -50,8 +50,19 @@ exports.getList = async function (req, res, next) {
       break;
   }
 
+  let orderStatus = "";
+
   let filter = {};
   if (keyword) {
+    if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
+    if ("รอบืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
+    if ("ใบงานพ้อม".startsWith(keyword)) orderStatus = "orderavailable";
+    if ("เตรียมการบริการ".startsWith(keyword)) orderStatus = "serviceprepared";
+    if ("กำลังให้บริการ".startsWith(keyword)) orderStatus = "golive";
+    if ("ยกเลิกใบงาน".startsWith(keyword)) orderStatus = "ordercancel";
+    if ("จบบริการยกเลิก)".startsWith(keyword))
+      orderStatus = "closewithcondition";
+    if ("จบบริการ".startsWith(keyword)) orderStatus = "close";
     filter = {
       $or: [
         {
@@ -67,10 +78,13 @@ exports.getList = async function (req, res, next) {
           },
         },
         {
-          "carNo.driverInfo.lastName": { $regex: "^" + keyword, $options: "i" },
+          "carNo.driverInfo.lastName": {
+            $regex: "^" + keyword,
+            $options: "i",
+          },
         },
         {
-          orderStatus: { $regex: "^" + keyword, $options: "i" },
+          orderStatus: { $regex: "^" + orderStatus, $options: "i" },
         },
       ],
     };
