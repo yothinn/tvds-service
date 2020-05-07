@@ -147,6 +147,7 @@ exports.getList = async function (req, res, next) {
     currentCount: _results.length,
     totalCount: _count,
     data: newJobOrderDatas,
+    filter: filter
   });
 
   // var query = {};
