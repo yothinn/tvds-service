@@ -37,6 +37,10 @@ exports.getList = async function (req, res, next) {
       // code block
       sort = { docdate: sortSign };
       break;
+    case "created":
+      // code block
+      sort = { created: sortSign };
+      break;
     case "carNo":
       // code block
       sort = { "carNo.lisenceID": sortSign };
