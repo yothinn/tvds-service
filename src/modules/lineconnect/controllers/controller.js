@@ -794,6 +794,13 @@ exports.getJobOrderIntent = async function (req, res, next) {
                   },
                   {
                     type: "text",
+                    text:
+                      "เลขที่ใบงาน: " + order.docno,
+                    size: "xs",
+                    color: "#B2B2B2",
+                  },
+                  {
+                    type: "text",
                     text: "จำนวนนัดหมาย: " + order.contactLists.length, //order.contactLists.filter((contact)=>{ return contact.contactStatus === "confirm"}).length,
                     margin: "lg",
                     size: "lg",
