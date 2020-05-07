@@ -95,13 +95,13 @@ exports.getList = async function (req, res, next) {
     };
   }
 
-  console.log(keyword);
+  console.log("keyword : " + keyword);
 
-  console.log(filter);
+  console.log(JSON.stringify(filter));
 
   console.log(orderBy);
   console.log(sortSign);
-  
+
   const [_results, _count] = await Promise.all([
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
@@ -348,8 +348,8 @@ exports.getJobOrder = function (req, res, next) {
 
     datas.forEach((el) => {
       if (el.orderStatus !== "ordercancel") {
-        jobUseDatas.push(el)
-      };
+        jobUseDatas.push(el);
+      }
     });
 
     req.jobOrderByDate = jobUseDatas;
