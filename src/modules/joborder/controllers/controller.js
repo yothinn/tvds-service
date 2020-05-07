@@ -95,7 +95,7 @@ exports.getList = async function (req, res, next) {
     };
   }
 
-  console.log(keywords);
+  console.log(keyword);
 
   console.log(filter);
 
