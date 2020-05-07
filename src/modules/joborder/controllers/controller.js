@@ -97,7 +97,7 @@ exports.getList = async function (req, res, next) {
 
   console.log("keyword : " + keyword);
 
-  console.log(JSON.stringify(filter));
+  console.log(filter);
 
   console.log(orderBy);
   console.log(sortSign);
