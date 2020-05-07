@@ -631,7 +631,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                 type: "uri",
                 label: "ดูรายละเอียด",
                 //uri: "line://app/1654123534-5rYewYVq?id=" + order._id,
-                uri: "line://app/1654123512-vPZoKZA8?id=" + order._id,
+                uri: `line://app/1654123512-vPZoKZA8?id=${order._id}&lineUserId=${req.body.events[0].source.userId}`,
               },
             });
             messages[0].contents.contents.push(message);
