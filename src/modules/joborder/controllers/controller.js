@@ -95,8 +95,13 @@ exports.getList = async function (req, res, next) {
     };
   }
 
+  console.log(keywords);
+
+  console.log(filter);
+
   console.log(orderBy);
   console.log(sortSign);
+  
   const [_results, _count] = await Promise.all([
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
@@ -135,7 +140,7 @@ exports.getList = async function (req, res, next) {
     })
   );
 
-  return res.json({
+  res.json({
     status: 200,
     currentPage: pageNo,
     pages: Math.ceil(_count / size),
