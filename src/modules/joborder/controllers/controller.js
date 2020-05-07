@@ -339,7 +339,15 @@ exports.getCusData = function (req, res, next) {
 exports.getJobOrder = function (req, res, next) {
   var docdate = req.body.docdate;
   Joborder.find({ docdate: docdate }, function (err, datas) {
-    req.jobOrderByDate = datas;
+    var jobUseDatas = [];
+
+    datas.forEach((el) => {
+      if (el.orderStatus !== "ordercancel") {
+        jobUseDatas.push(el)
+      };
+    });
+
+    req.jobOrderByDate = jobUseDatas;
     next();
   });
 };
