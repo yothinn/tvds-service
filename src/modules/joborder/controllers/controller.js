@@ -100,13 +100,6 @@ exports.getList = async function (req, res, next) {
     };
   }
 
-  console.log("keyword : " + keyword);
-
-  console.log(filter);
-
-  console.log(orderBy);
-  console.log(sortSign);
-
   const [_results, _count] = await Promise.all([
     Joborder.find(filter)
       .skip(size * (pageNo - 1))
@@ -116,10 +109,6 @@ exports.getList = async function (req, res, next) {
     Joborder.countDocuments(filter).exec(),
   ]);
 
-  // _results.forEach((rec)=>{
-  //   rec.confirmCount = 1;
-  //   rec.rejectCount = 2;
-  // })
   var newJobOrderDatas = [];
   await Promise.all(
     _results.map(async (jobOrderData) => {
@@ -155,20 +144,6 @@ exports.getList = async function (req, res, next) {
     filter: filter,
   });
 
-  // var query = {};
-  // query.skip = size * (pageNo - 1);
-  // query.limit = size;
-  // Joborder.find({}, {}, query, function (err, datas) {
-  //     if (err) {
-  //         return res.status(400).send({
-  //             status: 400,
-  //             message: errorHandler.getErrorMessage(err)
-  //         });
-  //     } else {
-  //         req.jobOrderDatas = datas;
-  //         next();
-  //     };
-  // });
 };
 
 exports.sumStatusList = function (req, res, next) {
