@@ -58,33 +58,26 @@ exports.getList = async function (req, res, next) {
 
   let filter = {};
   if (keyword) {
-    
-
-    filter = {
-      $or: [
-        {
-          docno: { $regex: "^" + keyword, $options: "i" },
+    let innerFilter = [
+      {
+        docno: { $regex: "^" + keyword, $options: "i" },
+      },
+      {
+        "carNo.lisenceID": { $regex: "^" + keyword, $options: "i" },
+      },
+      {
+        "carNo.driverInfo.firstName": {
+          $regex: "^" + keyword,
+          $options: "i",
         },
-        {
-          "carNo.lisenceID": { $regex: "^" + keyword, $options: "i" },
+      },
+      {
+        "carNo.driverInfo.lastName": {
+          $regex: "^" + keyword,
+          $options: "i",
         },
-        {
-          "carNo.driverInfo.firstName": {
-            $regex: "^" + keyword,
-            $options: "i",
-          },
-        },
-        {
-          "carNo.driverInfo.lastName": {
-            $regex: "^" + keyword,
-            $options: "i",
-          },
-        },
-        // {
-        //   orderStatus: { $regex: "^" + orderStatus, $options: "i" },
-        // },
-      ],
-    };
+      },
+    ];
 
     if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
     if ("รอบืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
@@ -96,7 +89,15 @@ exports.getList = async function (req, res, next) {
       orderStatus = "closewithcondition";
     if ("จบบริการ".startsWith(keyword)) orderStatus = "close";
 
-    
+    if (orderStatus !== "") {
+      innerFilter.push({
+        orderStatus: { $regex: "^" + orderStatus, $options: "i" },
+      });
+    }
+
+    filter = {
+      $or: innerFilter,
+    };
   }
 
   console.log("keyword : " + keyword);
@@ -151,7 +152,7 @@ exports.getList = async function (req, res, next) {
     currentCount: _results.length,
     totalCount: _count,
     data: newJobOrderDatas,
-    filter: filter
+    filter: filter,
   });
 
   // var query = {};
