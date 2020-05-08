@@ -58,15 +58,7 @@ exports.getList = async function (req, res, next) {
 
   let filter = {};
   if (keyword) {
-    if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
-    if ("รอบืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
-    if ("ใบงานพ้อม".startsWith(keyword)) orderStatus = "orderavailable";
-    if ("เตรียมการบริการ".startsWith(keyword)) orderStatus = "serviceprepared";
-    if ("กำลังให้บริการ".startsWith(keyword)) orderStatus = "golive";
-    if ("ยกเลิกใบงาน".startsWith(keyword)) orderStatus = "ordercancel";
-    if ("จบบริการยกเลิก)".startsWith(keyword))
-      orderStatus = "closewithcondition";
-    if ("จบบริการ".startsWith(keyword)) orderStatus = "close";
+    
 
     filter = {
       $or: [
@@ -88,11 +80,23 @@ exports.getList = async function (req, res, next) {
             $options: "i",
           },
         },
-        {
-          orderStatus: { $regex: "^" + orderStatus, $options: "i" },
-        },
+        // {
+        //   orderStatus: { $regex: "^" + orderStatus, $options: "i" },
+        // },
       ],
     };
+
+    if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
+    if ("รอบืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
+    if ("ใบงานพ้อม".startsWith(keyword)) orderStatus = "orderavailable";
+    if ("เตรียมการบริการ".startsWith(keyword)) orderStatus = "serviceprepared";
+    if ("กำลังให้บริการ".startsWith(keyword)) orderStatus = "golive";
+    if ("ยกเลิกใบงาน".startsWith(keyword)) orderStatus = "ordercancel";
+    if ("จบบริการยกเลิก)".startsWith(keyword))
+      orderStatus = "closewithcondition";
+    if ("จบบริการ".startsWith(keyword)) orderStatus = "close";
+
+    
   }
 
   console.log("keyword : " + keyword);
