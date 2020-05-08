@@ -8,6 +8,9 @@ const SATFF_CHANNEL_ACCESS_TOKEN =
   process.env.SATFF_CHANNEL_ACCESS_TOKEN ||
   "WblrHOmUiMEGo8R+sKJEfp3tYJF6lZCiljPGAPYRf8kXgFdFZKh9Qrz4bQN9mJ1gYglgjg7R05CL5zACB9rlxGptxzJMC6pvxpvFCxXVVVyftk5SEqLX4vhin0MWj8jPTFxbezCyvT9D4IEO8KX2qAdB04t89/1O/w1cDnyilFU=";
 
+const LINE_LIFF_APPID = process.env.LINE_LIFF_APPID || "1654123512-vPZoKZA8";
+const STAFF_LINE_LIFF_APPID = process.env.STAFF_LINE_LIFF_APPID || "1654123534-5rYewYVq";
+
 var mongoose = require("mongoose"),
   model = require("../models/model"),
   mq = require("../../core/controllers/rabbitmq"),
@@ -630,8 +633,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               action: {
                 type: "uri",
                 label: "ดูรายละเอียด",
-                //uri: "line://app/1654123534-5rYewYVq?id=" + order._id,
-                uri: `line://app/1654123512-vPZoKZA8?id=${order._id}&lineUserId=${req.body.events[0].source.userId}`,
+                uri: `line://app/${LINE_LIFF_APPID}?id=${order._id}&lineUserId=${req.body.events[0].source.userId}`,
               },
             });
             messages[0].contents.contents.push(message);
@@ -824,7 +826,7 @@ exports.getJobOrderIntent = async function (req, res, next) {
               action: {
                 type: "uri",
                 label: "ดูรายละเอียด",
-                uri: "line://app/1654123534-5rYewYVq?id=" + order._id,
+                uri: `line://app/${STAFF_LINE_LIFF_APPID}?id=${order._id}`,
               },
             });
             messages[0].contents.contents.push(message);
