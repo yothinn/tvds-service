@@ -653,7 +653,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
           messages = [
             {
               type: `text`,
-              text: `ณ ตอนนี้ยังไม่มีนัดหมายของท่าน กรุณาตรวสอบใหม่อีกครั้ง ภายหลังค่ะ`,
+              text: `ณ ตอนนี้ยังไม่มีนัดหมายของท่าน กรุณาตรวจสอบใหม่อีกครั้ง ภายหลังค่ะ`,
             },
           ];
           let reply = await lineChat.replyMessage(
