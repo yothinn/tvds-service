@@ -155,7 +155,16 @@ var JoborderSchema = new Schema({
   },
   orderStatus: {
     type: String,
-    enum: ["draft", "waitapprove", "orderavailable", "serviceprepared", "ordercancel", "golive", "close", "closewithcondition"],
+    enum: [
+      "draft", 
+      "waitapprove", 
+      "orderavailable", 
+      "serviceprepared", 
+      "ordercancel", 
+      "golive", 
+      "close", 
+      "closewithcondition",
+    ],
   },
   contactLists: {
     type: [
@@ -230,6 +239,9 @@ var JoborderSchema = new Schema({
         },
         longitude: {
           type: String,
+        },
+        sales: {
+          type: Number,
         },
       },
     ],
