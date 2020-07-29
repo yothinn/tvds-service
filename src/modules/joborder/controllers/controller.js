@@ -80,7 +80,7 @@ exports.getList = async function (req, res, next) {
     ];
 
     if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
-    if ("รอบืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
+    if ("รอยืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
     if ("ใบงานพ้อม".startsWith(keyword)) orderStatus = "orderavailable";
     if ("เตรียมการบริการ".startsWith(keyword)) orderStatus = "serviceprepared";
     if ("กำลังให้บริการ".startsWith(keyword)) orderStatus = "golive";
@@ -113,10 +113,13 @@ exports.getList = async function (req, res, next) {
   await Promise.all(
     _results.map(async (jobOrderData) => {
       let confirmArray = jobOrderData.contactLists.filter((contact) => {
-        return contact.contactStatus === "confirm";
+        return ((contact.contactStatus === "confirm") ||
+                (contact.contactStatus === "arrival") || 
+                (contact.contactStatus === "departure"));
       });
       let rejectArray = jobOrderData.contactLists.filter((contact) => {
-        return contact.contactStatus === "reject";
+        return ((contact.contactStatus === "reject") || 
+                (contact.contactStatus === "driver-reject"));
       });
       var confirmCount = confirmArray.length;
       var rejectCount = rejectArray.length;
@@ -159,6 +162,7 @@ exports.sumStatusList = function (req, res, next) {
     for (let j = 0; j < jobOrderData.contactLists.length; j++) {
       const listData = jobOrderData.contactLists[j];
       if (listData.contactStatus === "confirm") {
+
         confirmCount += 1;
       }
       if (listData.contactStatus === "reject") {
