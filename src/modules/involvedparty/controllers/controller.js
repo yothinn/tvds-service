@@ -339,12 +339,12 @@ exports.confirmAndReject = (req, res, next) => {
         if (req.jobOrder.act === "confirm") {
           req.replyBody.messages.push({
             type: `text`,
-            text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยครับ`,
+            text: `ระบบยืนยันนัดหมายของท่านเรียบร้อยค่ะ`,
           });
         } else {
           req.replyBody.messages.push({
             type: `text`,
-            text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะครับ`,
+            text: `ขอบคุณค่ะ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะค่ะ`,
           });
         }
       }

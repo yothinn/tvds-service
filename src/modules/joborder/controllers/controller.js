@@ -81,7 +81,7 @@ exports.getList = async function (req, res, next) {
 
     if ("จัดเส้นทาง".startsWith(keyword)) orderStatus = "draft";
     if ("รอยืนยัน".startsWith(keyword)) orderStatus = "waitapprove";
-    if ("ใบงานพ้อม".startsWith(keyword)) orderStatus = "orderavailable";
+    if ("ใบงานพร้อม".startsWith(keyword)) orderStatus = "orderavailable";
     if ("เตรียมการบริการ".startsWith(keyword)) orderStatus = "serviceprepared";
     if ("กำลังให้บริการ".startsWith(keyword)) orderStatus = "golive";
     if ("ยกเลิกใบงาน".startsWith(keyword)) orderStatus = "ordercancel";

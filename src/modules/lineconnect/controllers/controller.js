@@ -422,7 +422,7 @@ exports.rejectIntent = async function (req, res, next) {
               socket.io.emit("user-confirm-reject", data);
               messages.push({
                 type: `text`,
-                text: `ขอบคุณครับ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะค่ะ`,
+                text: `ขอบคุณค่ะ ไว้โอกาสหน้าจะนัดหมายมาใหม่นะค่ะ`,
               });
             }
             let reply = await lineChat.replyMessage(
