@@ -465,6 +465,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
       docdate: { $gte: start },
       "contactLists.lineUserId": req.body.events[0].source.userId,
       $or: [
+        { orderStatus: "waitapprove"},
         { orderStatus: "orderavailable" },
         { orderStatus: "serviceprepared" },
         { orderStatus: "golive" },
@@ -474,13 +475,16 @@ exports.getAppointmentsIntent = async function (req, res, next) {
       .exec(async function (err, results) {
         console.log(results.length);
         if (results.length > 0) {
+          // Has appointment
           results.forEach((order) => {
+            // 1. In each Joborder, find customer by lineid in contact list
             const me = order.contactLists.filter((contact) => {
               return (
                 contact.lineUserId === `${req.body.events[0].source.userId}`
               );
             });
 
+            // 2. set driver info
             let driver = "ไม่ระบุ";
 
             if (order.carNo.driverInfo) {
@@ -488,6 +492,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             }
 
             // console.log(me);
+            // 3. set order day
             let dayOfweek = "-";
             try {
               console.log(`getAppointmentsIntent : ${order.docdate.getDay()}`);
@@ -562,6 +567,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
               },
             };
 
+            // 4. ??
             if (!sameToday) {
               if (isConfirmed) {
                 message.footer.contents.push({
@@ -624,6 +630,8 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                 });
               }
             }
+
+            // 5. set footer message to joborder liff app
             message.footer.contents.push({
               type: "text",
               text: "ดูรายละเอียด",
@@ -636,9 +644,12 @@ exports.getAppointmentsIntent = async function (req, res, next) {
                 uri: `line://app/${LINE_LIFF_APPID}?id=${order._id}&lineUserId=${req.body.events[0].source.userId}`,
               },
             });
+
+            // 6. push detail in messages
             messages[0].contents.contents.push(message);
           });
 
+          // 7. reply message to line
           let reply = await lineChat.replyMessage(
             CHANNEL_ACCESS_TOKEN,
             req.body.events[0].replyToken,
@@ -650,6 +661,7 @@ exports.getAppointmentsIntent = async function (req, res, next) {
             data: req.body.events[0],
           });
         } else {
+          // No appointment
           messages = [
             {
               type: `text`,
