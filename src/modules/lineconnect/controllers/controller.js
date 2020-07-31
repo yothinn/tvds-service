@@ -905,6 +905,22 @@ exports.fallbackIntent = function (req, res, next) {
   }
 };
 
+exports.fallbackToDialogFlow = (req, res, next) => {
+  if (req.body.events[0].message.type === "text") {
+    //https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50
+    req.headers.host = "dialogflow.cloud.google.com";
+    request.post({
+      uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/d3dafee1-6dee-4ce2-a48d-457a2f449f50",
+      headers: req.headers,
+      body: JSON.stringify(req.body)
+    },(err, resp, body) => {
+      res.jsonp(req.body.events[0]);
+    });
+  } else {
+    next();
+  }
+};
+
 exports.completedChat = async function (req, res) {
   res.jsonp({
     status: 200,

@@ -30,7 +30,8 @@ module.exports = function (app) {
       controller.rejectIntent,
       controller.getAppointmentsIntent,
       controller.getJobOrderIntent,
-      controller.fallbackIntent,
+      // controller.fallbackIntent,
+      controller.fallbackToDialogFlow,
       controller.completedChat
     );
 
