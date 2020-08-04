@@ -281,10 +281,23 @@ exports.getCusData = function (req, res, next) {
       for (let i = 0; i < datas.length; i++) {
         const data = datas[i];
 
-        let bgColor = "ff2a2a";
-        if (data.isShareHolder === true) {
-          bgColor = "167eff"; //สีน้ำเงิน
+        const createdDate = new Date(data.created);
+        // ปรับวันที่ให้ตรงกับ timezone ประเทศไทย
+        const currDate = new Date(new Date().setDate(new Date().getDate() - 1)); 
+
+        let bgColor = "ff2a2a"; // สีแดง
+        // console.log(`createDate.toString() : ${createdDate.getMonth()}`);
+        if (createdDate.getMonth() === currDate.getMonth()) {
+            bgColor = "66ff33"; // สีเขียว เดิอนปัจจุบัน
+        } else if (createdDate.getMonth() === currDate.getMonth()-1) {
+          bgColor = "ffff00"; // สีเหลือง เดิอนก่อนหน้า
+        } else {
+          if (data.isShareHolder === true) {
+            bgColor = "167eff"; //สีน้ำเงิน
+          }
         }
+        
+
 
         let label = "";
 
@@ -317,6 +330,7 @@ exports.getCusData = function (req, res, next) {
           lineUserId: data.lineUserId,
           latitude: data.latitude,
           longitude: data.longitude,
+          created: data.created,
         });
       }
       // console.log(cusUseData);
