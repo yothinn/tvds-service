@@ -458,3 +458,45 @@ exports.checkValidJob = function (req, res) {
     }
   );
 };
+
+/**
+ * query history joborder by customer id
+ * /api/joborders/history/:customerId?size={number}
+ * default number is 5
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.getJoborderHistory = function (req, res) {
+  // Default size is 5
+  var size = parseInt(req.query.size);
+  size = size ? size : 5;
+
+  // Check valid customerId
+  if (!mongoose.Types.ObjectId.isValid(req.params.customerId)) {
+    return res.status(400).send({
+      status: 400,
+      message: "customer Id is invalid",
+    });
+  }
+
+  // Must be convert string to ObjectId
+  var customerId = mongoose.Types.ObjectId(req.params.customerId);
+
+  //console.log(size);
+  //console.log(customerId);
+
+  Joborder.aggregate()
+    .unwind("contactLists")             // seperate contactLists array
+    .match({ 
+      "contactLists._id": customerId    // match customer objectId type
+    })
+    .sort({ docdate: 1 })               // sort from current date to previous
+    .limit(size)
+    .exec(function(err, result) {
+      // console.log(result);
+      res.jsonp({
+        status: 200,
+        data: result,
+      });
+    });
+};
