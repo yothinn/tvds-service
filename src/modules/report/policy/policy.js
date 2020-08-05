@@ -17,23 +17,11 @@ exports.invokeRolesPolicies = function() {
       roles: ["admin", "user"],
       allows: [
         {
-          resources: "/api/joborders",
+          resources: "/api/reports",
           permissions: "*"
         },
         {
-          resources: "/api/joborders/:joborderId",
-          permissions: "*"
-        },
-        {
-          resources: "/api/jobordersupdatemap",
-          permissions: "*"
-        },
-        {
-          resources: "/api/checkvalidjob",
-          permissions: "*"
-        },
-        {
-          resources: "/api/joborders/history/:customerId",
+          resources: "/api/reports/:reportId",
           permissions: "*"
         }
       ]
