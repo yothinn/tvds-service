@@ -243,6 +243,9 @@ var JoborderSchema = new Schema({
         sales: {
           type: Number,
         },
+        suggestion: {
+          type: String,
+        },
       },
     ],
   },
