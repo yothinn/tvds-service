@@ -67,6 +67,9 @@ var TvdscustomerSchema = new Schema({
   longitude: {
     type: String,
   },
+  notes: {
+    type: String,
+  },
   created: {
     type: Date,
     default: Date.now,
