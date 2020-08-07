@@ -342,6 +342,7 @@ exports.getCusData = function (req, res, next) {
 
 exports.getJobOrder = function (req, res, next) {
   var docdate = req.body.docdate;
+  // console.log(docdate);
   Joborder.find({ docdate: docdate }, function (err, datas) {
     var jobUseDatas = [];
 
@@ -490,13 +491,20 @@ exports.getJoborderHistory = function (req, res) {
     .match({ 
       "contactLists._id": customerId    // match customer objectId type
     })
-    .sort({ docdate: 1 })               // sort from current date to previous
-    .limit(size)
+    .sort({ docdate: -1 })               // sort from current date to previous
+    .limit(size)                        // don't limit before sort 
     .exec(function(err, result) {
       // console.log(result);
-      res.jsonp({
-        status: 200,
-        data: result,
-      });
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err),
+        });
+      } else {
+        res.jsonp({
+          status: 200,
+          data: result,
+        });
+      } 
     });
 };
