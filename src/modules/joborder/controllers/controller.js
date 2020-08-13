@@ -331,6 +331,7 @@ exports.getCusData = function (req, res, next) {
           latitude: data.latitude,
           longitude: data.longitude,
           created: data.created,
+          notes: data.notes,
         });
       }
       // console.log(cusUseData);

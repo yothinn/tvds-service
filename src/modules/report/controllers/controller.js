@@ -29,6 +29,8 @@ exports.getSalesReportByJoborder = function (req, res) {
     let page = parseInt(req.body.page) || 1;
     let size = parseInt(req.body.size) || REPORT_PAGESIZE;
     
+    // console.log(req.body.startDate);
+    // console.log(req.body.endDate);
     // Check start date is null or valid
     if (moment(req.body.startDate).isValid()) {
         startDate = new Date(req.body.startDate)
@@ -58,8 +60,8 @@ exports.getSalesReportByJoborder = function (req, res) {
     }
 
     // console.log(req.body);
-    // console.log(startDate);
-    // console.log(endDate);
+    //console.log(startDate);
+    //console.log(endDate);
     // console.log(page);
     
     Joborder.aggregate()
