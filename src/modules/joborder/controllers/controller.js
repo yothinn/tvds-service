@@ -509,3 +509,12 @@ exports.getJoborderHistory = function (req, res) {
       } 
     });
 };
+
+
+/**
+ * Get customer suggestion in joborder
+ * @param {*} req 
+ * @param {*} res 
+ */
+// exports.getCutomerSuggestion = function (req, res) {
+// };

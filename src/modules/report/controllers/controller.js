@@ -25,15 +25,19 @@ const REPORT_PAGESIZE = 10;
 */
 exports.getSalesReportByJoborder = function (req, res) {
 
-    let startDate, endDate;
+    let startDate = "";
+    let endDate = "";
+    let filter = {};
     let page = parseInt(req.body.page) || 1;
     let size = parseInt(req.body.size) || REPORT_PAGESIZE;
     
-    // console.log(req.body.startDate);
-    // console.log(req.body.endDate);
-    // Check start date is null or valid
-    if (moment(req.body.startDate).isValid()) {
-        startDate = new Date(req.body.startDate)
+     // console.log(req.body.startDate);
+     //console.log(req.body.endDate);
+     // Check start date is undefined, null, empty string or valid
+    if (!req.body.startDate || (req.body.startDate === "")) {
+        startDate = "";
+    } else if (moment(req.body.startDate).isValid()) {
+        startDate = new Date(req.body.startDate);
      } else {
         return res.status(400).send({
             status: 400,
@@ -41,8 +45,10 @@ exports.getSalesReportByJoborder = function (req, res) {
           });
      } 
 
-    // Check end date is null or valid
-    if (moment(req.body.endDate).isValid()) { 
+     // Check end date is undefined, null, empty string or valid
+     if (!req.body.endDate || (req.body.endDate === "")) {
+         endDate = "";
+     } else if (moment(req.body.endDate).isValid()) {  
         endDate = new Date(req.body.endDate);
      } else {
         return res.status(400).send({
@@ -50,36 +56,45 @@ exports.getSalesReportByJoborder = function (req, res) {
             message: "End date invalid",
           });
      } 
-    
-    // endDate must greater than startDate
-    if (endDate < startDate) {
-        return res.status(400).send({
-            status: 400,
-            message: "Invalid : end date less than start date ",
-          });
-    }
 
+     //console.log(startDate);
+     //console.log(endDate);
+
+     if ((startDate !== "") && (endDate !== "")) {
+        // endDate must greater than startDate
+        if (endDate < startDate) {
+            return res.status(400).send({
+                status: 400,
+                message: "Invalid : end date less than start date ",
+            });
+        }
+        filter = {
+            docdate : { $gte: startDate, $lte: endDate}
+        }
+    }
+    
     // console.log(req.body);
     //console.log(startDate);
     //console.log(endDate);
     // console.log(page);
-    
+    // TODO : can do aggregate by facet ???
+
     Joborder.aggregate()
-        .match({ docdate : { $gte: startDate, $lte: endDate } })    // filter date
+        .match(filter)    // filter date
         .project({
             _id: "$_id",
             docdate: "$docdate",
             docno: "$docno",
             carNo: "$carNo",
-            orderStatus: "orderStatus",
+            orderStatus: "$orderStatus",
             salesAmount: {                                          // summary sales in contactLists
                 $sum : "$contactLists.sales"
             }
         })
+        .sort( {docdate : -1} )
         .skip(size * (page - 1))
         .limit(size)
-        .sort( {docdate : -1} )
-        .exec(function(err, result) {
+        .exec(function(err, result1) {
             // console.log(result);
             if (err) {
                 return res.status(400).send({
@@ -87,13 +102,24 @@ exports.getSalesReportByJoborder = function (req, res) {
                   message: errorHandler.getErrorMessage(err),
                 });
             } else {
-                res.jsonp({
-                  status: 200,
-                  data: result,
-                });
+                Joborder.aggregate().match(filter).count("docno")
+                        .exec(function(err, result2) {
+                            if (err) {
+                                return res.status(400).send({
+                                  status: 400,
+                                  message: errorHandler.getErrorMessage(err),
+                                });
+                            } else {
+                                // console.log(result2);
+                                res.jsonp({
+                                    status: 200,
+                                    totalCount: result2[0].docno,
+                                    data: result1,
+                                  });
+                            }
+                        });
             } 
         })
-    
 };
 
 /**
@@ -157,8 +183,8 @@ exports.getSalesReportByDates = function (req, res) {
             }
         })
         .skip(size * (page - 1))
-        .limit(size)
         .sort({docdate : 1})
+        .limit(size)
         .exec(function(err, result) {
             // console.log(result);
             if (err) {

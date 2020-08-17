@@ -930,6 +930,7 @@ exports.completedChat = async function (req, res) {
 
 exports.pushMessage = async function (req, res) {
   let body = JSON.stringify(req.body);
+  // console.log(body);
   let push = await lineChat.pushMessage(CHANNEL_ACCESS_TOKEN, req.body);
   res.jsonp({
     status: 200,
