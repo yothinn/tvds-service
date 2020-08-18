@@ -584,7 +584,7 @@ exports.getCustomerSuggestion = function (req, res) {
       // console.log(result);
       res.jsonp({
         status: 200,
-        total: result[1][0].contactLists,
+        totalCount: result[1][0].contactLists,
         data: result[0],
       });
   }).catch(err => {

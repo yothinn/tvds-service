@@ -212,10 +212,10 @@ exports.getSalesReportByDates = async function (req, res) {
                 })
                 .count("salesAmount").exec()
     ]).then(result => {
-        console.log(result);
+        // console.log(result);
         res.jsonp({
             status: 200,
-            total: result[1][0].salesAmount,
+            totalCount: result[1][0].salesAmount,
             data: result[0],
         });
     }).catch(err => {

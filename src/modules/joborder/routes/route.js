@@ -46,7 +46,7 @@ module.exports = function (app) {
 
   app
     .route("/api/suggestion")
-  //   //.all(policy.isAllowed)
+    .all(policy.isAllowed)
     .post(controller.getCustomerSuggestion);
 
   app.param("joborderId", controller.getByID);

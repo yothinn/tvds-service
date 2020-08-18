@@ -33,6 +33,10 @@ exports.invokeRolesPolicies = function() {
           permissions: "*"
         },
         {
+          resources: "/api/suggestion",
+          permissions: "*"
+        },
+        {
           resources: "/api/joborders/history/:customerId",
           permissions: "*"
         }
