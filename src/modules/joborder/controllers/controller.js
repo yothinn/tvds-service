@@ -561,7 +561,7 @@ exports.getCustomerSuggestion = function (req, res) {
   // console.log(req.body);
   // console.log(startDate);
   // console.log(endDate);
-   console.log(page);
+  // console.log(page);
   // TODO :รวม aggregate
   Promise.all([
     Joborder.aggregate()
