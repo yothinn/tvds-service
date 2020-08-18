@@ -35,6 +35,7 @@ exports.getSalesReportByJoborder = function (req, res) {
      //console.log(req.body.endDate);
      // Check start date is undefined, null, empty string or valid
     if (!req.body.startDate || (req.body.startDate === "")) {
+        // ถ้าไม่ระบุ ให้เอาทั้งหมด
         startDate = "";
     } else if (moment(req.body.startDate).isValid()) {
         startDate = new Date(req.body.startDate);
@@ -134,71 +135,123 @@ exports.getSalesReportByJoborder = function (req, res) {
 * Default size is 10;
 */
 
-exports.getSalesReportByDates = function (req, res) {
-    let startDate, endDate;
+exports.getSalesReportByDates = async function (req, res) {
+    let startDate = "";
+    let endDate = "";
+    let filter = {};
     let page = parseInt(req.body.page) || 1;
     let size = parseInt(req.body.size) || REPORT_PAGESIZE;
     
     // Check start date is null or valid 
-    if (moment(req.body.startDate).isValid()) {
-        startDate = new Date(req.body.startDate)
-     } else {
+    if (!req.body.startDate || (req.body.startDate === "")) {
+        // ถ้าไม่ระบุ ให้เอาทั้งหมด
+        startDate = "";
+    } else if (moment(req.body.startDate).isValid()) {
+        startDate = new Date(req.body.startDate);
+    } else {
         return res.status(400).send({
             status: 400,
             message: "Start date invalid",
           });
-     } 
+    } 
 
-    // Check end date is null or valid
-    if (moment(req.body.endDate).isValid()) { 
+    // Check end date is undefined, null, empty string or valid
+    if (!req.body.endDate || (req.body.endDate === "")) {
+        endDate = "";
+    } else if (moment(req.body.endDate).isValid()) {  
         endDate = new Date(req.body.endDate);
     } else {
         return res.status(400).send({
             status: 400,
             message: "End date invalid",
-          });
+            });
     } 
-   
-    // endDate must greater than startDate
-    if (endDate < startDate) {
-        return res.status(400).send({
-            status: 400,
-            message: "Invalid : end date less than start date",
-          });
-    }
 
+    if ((startDate !== "") && (endDate !== "")) {
+        // endDate must greater than startDate
+        if (endDate < startDate) {
+            return res.status(400).send({
+                status: 400,
+                message: "Invalid : end date less than start date ",
+            });
+        }
+        filter = {
+            docdate : { $gte: startDate, $lte: endDate}
+        }
+    }
+     
     // console.log(req.body);
     // console.log(startDate);
     // console.log(endDate);
     // console.log(page);
+   
+    // TODO : รวม aggregate
+    await Promise.all([
+        Joborder.aggregate()
+                .match(filter)    // filter date
+                .unwind("contactLists")
+                .group({
+                    _id: "$docdate",
+                    //docdate: "$docdate",
+                    salesAmount: {
+                        $sum : "$contactLists.sales"
+                    }
+                })
+                .sort({_id : -1})
+                .skip(size * (page - 1))
+                .limit(size).exec(),
+        Joborder.aggregate()
+                .match(filter)    // filter date
+                .unwind("contactLists")
+                .group({
+                    _id: "$docdate",
+                    //docdate: "$docdate",
+                    salesAmount: {
+                        $sum : "$contactLists.sales"
+                    }
+                })
+                .count("salesAmount").exec()
+    ]).then(result => {
+        console.log(result);
+        res.jsonp({
+            status: 200,
+            total: result[1][0].salesAmount,
+            data: result[0],
+        });
+    }).catch(err => {
+        return res.status(400).send({
+            status: 400,
+            message: errorHandler.getErrorMessage(err),
+        });
+    })
 
-    Joborder.aggregate()
-        .match({ docdate : { $gte: startDate, $lte: endDate } })    // filter date
-        .unwind("contactLists")
-        .group({
-            _id: "$docdate",
-            //docdate: "$docdate",
-            salesAmount: {
-                $sum : "$contactLists.sales"
-            }
-        })
-        .skip(size * (page - 1))
-        .sort({docdate : 1})
-        .limit(size)
-        .exec(function(err, result) {
-            // console.log(result);
-            if (err) {
-                return res.status(400).send({
-                    status: 400,
-                    message: errorHandler.getErrorMessage(err),
-                });
-            } else {
-                res.jsonp({
-                    status: 200,
-                    data: result,
-                });
-            } 
-        })
+    // Joborder.aggregate()
+    //     .match(filter)    // filter date
+    //     .unwind("contactLists")
+    //     .group({
+    //         _id: "$docdate",
+    //         //docdate: "$docdate",
+    //         salesAmount: {
+    //             $sum : "$contactLists.sales"
+    //         }
+    //     })
+    //     .sort({docdate : -1})
+    //     .skip(size * (page - 1))
+    //     .limit(size)
+    //     .exec(function(err, result) {
+    //         // console.log(result);
+    //         if (err) {
+    //             return res.status(400).send({
+    //                 status: 400,
+    //                 message: errorHandler.getErrorMessage(err),
+    //             });
+    //         } else {
+    //             res.jsonp({
+    //                 status: 200,
+    //                 data: result,
+    //             });
+    //         } 
+    //     })
 };
 
 // exports.getList = function (req, res) {

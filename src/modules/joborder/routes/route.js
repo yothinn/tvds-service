@@ -44,10 +44,10 @@ module.exports = function (app) {
     .all(policy.isAllowed)
     .get(controller.getJoborderHistory);
 
-  // app
-  //   .route("/api/joborders/suggestion")
-  //   .all(policy.isAllowed)
-  //   .get(controller.getCustomerSuggestion);
+  app
+    .route("/api/suggestion")
+  //   //.all(policy.isAllowed)
+    .post(controller.getCustomerSuggestion);
 
   app.param("joborderId", controller.getByID);
 

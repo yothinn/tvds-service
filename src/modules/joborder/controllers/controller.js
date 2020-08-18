@@ -516,5 +516,105 @@ exports.getJoborderHistory = function (req, res) {
  * @param {*} req 
  * @param {*} res 
  */
-// exports.getCutomerSuggestion = function (req, res) {
-// };
+exports.getCustomerSuggestion = function (req, res) {
+  let startDate = "";
+  let endDate = "";
+  let filter = {};
+  let page = parseInt(req.body.page) || 1;
+  let size = parseInt(req.body.size) || 10;
+
+  // Check start date is null or valid 
+  if (!req.body.startDate || (req.body.startDate === "")) {
+      // ถ้าไม่ระบุ ให้เอาทั้งหมด
+      startDate = "";
+  } else if (moment(req.body.startDate).isValid()) {
+      startDate = new Date(req.body.startDate);
+  } else {
+      return res.status(400).send({
+          status: 400,
+          message: "Start date invalid",
+        });
+  } 
+
+  // Check end date is undefined, null, empty string or valid
+  if (!req.body.endDate || (req.body.endDate === "")) {
+      endDate = "";
+  } else if (moment(req.body.endDate).isValid()) {  
+      endDate = new Date(req.body.endDate);
+  } else {
+      return res.status(400).send({
+          status: 400,
+          message: "End date invalid",
+          });
+  } 
+
+  if ((startDate !== "") && (endDate !== "")) {
+      // endDate must greater than startDate
+      if (endDate < startDate) {
+          return res.status(400).send({
+              status: 400,
+              message: "Invalid : end date less than start date ",
+          });
+      }
+  }
+  
+  // console.log(req.body);
+  // console.log(startDate);
+  // console.log(endDate);
+   console.log(page);
+  // TODO :รวม aggregate
+  Promise.all([
+    Joborder.aggregate()
+      .match(filter)    // filter date
+      .unwind("contactLists")
+      .match({
+        "contactLists.suggestion" : { $exists: true}
+      })
+      .sort( {docdate : -1} )
+      .skip(size * (page - 1))
+      .limit(size).exec(),
+    Joborder.aggregate()
+      .match(filter)    // filter date
+      .unwind("contactLists")
+      .match({
+        "contactLists.suggestion" : { $exists: true}
+      })
+      .count("contactLists").exec(),
+  ]).then(result => {
+      // console.log(result);
+      res.jsonp({
+        status: 200,
+        total: result[1][0].contactLists,
+        data: result[0],
+      });
+  }).catch(err => {
+    return res.status(400).send({
+      status: 400,
+      message: errorHandler.getErrorMessage(err),
+    });
+  })
+
+  // Joborder.aggregate()
+  //         .match(filter)    // filter date
+  //         .unwind("contactLists")
+  //         .match({
+  //           "contactLists.suggestion" : { $exists: true}
+  //         })
+  //         .sort( {docdate : -1} )
+  //         .skip(size * (page - 1))
+  //         .limit(size)
+  //         .exec(function(err, result) {
+  //           // console.log(result);
+  //           if (err) {
+  //               return res.status(400).send({
+  //                   status: 400,
+  //                   message: errorHandler.getErrorMessage(err),
+  //               });
+  //           } else {
+  //               res.jsonp({
+  //                   status: 200,
+  //                   data: result,
+  //               });
+  //           } 
+  //         });
+}
