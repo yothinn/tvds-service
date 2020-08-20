@@ -64,6 +64,7 @@ describe('Joborder CRUD routes tests', function () {
             .set('Authorization', 'Bearer ' + token)
             .expect(200)
             .end((err, res) => {
+                // console.log(err);
                 if (err) {
                     return done(err);
                 }

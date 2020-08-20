@@ -243,6 +243,9 @@ var JoborderSchema = new Schema({
         sales: {
           type: Number,
         },
+        suggestion: {
+          type: String,
+        },
       },
     ],
   },
@@ -280,6 +283,7 @@ JoborderSchema.pre("save", function (next) {
   let Joborder = this;
   Joborder.cusAmount = Joborder.contactLists.length;
   const model = mongoose.model("Joborder", JoborderSchema);
+
   const startOfMonth = moment(Joborder.docdate).startOf("month").format();
   const endOfMonth = moment(Joborder.docdate).endOf("month").format();
   if (Joborder.isNew) {
@@ -288,9 +292,21 @@ JoborderSchema.pre("save", function (next) {
       err,
       data
     ) {
+      
+      // Joborder.docdate is UTC Timezone must have +07:00 hours to Bangkok timezone
+      let jobDate = moment(Joborder.docdate);
+      jobDate.add(7, "hours");
+
+      // console.log(Joborder.docdate);
+      // console.log(jobDate.toString());
+      // console.log(jobDate.year());
+      // console.log(jobDate.month()+1);
+      
       if (err) next(err);
-      var year = new Date(Joborder.docdate).getFullYear();
-      var month = new Date(Joborder.docdate).getMonth() + 1;
+      // var year = new Date(Joborder.docdate).getFullYear();
+      // var month = new Date(Joborder.docdate).getMonth() + 1;
+      var year = jobDate.year();
+      var month = jobDate.month()+1;
       var fullMonth = month.toString().padStart(2, "0");
 
       if (data.length === 0) {

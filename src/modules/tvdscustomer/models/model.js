@@ -67,6 +67,9 @@ var TvdscustomerSchema = new Schema({
   longitude: {
     type: String,
   },
+  notes: {
+    type: String,
+  },
   created: {
     type: Date,
     default: Date.now,
@@ -100,6 +103,13 @@ var TvdscustomerSchema = new Schema({
 TvdscustomerSchema.pre("save", function (next) {
   let Tvdscustomer = this;
   const model = mongoose.model("Tvdscustomer", TvdscustomerSchema);
+
+  // When persanalId is empty string , change to undefined
+  // because empty string will duplicate value
+  if (Tvdscustomer.persanalId === "") {
+    Tvdscustomer.persanalId = undefined;
+  }
+
   if (Tvdscustomer.isNew) {
     // create
     if (Tvdscustomer.displayName) {

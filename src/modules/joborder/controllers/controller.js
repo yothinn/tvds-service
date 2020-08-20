@@ -281,10 +281,23 @@ exports.getCusData = function (req, res, next) {
       for (let i = 0; i < datas.length; i++) {
         const data = datas[i];
 
-        let bgColor = "ff2a2a";
-        if (data.isShareHolder === true) {
-          bgColor = "167eff"; //สีน้ำเงิน
+        const createdDate = new Date(data.created);
+        // ปรับวันที่ให้ตรงกับ timezone ประเทศไทย
+        const currDate = new Date(new Date().setDate(new Date().getDate() - 1)); 
+
+        let bgColor = "ff2a2a"; // สีแดง
+        // console.log(`createDate.toString() : ${createdDate.getMonth()}`);
+        if (createdDate.getMonth() === currDate.getMonth()) {
+            bgColor = "66ff33"; // สีเขียว เดิอนปัจจุบัน
+        } else if (createdDate.getMonth() === currDate.getMonth()-1) {
+          bgColor = "ffff00"; // สีเหลือง เดิอนก่อนหน้า
+        } else {
+          if (data.isShareHolder === true) {
+            bgColor = "167eff"; //สีน้ำเงิน
+          }
         }
+        
+
 
         let label = "";
 
@@ -317,6 +330,8 @@ exports.getCusData = function (req, res, next) {
           lineUserId: data.lineUserId,
           latitude: data.latitude,
           longitude: data.longitude,
+          created: data.created,
+          notes: data.notes,
         });
       }
       // console.log(cusUseData);
@@ -328,6 +343,7 @@ exports.getCusData = function (req, res, next) {
 
 exports.getJobOrder = function (req, res, next) {
   var docdate = req.body.docdate;
+  // console.log(docdate);
   Joborder.find({ docdate: docdate }, function (err, datas) {
     var jobUseDatas = [];
 
@@ -444,3 +460,161 @@ exports.checkValidJob = function (req, res) {
     }
   );
 };
+
+/**
+ * query history joborder by customer id
+ * /api/joborders/history/:customerId?size={number}
+ * default number is 5
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.getJoborderHistory = function (req, res) {
+  // Default size is 5
+  var size = parseInt(req.query.size);
+  size = size ? size : 5;
+
+  // Check valid customerId
+  if (!mongoose.Types.ObjectId.isValid(req.params.customerId)) {
+    return res.status(400).send({
+      status: 400,
+      message: "customer Id is invalid",
+    });
+  }
+
+  // Must be convert string to ObjectId
+  var customerId = mongoose.Types.ObjectId(req.params.customerId);
+
+  //console.log(size);
+  //console.log(customerId);
+
+  Joborder.aggregate()
+    .unwind("contactLists")             // seperate contactLists array
+    .match({ 
+      "contactLists._id": customerId    // match customer objectId type
+    })
+    .sort({ docdate: -1 })               // sort from current date to previous
+    .limit(size)                        // don't limit before sort 
+    .exec(function(err, result) {
+      // console.log(result);
+      if (err) {
+        return res.status(400).send({
+          status: 400,
+          message: errorHandler.getErrorMessage(err),
+        });
+      } else {
+        res.jsonp({
+          status: 200,
+          data: result,
+        });
+      } 
+    });
+};
+
+
+/**
+ * Get customer suggestion in joborder
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.getCustomerSuggestion = function (req, res) {
+  let startDate = "";
+  let endDate = "";
+  let filter = {};
+  let page = parseInt(req.body.page) || 1;
+  let size = parseInt(req.body.size) || 10;
+
+  // Check start date is null or valid 
+  if (!req.body.startDate || (req.body.startDate === "")) {
+      // ถ้าไม่ระบุ ให้เอาทั้งหมด
+      startDate = "";
+  } else if (moment(req.body.startDate).isValid()) {
+      startDate = new Date(req.body.startDate);
+  } else {
+      return res.status(400).send({
+          status: 400,
+          message: "Start date invalid",
+        });
+  } 
+
+  // Check end date is undefined, null, empty string or valid
+  if (!req.body.endDate || (req.body.endDate === "")) {
+      endDate = "";
+  } else if (moment(req.body.endDate).isValid()) {  
+      endDate = new Date(req.body.endDate);
+  } else {
+      return res.status(400).send({
+          status: 400,
+          message: "End date invalid",
+          });
+  } 
+
+  if ((startDate !== "") && (endDate !== "")) {
+      // endDate must greater than startDate
+      if (endDate < startDate) {
+          return res.status(400).send({
+              status: 400,
+              message: "Invalid : end date less than start date ",
+          });
+      }
+  }
+  
+  // console.log(req.body);
+  // console.log(startDate);
+  // console.log(endDate);
+  // console.log(page);
+  // TODO :รวม aggregate
+  Promise.all([
+    Joborder.aggregate()
+      .match(filter)    // filter date
+      .unwind("contactLists")
+      .match({
+        "contactLists.suggestion" : { $exists: true}
+      })
+      .sort( {docdate : -1} )
+      .skip(size * (page - 1))
+      .limit(size).exec(),
+    Joborder.aggregate()
+      .match(filter)    // filter date
+      .unwind("contactLists")
+      .match({
+        "contactLists.suggestion" : { $exists: true}
+      })
+      .count("contactLists").exec(),
+  ]).then(result => {
+      // console.log(result);
+      res.jsonp({
+        status: 200,
+        totalCount: result[1][0].contactLists,
+        data: result[0],
+      });
+  }).catch(err => {
+    return res.status(400).send({
+      status: 400,
+      message: errorHandler.getErrorMessage(err),
+    });
+  })
+
+  // Joborder.aggregate()
+  //         .match(filter)    // filter date
+  //         .unwind("contactLists")
+  //         .match({
+  //           "contactLists.suggestion" : { $exists: true}
+  //         })
+  //         .sort( {docdate : -1} )
+  //         .skip(size * (page - 1))
+  //         .limit(size)
+  //         .exec(function(err, result) {
+  //           // console.log(result);
+  //           if (err) {
+  //               return res.status(400).send({
+  //                   status: 400,
+  //                   message: errorHandler.getErrorMessage(err),
+  //               });
+  //           } else {
+  //               res.jsonp({
+  //                   status: 200,
+  //                   data: result,
+  //               });
+  //           } 
+  //         });
+}

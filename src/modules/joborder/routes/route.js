@@ -38,6 +38,17 @@ module.exports = function (app) {
     .all(policy.isAllowed)
     .post(controller.checkValidJob);
 
+  // /api/jobordres/history/:customerId?size={number}
+  app
+    .route("/api/joborders/history/:customerId")
+    .all(policy.isAllowed)
+    .get(controller.getJoborderHistory);
+
+  app
+    .route("/api/suggestion")
+    .all(policy.isAllowed)
+    .post(controller.getCustomerSuggestion);
+
   app.param("joborderId", controller.getByID);
 
   /**
