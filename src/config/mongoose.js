@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 module.exports.connection = function (cb) {
-    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://dbOwner:covid1920@34.87.182.146:27017/thamdata-dev"
+    var MONGODB_URI = process.env.MONGO_DB_URI || process.env.MONGODB_URI || process.env.MONGODB_URI_TEST || "mongodb://localhost:27017/thamdata"
     // TODO : comment test db
     // MONGODB_URI = "mongodb://localhost:27017/thamdata";
     // mongoose.set('debug', process.env.MONGO_DB_URI || process.env.MONGODB_URI ? false : true);
