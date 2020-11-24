@@ -6,6 +6,7 @@ var mongoose = require("mongoose"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash");
+  
 
 exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
