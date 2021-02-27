@@ -31,6 +31,10 @@ var TvdscustomerSchema = new Schema({
     type: Boolean,
     default: "false",
   },
+  activated: {
+    type: Boolean,
+    default: "true",
+  },
   mobileNo1: {
     type: String,
   },
@@ -70,6 +74,12 @@ var TvdscustomerSchema = new Schema({
   notes: {
     type: String,
   },
+  // Fixed in 7 length total, index 0 is sunday, index 6 is saturday
+  // Specify convenient days of service
+  // if true, it means convenient to receive services
+  convenientDay: [{
+    type: Boolean,
+  }],
   created: {
     type: Date,
     default: Date.now,

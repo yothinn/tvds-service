@@ -6,6 +6,7 @@ var mongoose = require("mongoose"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash");
+  
 
 exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
@@ -332,6 +333,7 @@ exports.getCusData = function (req, res, next) {
           longitude: data.longitude,
           created: data.created,
           notes: data.notes,
+          convenientDay: data.convenientDay || [],
         });
       }
       // console.log(cusUseData);
