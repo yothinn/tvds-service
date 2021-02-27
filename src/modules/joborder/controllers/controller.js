@@ -333,6 +333,7 @@ exports.getCusData = function (req, res, next) {
           longitude: data.longitude,
           created: data.created,
           notes: data.notes,
+          convenientDay: data.convenientDay || [],
         });
       }
       // console.log(cusUseData);
