@@ -116,3 +116,44 @@ exports.delete = function (req, res) {
         };
     });
 };
+
+
+exports.getProvincesList = async function(req, res) {
+
+    let filter = {};
+
+    // get all provinces
+    if (req.params.name !== "all") {
+        filter = {
+            province: req.params.name
+        }
+    }
+
+    // ข้อมูลแต่ละจังหวัด
+    Postcode.aggregate()
+        .match(filter)
+        .group({
+            _id: null,
+            provinces: { $addToSet: "$province"},
+            postcodes: { $addToSet: "$postcode"},
+            districts: { $addToSet: "$district"},
+            subdistricts: { $addToSet: "$subdistrict" },
+        })
+        .exec(function(err, result) {
+            console.log(result);
+
+            if (err) {
+                return res.status(400).send({
+                  status: 400,
+                  message: errorHandler.getErrorMessage(err),
+                });
+            } else {
+                res.jsonp({
+                    status: 200,
+                    data: result
+                });
+            }
+        });
+}
+
+
