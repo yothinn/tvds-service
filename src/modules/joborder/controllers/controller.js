@@ -333,7 +333,7 @@ exports.getCusData = function (req, res, next) {
           longitude: data.longitude,
           created: data.created,
           notes: data.notes,
-          convenientDay: data.convenientDay || [],
+          convenientDay: data.convenientDay || Array(7).fill(false),
         });
       }
       // console.log(cusUseData);
@@ -404,21 +404,34 @@ exports.mapData = function (req, res, next) {
 };
 
 function checkSymbolMarkersDefault(contactStatus) {
-  if (contactStatus === "waitapprove") {
-    return "W";
+  switch(contactStatus) {
+    case "waitapprove": return "W";
+    case "waitcontact": 
+    case "confirm": return "C";
+    case "driver-reject":
+    case "reject": return "R";
+    case "select":
+    case "waitcontact": return "S";
+    case "arrival": return "G";
+    case "departure": return "E";
+    default : return "";
   }
-  if (contactStatus === "confirm") {
-    return "C";
-  }
-  if (contactStatus === "reject") {
-    return "R";
-  }
-  if (contactStatus === "select" || contactStatus === "waitcontact") {
-    return "S";
-  }
-  if (contactStatus === "") {
-    return "";
-  }
+
+  // if (contactStatus === "waitapprove") {
+  //   return "W";
+  // }
+  // if (contactStatus === "confirm") {
+  //   return "C";
+  // }
+  // if (contactStatus === "reject") {
+  //   return "R";
+  // }
+  // if (contactStatus === "select" || contactStatus === "waitcontact") {
+  //   return "S";
+  // }
+  // if (contactStatus === "") {
+  //   return "";
+  // }
 }
 
 exports.updateJobOrderContactWithCusData = async function (req, res, next) {
