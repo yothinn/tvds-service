@@ -140,7 +140,7 @@ exports.getProvincesList = async function(req, res) {
             subdistricts: { $addToSet: "$subdistrict" },
         })
         .exec(function(err, result) {
-            console.log(result);
+            // console.log(result);
 
             if (err) {
                 return res.status(400).send({
