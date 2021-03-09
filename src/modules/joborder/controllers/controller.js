@@ -275,7 +275,7 @@ exports.delete = function (req, res) {
 
 exports.getCusData = function (req, res, next) {
   Tvdscustomer.find(
-    { latitude: { $ne: "" }, longitude: { $ne: "" } },
+    { latitude: { $ne: "" }, longitude: { $ne: "" }, activated: { $ne: false} },
     function (err, datas) {
       var cusUseData = [];
 
@@ -329,6 +329,7 @@ exports.getCusData = function (req, res, next) {
           addressProvince: data.addressProvince,
           addressPostCode: data.addressPostCode,
           lineUserId: data.lineUserId,
+          lineDisplayName: data.lineDisplayName,
           latitude: data.latitude,
           longitude: data.longitude,
           created: data.created,

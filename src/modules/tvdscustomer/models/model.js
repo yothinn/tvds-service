@@ -65,6 +65,9 @@ var TvdscustomerSchema = new Schema({
   lineUserId: {
     type: String,
   },
+  lineDisplayName: {
+    type: String,
+  },  
   latitude: {
     type: String,
   },
