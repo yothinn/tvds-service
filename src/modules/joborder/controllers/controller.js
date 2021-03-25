@@ -6,7 +6,6 @@ var mongoose = require("mongoose"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash");
-  
 
 exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
@@ -244,11 +243,13 @@ exports.update = function (req, res) {
   updJoborder.updateby = req.user;
   updJoborder.save(function (err, data) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         status: 400,
         message: errorHandler.getErrorMessage(err),
       });
     } else {
+      // console.log(data);
       res.jsonp({
         status: 200,
         data: data,

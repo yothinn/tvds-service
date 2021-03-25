@@ -33,7 +33,7 @@ module.exports = function (app) {
       // controller.fallbackIntent,
       controller.fallbackToDialogFlow,
       controller.completedChat
-    );
+    );       
 
     app
     .route(url + "/staffs/hook")
