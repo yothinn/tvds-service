@@ -289,9 +289,9 @@ exports.getCusData = function (req, res, next) {
 
         let bgColor = "ff2a2a"; // สีแดง
         // console.log(`createDate.toString() : ${createdDate.getMonth()}`);
-        if (createdDate.getMonth() === currDate.getMonth()) {
+        if ((createdDate.getFullYear() === currDate.getFullYear()) && (createdDate.getMonth() === currDate.getMonth())) {
             bgColor = "66ff33"; // สีเขียว เดิอนปัจจุบัน
-        } else if (createdDate.getMonth() === currDate.getMonth()-1) {
+        } else if ((createdDate.getFullYear() === currDate.getFullYear()) && (createdDate.getMonth() === currDate.getMonth()-1)) {
           bgColor = "ffff00"; // สีเหลือง เดิอนก่อนหน้า
         } else {
           if (data.isShareHolder === true) {
