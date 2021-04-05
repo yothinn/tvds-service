@@ -234,6 +234,9 @@ var JoborderSchema = new Schema({
         lineUserId: {
           type: String,
         },
+        lineDisplayName: {
+          type: String,
+        },
         latitude: {
           type: String,
         },

@@ -6,7 +6,6 @@ var mongoose = require("mongoose"),
   Tvdscustomer = mongoose.model("Tvdscustomer"),
   errorHandler = require("../../core/controllers/errors.server.controller"),
   _ = require("lodash");
-  
 
 exports.getList = async function (req, res, next) {
   var pageNo = parseInt(req.query.pageNo);
@@ -244,11 +243,13 @@ exports.update = function (req, res) {
   updJoborder.updateby = req.user;
   updJoborder.save(function (err, data) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         status: 400,
         message: errorHandler.getErrorMessage(err),
       });
     } else {
+      // console.log(data);
       res.jsonp({
         status: 200,
         data: data,
@@ -275,7 +276,7 @@ exports.delete = function (req, res) {
 
 exports.getCusData = function (req, res, next) {
   Tvdscustomer.find(
-    { latitude: { $ne: "" }, longitude: { $ne: "" } },
+    { latitude: { $ne: "" }, longitude: { $ne: "" }, activated: { $ne: false} },
     function (err, datas) {
       var cusUseData = [];
 
@@ -329,11 +330,12 @@ exports.getCusData = function (req, res, next) {
           addressProvince: data.addressProvince,
           addressPostCode: data.addressPostCode,
           lineUserId: data.lineUserId,
+          lineDisplayName: data.lineDisplayName,
           latitude: data.latitude,
           longitude: data.longitude,
           created: data.created,
           notes: data.notes,
-          convenientDay: data.convenientDay || [],
+          convenientDay: data.convenientDay || Array(7).fill(false),
         });
       }
       // console.log(cusUseData);
@@ -404,21 +406,34 @@ exports.mapData = function (req, res, next) {
 };
 
 function checkSymbolMarkersDefault(contactStatus) {
-  if (contactStatus === "waitapprove") {
-    return "W";
+  switch(contactStatus) {
+    case "waitapprove": return "W";
+    case "waitcontact": 
+    case "confirm": return "C";
+    case "driver-reject":
+    case "reject": return "R";
+    case "select":
+    case "waitcontact": return "S";
+    case "arrival": return "G";
+    case "departure": return "E";
+    default : return "";
   }
-  if (contactStatus === "confirm") {
-    return "C";
-  }
-  if (contactStatus === "reject") {
-    return "R";
-  }
-  if (contactStatus === "select" || contactStatus === "waitcontact") {
-    return "S";
-  }
-  if (contactStatus === "") {
-    return "";
-  }
+
+  // if (contactStatus === "waitapprove") {
+  //   return "W";
+  // }
+  // if (contactStatus === "confirm") {
+  //   return "C";
+  // }
+  // if (contactStatus === "reject") {
+  //   return "R";
+  // }
+  // if (contactStatus === "select" || contactStatus === "waitcontact") {
+  //   return "S";
+  // }
+  // if (contactStatus === "") {
+  //   return "";
+  // }
 }
 
 exports.updateJobOrderContactWithCusData = async function (req, res, next) {

@@ -2,9 +2,11 @@
 var mongoose = require('mongoose'),
     model = require('../models/model'),
     mq = require('../../core/controllers/rabbitmq'),
-    Postcode = mongoose.model('Postcode'),
+    Sse = mongoose.model('Sse'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
+
+var subscriptionList = [];
 
 exports.getList = function (req, res) {
     var pageNo = parseInt(req.query.pageNo);
@@ -16,7 +18,7 @@ exports.getList = function (req, res) {
     }
     query.skip = size * (pageNo - 1);
     query.limit = size;
-        Postcode.find({}, {}, query, function (err, datas) {
+        Sse.find({}, {}, query, function (err, datas) {
             if (err) {
                 return res.status(400).send({
                     status: 400,
@@ -32,9 +34,9 @@ exports.getList = function (req, res) {
 };
 
 exports.create = function (req, res) {
-    var newPostcode = new Postcode (req.body);
-    newPostcode.createby = req.user;
-    newPostcode.save(function (err, data) {
+    var newSse = new Sse (req.body);
+    newSse.createby = req.user;
+    newSse.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -62,7 +64,7 @@ exports.getByID = function (req, res, next, id) {
         });
     }
 
-    Postcode.findById(id, function (err, data) {
+    Sse.findById(id, function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -83,10 +85,10 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-    var updPostcode = _.extend(req.data, req.body);
-    updPostcode.updated = new Date();
-    updPostcode.updateby = req.user;
-    updPostcode.save(function (err, data) {
+    var updSse = _.extend(req.data, req.body);
+    updSse.updated = new Date();
+    updSse.updateby = req.user;
+    updSse.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -118,42 +120,63 @@ exports.delete = function (req, res) {
 };
 
 
-exports.getProvincesList = async function(req, res) {
+exports.eventHandler = function(req, res) {  
+  try {
 
-    let filter = {};
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
 
-    // get all provinces
-    if (req.params.name !== "all") {
-        filter = {
-            province: req.params.name
-        }
-    }
+    // Subscribe
+    subscribe({
+        request: req,
+        response: res
+      });   
+    
+    console.log('open event stream');
+    console.log("subscribe count : " + subscriptionList.length);
+ 
+    // console.log(req);
+    req.on('close', () => {
+      console.log('close sse');
+      // delete out of subscription list and close connection
+      unsubscribe(req);
+      console.log("subscribe count : " +subscriptionList.length);
+    })
 
-    // ข้อมูลแต่ละจังหวัด
-    Postcode.aggregate()
-        .match(filter)
-        .group({
-            _id: null,
-            provinces: { $addToSet: "$province"},
-            postcodes: { $addToSet: "$postcode"},
-            districts: { $addToSet: "$district"},
-            subdistricts: { $addToSet: "$subdistrict" },
-        })
-        .exec(function(err, result) {
-            // console.log(result);
+  } catch(error) {
+    console.log(error);
+  }
+}
 
-            if (err) {
-                return res.status(400).send({
-                  status: 400,
-                  message: errorHandler.getErrorMessage(err),
-                });
-            } else {
-                res.jsonp({
-                    status: 200,
-                    data: result
-                });
-            }
-        });
+exports.sendAllSubscriber = function(req, res) {
+    let data = req.body;
+
+    console.log('send subscribe');    
+    console.log(subscriptionList.length);
+
+    subscriptionList.forEach(item => {
+        item.response.write(`data: ${JSON.stringify(data)}\n\n`);
+    });
+
+    res.jsonp({
+        status: 200,
+    });
+  }
+
+function subscribe(data) {
+  subscriptionList.push(data);
+}
+
+function unsubscribe(req) {
+  let index = subscriptionList.findIndex(item => item.request === req);
+
+  if (index >= 0) {
+    subscriptionList[index].response.end();
+    subscriptionList.splice(index, 1);
+  }
 }
 
 

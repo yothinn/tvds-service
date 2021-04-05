@@ -13,9 +13,13 @@ module.exports = function (app) {
         .get(controller.read)
         .put(controller.update)
         .delete(controller.delete);
+    
+    // name = list - get all info in distince
+    // name = province name ex.กรุงเทพมหานคร  : get all inf in province
+    app.route('/api/provinces/:name')
+        .get(controller.getProvincesList);
 
     app.param('postcodeId', controller.getByID);
-
     /**
      * Message Queue
      * exchange : ชื่อเครือข่ายไปรษณีย์  เช่น casan
