@@ -331,6 +331,7 @@ exports.getCusData = function (req, res, next) {
           addressPostCode: data.addressPostCode,
           lineUserId: data.lineUserId,
           lineDisplayName: data.lineDisplayName,
+          lineChatId: data.lineChatId,
           latitude: data.latitude,
           longitude: data.longitude,
           created: data.created,
