@@ -162,6 +162,7 @@ exports.delete = function (req, res) {
 };
 
 exports.hook = function (req, res, next) {
+  console.log(JSON.stringify(req.body, null, 3));
   if (req.body.events[0].message) {
     next();
   } else {
