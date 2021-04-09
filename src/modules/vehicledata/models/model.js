@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-var VehicledataSchema = new Schema({
+var VehiclesdataSchema = new Schema({
     lisenceID: {
         type: String,
         unique: true
@@ -111,9 +111,9 @@ var VehicledataSchema = new Schema({
         }
     }
 });
-VehicledataSchema.pre('save', function (next) {
+VehiclesdataSchema.pre('save', function (next) {
     let Vehicledata = this;
-    const model = mongoose.model("Vehicledata", VehicledataSchema);
+    const model = mongoose.model("Vehicledata", VehiclesdataSchema);
     if (Vehicledata.isNew) {
         // create
         next();
@@ -125,4 +125,4 @@ VehicledataSchema.pre('save', function (next) {
 
 
 })
-mongoose.model("Vehicledata", VehicledataSchema);
+mongoose.model("Vehiclesdata", VehiclesdataSchema);
