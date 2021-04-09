@@ -2,7 +2,7 @@
 var mongoose = require('mongoose'),
     model = require('../models/model'),
     mq = require('../../core/controllers/rabbitmq'),
-    Vehicledata = mongoose.model('Vehicledata'),
+    Vehicledata = mongoose.model('Vehiclesdata'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
 
