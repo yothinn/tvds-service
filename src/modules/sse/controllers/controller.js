@@ -137,6 +137,8 @@ exports.eventHandler = function(req, res) {
     
     console.log('open event stream');
     console.log("subscribe count : " + subscriptionList.length);
+
+    res.write('data: success connect\n\n');
  
     // console.log(req);
     req.on('close', () => {
