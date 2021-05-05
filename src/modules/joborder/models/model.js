@@ -324,6 +324,7 @@ JoborderSchema.pre("save", function (next) {
         // var num = Number(docnoLastest) + 1;
 
         // Use data length for running no
+        console.log(`lastest number : ${data.length}`);
         var num = data.length + 1;
         var no = num.toString().padStart(4, "0");
       }
