@@ -319,8 +319,12 @@ JoborderSchema.pre("save", function (next) {
         var num = 1;
         var no = num.toString().padStart(4, "0");
       } else {
-        var docnoLastest = data[data.length - 1].docno.substr(8, 4);
-        var num = Number(docnoLastest) + 1;
+        // Can't use , bug : order isn't sort descending date
+        // var docnoLastest = data[data.length - 1].docno.substr(8, 4);
+        // var num = Number(docnoLastest) + 1;
+
+        // Use data length for running no
+        var num = data.length + 1;
         var no = num.toString().padStart(4, "0");
       }
 
