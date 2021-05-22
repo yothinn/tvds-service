@@ -308,7 +308,7 @@ exports.getCusData = function (req, res, next) {
           docno: "",
           contactStatus: "",
           icon: {
-            url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=fff&background=${bgColor}&name=${label}`,
+            url: `https://ui-avatars.com/api/?rounded=true&size=36&font-size=0.4&length=4&color=000&background=${bgColor}&name=${label}`,
             scaledSize: {
               width: 34,
               height: 34,

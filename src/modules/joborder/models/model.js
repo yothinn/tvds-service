@@ -290,24 +290,26 @@ JoborderSchema.pre("save", function (next) {
   Joborder.cusAmount = Joborder.contactLists.length;
   const model = mongoose.model("Joborder", JoborderSchema);
 
-  const startOfMonth = moment(Joborder.docdate).startOf("month").format();
-  const endOfMonth = moment(Joborder.docdate).endOf("month").format();
+  let jobDate = moment(Joborder.docdate);
+  const startOfMonth = jobDate.startOf("month").format();
+  const endOfMonth = jobDate.endOf("month").format();
+
+  console.log(`Job docdate ${jobDate}, start month ${startOfMonth} end month ${endOfMonth}`);
+
   if (Joborder.isNew) {
     // create
     model.find({ docdate: { $gte: startOfMonth, $lte: endOfMonth } }, function (
       err,
       data
-    ) {
-      
-      // Joborder.docdate is UTC Timezone must have +07:00 hours to Bangkok timezone
-      let jobDate = moment(Joborder.docdate);
-      jobDate.add(7, "hours");
-
+    ) {    
       // console.log(Joborder.docdate);
       // console.log(jobDate.toString());
       // console.log(jobDate.year());
       // console.log(jobDate.month()+1);
-      
+
+      // Joborder.docdate is UTC Timezone must have +07:00 hours to Bangkok timezone
+      jobDate.add(7, "hours");
+  
       if (err) next(err);
       // var year = new Date(Joborder.docdate).getFullYear();
       // var month = new Date(Joborder.docdate).getMonth() + 1;
